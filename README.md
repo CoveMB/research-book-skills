@@ -8,7 +8,7 @@ The package assumes a person is still doing the research. It can sort, pressure-
 
 ## Install in 30 seconds
 
-You need Python 3 and an app that can load local skills plugins.
+If you use this as a collection of skill folders, you do not need Python. Python 3.10 or newer is only needed for the bundled install, validation, and packaging scripts. Those scripts use the Python standard library, so there is no dependency install step.
 
 From the unzipped folder:
 
@@ -165,10 +165,13 @@ python3 scripts/check_book_artifact_contract.py --path .
 python3 -m unittest discover -s scripts -p 'test_*.py'
 ```
 
+Script details, arguments, side effects, and dependency notes are in [`docs/SCRIPTS.md`](docs/SCRIPTS.md).
+
 ## Useful docs
 
 - [`docs/INSTALLATION.md`](docs/INSTALLATION.md): manual install options and uninstall steps
 - [`docs/SKILL_INDEX.md`](docs/SKILL_INDEX.md): all skills and when to use them
+- [`docs/SCRIPTS.md`](docs/SCRIPTS.md): script commands, requirements, and write behavior
 - [`docs/WORKFLOW_PLAYBOOK.md`](docs/WORKFLOW_PLAYBOOK.md): practical book workflows
 - [`docs/QUALITY_STANDARD.md`](docs/QUALITY_STANDARD.md): source, claim, and citation standards
 - [`docs/SOURCE_LIMITS.md`](docs/SOURCE_LIMITS.md): what counts as verified source access

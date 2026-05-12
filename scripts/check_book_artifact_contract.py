@@ -313,8 +313,13 @@ def check(root: Path) -> list[str]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--path", type=Path, default=Path(__file__).resolve().parents[1])
+    parser = argparse.ArgumentParser(description="Validate book artifact schema and shipped examples.")
+    parser.add_argument(
+        "--path",
+        type=Path,
+        default=Path(__file__).resolve().parents[1],
+        help="Plugin root that contains the shared schema and example artifacts.",
+    )
     args = parser.parse_args()
 
     errors = check(args.path.resolve())

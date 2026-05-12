@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate a Codex/Agent Skills plugin package.
+"""Validate a local skills plugin package.
 
 Checks:
 - .codex-plugin/plugin.json exists and points to skills
@@ -10,6 +10,7 @@ Checks:
 """
 from __future__ import annotations
 
+import argparse
 import re
 import sys
 from pathlib import Path
@@ -353,7 +354,16 @@ def validate_skills(root: Path, skills_dir: Path) -> list[str]:
 
 
 def main() -> int:
-    root = Path(sys.argv[1] if len(sys.argv) > 1 else ".").expanduser().resolve()
+    parser = argparse.ArgumentParser(description="Validate a local skills plugin package.")
+    parser.add_argument(
+        "plugin_root",
+        nargs="?",
+        default=".",
+        help="Plugin root to validate. Defaults to the current directory.",
+    )
+    args = parser.parse_args()
+
+    root = Path(args.plugin_root).expanduser().resolve()
     _, skills_dir, errors = manifest_errors(root)
     errors.extend(validate_skills(root, skills_dir))
     errors.extend(validate_project_references(root))

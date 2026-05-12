@@ -164,6 +164,35 @@ class TestExecutableSafeguards(unittest.TestCase):
         text = (ROOT / "validate.sh").read_text(encoding="utf-8")
         self.assertIn("-m unittest discover", text)
 
+    def test_executable_scripts_explain_help(self) -> None:
+        expected_help = {
+            "validate_plugin.py": [
+                "Validate a local skills plugin package.",
+                "plugin_root",
+            ],
+            "check_book_artifact_contract.py": [
+                "Validate book artifact schema and shipped examples.",
+                "--path",
+            ],
+            "package_plugin.py": [
+                "Package this plugin directory as a zip.",
+                "--out",
+            ],
+            "install_codex_plugin.py": [
+                "Install Research Book Skills Plugin locally.",
+                "--dry-run",
+            ],
+        }
+
+        for script_name, expected_snippets in expected_help.items():
+            with self.subTest(script_name=script_name):
+                result = run_script(script_name, "--help")
+
+                self.assertEqual(result.returncode, 0, msg=f"stdout={result.stdout} stderr={result.stderr}")
+                self.assertIn("usage:", result.stdout)
+                for expected_snippet in expected_snippets:
+                    self.assertIn(expected_snippet, result.stdout)
+
     def test_validator_requires_skill_readme_and_agent_metadata(self) -> None:
         with TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)

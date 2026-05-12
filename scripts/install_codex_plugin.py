@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Install this plugin into a local Codex personal marketplace.
+"""Install this plugin into a local personal marketplace.
 
 Default behavior:
 - validate plugin
-- copy plugin to ~/.codex/plugins/scholarly-research-book
+- copy plugin to the local plugin directory
 - create/update ~/.agents/plugins/marketplace.json
 
 Use --dry-run to preview actions.
@@ -153,9 +153,18 @@ def print_dry_run_plan(root: Path, dest: Path, marketplace: Path, source_path: s
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Install Research Book Skills Plugin locally for Codex.")
-    parser.add_argument("--plugin-root", type=Path, default=plugin_root_from_script(), help="Path to this plugin root")
-    parser.add_argument("--dest", type=Path, help="Destination plugin directory")
+    parser = argparse.ArgumentParser(description="Install Research Book Skills Plugin locally.")
+    parser.add_argument(
+        "--plugin-root",
+        type=Path,
+        default=plugin_root_from_script(),
+        help="Plugin root to validate and install. Defaults to this repository root.",
+    )
+    parser.add_argument(
+        "--dest",
+        type=Path,
+        help="Destination plugin directory. Defaults to the local plugin directory for this package.",
+    )
     parser.add_argument(
         "--marketplace",
         type=Path,
@@ -163,7 +172,7 @@ def main() -> int:
         help="Marketplace JSON path",
     )
     parser.add_argument("--source-path", help="source.path to write in marketplace.json")
-    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--dry-run", action="store_true", help="Print the install plan without writing files.")
     args = parser.parse_args()
 
     root = args.plugin_root.expanduser().resolve()

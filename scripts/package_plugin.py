@@ -52,9 +52,18 @@ def default_output_path(root: Path) -> Path:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument("--out", type=Path)
+    parser = argparse.ArgumentParser(description="Package this plugin directory as a zip.")
+    parser.add_argument(
+        "--root",
+        type=Path,
+        default=Path(__file__).resolve().parents[1],
+        help="Plugin root to package. Defaults to this repository root.",
+    )
+    parser.add_argument(
+        "--out",
+        type=Path,
+        help="Zip file to write. Defaults to <root-name>-v<manifest-version>.zip.",
+    )
     args = parser.parse_args()
     root = args.root.resolve()
     out = (args.out if args.out is not None else default_output_path(root)).resolve()

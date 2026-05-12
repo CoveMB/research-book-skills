@@ -2,20 +2,30 @@
 
 This package can be installed as a local plugin or used as a portable collection of skill folders.
 
+## Requirements
+
+If you use this package as a collection of skill folders, you do not need Python.
+
+Python 3.10 or newer is only required when you run the bundled install, validation, or packaging scripts. No pip packages are required. The scripts use the Python standard library.
+
+- macOS and Linux installs use Bash through `./install.sh`.
+- Windows installs use PowerShell through `.\install.ps1`.
+- A local plugin install needs write access to the plugin destination and marketplace JSON.
+
 ## Option A: Install as a local plugin
 
 ### macOS / Linux
 
 ```bash
 cd scholarly-research-book-plugin
-python3 scripts/install_codex_plugin.py
+./install.sh
 ```
 
 ### Windows PowerShell
 
 ```powershell
 cd scholarly-research-book-plugin
-py scripts\install_codex_plugin.py
+.\install.ps1
 ```
 
 The installer:
@@ -27,6 +37,14 @@ The installer:
 5. adds the marketplace entry for this plugin.
 
 Restart the app after installation.
+
+Preview the install first if you want to check paths before writing files:
+
+```bash
+./install.sh --dry-run
+```
+
+More script details are in [`docs/SCRIPTS.md`](SCRIPTS.md).
 
 ## Option B: Manual personal marketplace install
 
@@ -102,6 +120,8 @@ For a full local package check, run:
 ```bash
 ./validate.sh
 ```
+
+See [`docs/SCRIPTS.md`](SCRIPTS.md) for the full script list and dependency notes.
 
 ## Uninstall
 
