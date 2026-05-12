@@ -1,0 +1,6 @@
+interface:
+  display_name: "Rights Privacy Release Auditor"
+  short_description: "Audit notes, research artifacts, manuscript exports, proposal materials, and shared files for privacy, copyright, quotation, license, secret, credential, local metadata, and release risks before external sharing."
+  default_prompt: "Use rights-privacy-release-auditor to audit these materials for privacy, copyright, quotation, license, credential, and release risks."
+policy:
+  allow_implicit_invocation: true

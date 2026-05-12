@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import subprocess
 import sys
 import unittest
@@ -88,6 +89,8 @@ class TestExecutableSafeguards(unittest.TestCase):
             root = Path(temporary_directory) / "plugin"
             root.mkdir()
             (root / "keep.txt").write_text("keep", encoding="utf-8")
+            (root / ".env").write_text("SECRET=1", encoding="utf-8")
+            (root / "local-notes.txt").write_text("notes", encoding="utf-8")
             (root / "old.zip").write_text("old", encoding="utf-8")
             (root / ".DS_Store").write_text("metadata", encoding="utf-8")
             (root / ".git").mkdir()
@@ -109,7 +112,8 @@ class TestExecutableSafeguards(unittest.TestCase):
             self.assertEqual(result.returncode, 0, msg=f"stdout={result.stdout} stderr={result.stderr}")
             with zipfile.ZipFile(output_path) as archive:
                 names = archive.namelist()
-            self.assertIn(f"{root.name}/keep.txt", names)
+            self.assertNotIn(f"{root.name}/.env", names)
+            self.assertNotIn(f"{root.name}/local-notes.txt", names)
             self.assertNotIn(f"{root.name}/bundle.zip", names)
             self.assertFalse(any("/.git/" in name for name in names))
             self.assertFalse(any(name.endswith(".zip") for name in names))
@@ -141,6 +145,17 @@ class TestExecutableSafeguards(unittest.TestCase):
 
             self.assertTrue(sentinel.exists())
 
+    def test_installer_refuses_to_copy_plugin_onto_itself(self) -> None:
+        installer = load_module("install_codex_plugin.py")
+        with TemporaryDirectory() as temporary_directory:
+            source = Path(temporary_directory) / "sample-plugin"
+            write_minimal_plugin(source)
+
+            with self.assertRaises(ValueError):
+                installer.copy_plugin(source, source, dry_run=False)
+
+            self.assertTrue((source / ".codex-plugin" / "plugin.json").exists())
+
     def test_installer_excludes_generated_files(self) -> None:
         installer = load_module("install_codex_plugin.py")
         with TemporaryDirectory() as temporary_directory:
@@ -151,6 +166,8 @@ class TestExecutableSafeguards(unittest.TestCase):
             (root / "dist").mkdir()
             (root / "dist" / "artifact.txt").write_text("dist", encoding="utf-8")
             (root / "debug.log").write_text("log", encoding="utf-8")
+            (root / ".env").write_text("SECRET=1", encoding="utf-8")
+            (root / "local-notes.txt").write_text("notes", encoding="utf-8")
             destination = Path(temporary_directory) / "sample-plugin"
 
             installer.copy_plugin(root, destination, dry_run=False)
@@ -159,10 +176,215 @@ class TestExecutableSafeguards(unittest.TestCase):
             self.assertFalse((destination / ".pytest_cache").exists())
             self.assertFalse((destination / "dist").exists())
             self.assertFalse((destination / "debug.log").exists())
+            self.assertFalse((destination / ".env").exists())
+            self.assertFalse((destination / "local-notes.txt").exists())
+
+    def test_installer_builds_plan_without_writing(self) -> None:
+        installer = load_module("install_codex_plugin.py")
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory) / "sample-plugin"
+            write_minimal_plugin(root)
+            marketplace = Path(temporary_directory) / "marketplace.json"
+
+            plan = installer.build_install_plan(
+                plugin_root=root,
+                dest=None,
+                marketplace=marketplace,
+                source_path=None,
+            )
+
+            self.assertEqual(plan.root, root.resolve())
+            self.assertEqual(plan.plugin_name_value, "sample-plugin")
+            self.assertEqual(plan.dest, installer.home() / ".codex" / "plugins" / "sample-plugin")
+            self.assertEqual(plan.marketplace, marketplace)
+            self.assertEqual(plan.source_path, "./.codex/plugins/sample-plugin")
+            self.assertFalse(marketplace.exists())
+
+    def test_installer_keeps_existing_destination_when_copy_fails(self) -> None:
+        installer = load_module("install_codex_plugin.py")
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            source = root / "source" / "sample-plugin"
+            destination = root / "sample-plugin"
+            write_minimal_plugin(source)
+            write_minimal_plugin(destination)
+            sentinel = destination / "keep.txt"
+            sentinel.write_text("keep", encoding="utf-8")
+
+            original_copy_package_tree = installer.copy_package_tree
+
+            def fail_copy_package_tree(*_args, **_kwargs):
+                raise RuntimeError("copy failed")
+
+            installer.copy_package_tree = fail_copy_package_tree
+            try:
+                with self.assertRaises(RuntimeError):
+                    installer.copy_plugin(source, destination, dry_run=False)
+            finally:
+                installer.copy_package_tree = original_copy_package_tree
+
+            self.assertTrue(sentinel.exists())
+
+    def test_installer_dry_run_does_not_backup_malformed_marketplace(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            marketplace = root / "marketplace.json"
+            marketplace.write_text("{not valid json", encoding="utf-8")
+
+            result = run_script(
+                "install_codex_plugin.py",
+                "--plugin-root",
+                str(ROOT),
+                "--dest",
+                str(root / "scholarly-research-book"),
+                "--marketplace",
+                str(marketplace),
+                "--dry-run",
+            )
+
+            self.assertEqual(result.returncode, 0, msg=f"stdout={result.stdout} stderr={result.stderr}")
+            self.assertEqual(marketplace.read_text(encoding="utf-8"), "{not valid json")
+            self.assertEqual(list(root.glob("marketplace.json.backup-*")), [])
+
+    def test_marketplace_write_failure_keeps_existing_file(self) -> None:
+        installer = load_module("install_codex_plugin.py")
+        with TemporaryDirectory() as temporary_directory:
+            marketplace = Path(temporary_directory) / "marketplace.json"
+            original_text = json.dumps(
+                {
+                    "name": "local-personal-plugins",
+                    "interface": {"displayName": "Local Personal Plugins"},
+                    "plugins": [],
+                },
+                indent=2,
+            ) + "\n"
+            marketplace.write_text(original_text, encoding="utf-8")
+            original_write_text = Path.write_text
+
+            def fail_write_text(self, *_args, **_kwargs):
+                original_write_text(self, "partial", encoding="utf-8")
+                raise RuntimeError("write failed")
+
+            Path.write_text = fail_write_text
+            try:
+                with self.assertRaises(RuntimeError):
+                    installer.update_marketplace(
+                        marketplace,
+                        "sample-plugin",
+                        "./.codex/plugins/sample-plugin",
+                        dry_run=False,
+                    )
+            finally:
+                Path.write_text = original_write_text
+
+            self.assertEqual(marketplace.read_text(encoding="utf-8"), original_text)
+
+    def test_marketplace_sample_matches_installer_defaults(self) -> None:
+        installer = load_module("install_codex_plugin.py")
+        sample = json.loads((ROOT / "marketplace.sample.json").read_text(encoding="utf-8"))
+
+        self.assertEqual(sample["name"], installer.MARKETPLACE_NAME)
+        self.assertEqual(sample["interface"]["displayName"], "Local Personal Plugins")
+
+    def test_plugin_utils_parse_nested_metadata_yaml(self) -> None:
+        plugin_utils = load_module("plugin_utils.py")
+
+        metadata = plugin_utils.parse_simple_yaml_mapping(
+            "\n".join(
+                [
+                    "interface:",
+                    '  display_name: "Sample Skill"',
+                    "policy:",
+                    "  allow_implicit_invocation: true",
+                    "",
+                ]
+            )
+        )
+
+        self.assertEqual(
+            plugin_utils.nested_string(plugin_utils.nested_mapping(metadata, "interface"), "display_name"),
+            "Sample Skill",
+        )
+        self.assertIs(
+            plugin_utils.nested_mapping(metadata, "policy")["allow_implicit_invocation"],
+            True,
+        )
+
+    def test_plugin_utils_reports_malformed_json_location(self) -> None:
+        plugin_utils = load_module("plugin_utils.py")
+        with TemporaryDirectory() as temporary_directory:
+            path = Path(temporary_directory) / "broken.json"
+            path.write_text("{broken", encoding="utf-8")
+
+            payload, error = plugin_utils.load_json_object_result(path)
+
+            self.assertIsNone(payload)
+            self.assertIn("malformed JSON at line 1, column 2", error)
+
+    def test_plugin_utils_scores_significant_description_terms(self) -> None:
+        plugin_utils = load_module("plugin_utils.py")
+
+        terms = plugin_utils.significant_description_terms(
+            "Scholarly research skill maps chapter evidence, argument continuity, and citation gaps."
+        )
+
+        self.assertNotIn("skill", terms)
+        self.assertNotIn("research", terms)
+        self.assertIn("chapter", terms)
+        self.assertIn("evidence", terms)
+        self.assertGreater(plugin_utils.MIN_SHARED_DESCRIPTION_TERMS, 0)
+
+    def test_plugin_utils_exposes_contract_artifact_skill_map(self) -> None:
+        plugin_utils = load_module("plugin_utils.py")
+
+        self.assertEqual(
+            plugin_utils.CONTRACT_ARTIFACT_SKILLS["chapter-architecture"],
+            "chapter_brief",
+        )
+        self.assertEqual(
+            plugin_utils.CONTRACT_ARTIFACT_SKILLS["claim-evidence-ledger"],
+            "claim_evidence_ledger",
+        )
 
     def test_validate_script_uses_unittest_discovery(self) -> None:
         text = (ROOT / "validate.sh").read_text(encoding="utf-8")
         self.assertIn("-m unittest discover", text)
+
+    def test_install_shell_requires_python_310_or_newer(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            fake_bin = Path(temporary_directory)
+            fake_python = fake_bin / "python3"
+            fake_python.write_text(
+                "\n".join(
+                    [
+                        "#!/usr/bin/env sh",
+                        'if [ "$1" = "-c" ]; then',
+                        "  exit 1",
+                        "fi",
+                        "exit 0",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            fake_python.chmod(0o755)
+            env = {**os.environ, "PATH": f"{fake_bin}{os.pathsep}{os.environ['PATH']}"}
+
+            result = subprocess.run(
+                ["bash", str(ROOT / "install.sh"), "--dry-run"],
+                check=False,
+                capture_output=True,
+                text=True,
+                env=env,
+            )
+
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("Python 3.10", result.stderr)
+
+    def test_install_powershell_has_python_version_preflight(self) -> None:
+        text = (ROOT / "install.ps1").read_text(encoding="utf-8")
+        self.assertIn("Python 3.10", text)
+        self.assertIn("sys.version_info", text)
 
     def test_executable_scripts_explain_help(self) -> None:
         expected_help = {
@@ -275,6 +497,39 @@ class TestExecutableSafeguards(unittest.TestCase):
             self.assertEqual(result.returncode, 1)
             self.assertIn("broken local reference", result.stdout)
 
+    def test_validator_rejects_missing_manifest_asset_references(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            write_minimal_plugin(root)
+            manifest_path = root / ".codex-plugin" / "plugin.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest["interface"] = {
+                "composerIcon": "./assets/missing-icon.svg",
+                "logo": "./assets/missing-logo.svg",
+            }
+            manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+            result = run_script("validate_plugin.py", str(root))
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("plugin.json: broken local reference", result.stdout)
+
+    def test_validator_rejects_broken_local_references_in_skill_assets(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            write_minimal_plugin(root)
+            assets_dir = root / "skills" / "sample-skill" / "assets"
+            assets_dir.mkdir()
+            (assets_dir / "template.md").write_text(
+                "See [missing guidance](docs/missing.md).",
+                encoding="utf-8",
+            )
+
+            result = run_script("validate_plugin.py", str(root))
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("template.md: broken local reference", result.stdout)
+
     def test_validator_requires_structured_agent_metadata(self) -> None:
         with TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
@@ -319,6 +574,46 @@ class TestExecutableSafeguards(unittest.TestCase):
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("policy.allow_implicit_invocation must be boolean", result.stdout)
+
+    def test_validator_rejects_stale_agent_display_name(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            description = (
+                "Sample skill validates metadata display routing coverage source evidence "
+                "workflow planning audit chapter argument continuity."
+            )
+            write_minimal_plugin(
+                root,
+                skill_body="\n".join(
+                    [
+                        "---",
+                        "name: sample-skill",
+                        f"description: {description}",
+                        "---",
+                        "# Sample Skill",
+                        "",
+                    ]
+                ),
+            )
+            (root / "skills" / "sample-skill" / "agents" / "openai.yaml").write_text(
+                "\n".join(
+                    [
+                        "interface:",
+                        '  display_name: "Unrelated Metadata"',
+                        f'  short_description: "{description}"',
+                        '  default_prompt: "Use sample-skill."',
+                        "policy:",
+                        "  allow_implicit_invocation: true",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+
+            result = run_script("validate_plugin.py", str(root))
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("display_name appears stale", result.stdout)
 
 
 if __name__ == "__main__":

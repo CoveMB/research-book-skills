@@ -1,5 +1,13 @@
 # Research book proposal template
 
+## Source basis
+
+## What I can verify
+
+## What remains uncertain
+
+## User verification needed
+
 ## Title and subtitle
 
 ## One-sentence premise

@@ -1,0 +1,132 @@
+---
+name: rights-privacy-release-auditor
+description: Audit notes, research artifacts, manuscript exports, proposal materials, and shared files for privacy, copyright, quotation, license, secret, credential, local metadata, and release risks before external sharing.
+license: MIT
+metadata:
+  version: "1.0.0"
+  category: research-book-writing
+---
+# Rights privacy release auditor
+
+## Purpose
+
+Audit research materials before external sharing for privacy, copyright, quotation, license, credential, and local metadata risks.
+
+## When to use
+
+Use before sending notes, artifacts, manuscript exports, proposal materials, source packets, or project files to readers, collaborators, editors, agents, presses, reviewers, or public venues.
+
+## Automatic selection guidance
+
+- High-signal triggers: release audit, share externally, privacy risk, copyright risk, quote risk, license mismatch, secrets, credentials, publisher text, or proposal packet review.
+- Light-route behavior: produce an issue table and release verdict without rewriting content.
+- Deep-work gate: external license or publication lookup requires explicit user permission, available tools, and a concrete release risk.
+- Noise and slowdown guard: do not run for private drafting unless sharing, export, publication, or handoff is at issue.
+
+## Do not use this skill when
+
+- The user needs citation-source fit checked; use `citation-integrity-auditor`.
+- The user needs prose edited; use `scholarly-prose-editor`.
+- The user asks for legal advice rather than a writing and release risk audit.
+
+## Inputs expected
+
+- Notes, research artifacts, manuscript exports, proposal materials, source packets, bibliography files, or file lists.
+- Intended recipient, sharing venue, publication status, and whether the artifact will be public.
+- Known permissions, licenses, source ownership, quote policies, and sensitive-data constraints.
+- Whether the user wants audit only or repair suggestions.
+
+## Source basis and AI limits
+
+Follow `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, include What I can verify, What remains uncertain, and User verification needed. Do not invent citations or source support.
+
+## Files/folders it may read
+
+- Bundled skill instructions, metadata, and assets if available (including, but not limited to, `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` in this project or equivalent files in another project).
+- Shared policy docs, especially `docs/SOURCE_LIMITS.md` and `docs/AUTO_SELECTION_GUARDRAILS.md`.
+- User-provided notes, artifacts, drafts, exports, metadata, source packets, and project files explicitly named in the request.
+
+## Files/folders it may write
+
+- None by default.
+- May create or update user-requested release audit reports or issue logs in the user-designated project or workspace.
+- Must not delete, redact, rewrite, publish, send, or move content unless explicitly asked.
+
+## What it must not do
+
+- Do not delete or rewrite content unless explicitly asked.
+- Do not provide legal advice or claim legal clearance.
+- Do not invent permissions, licenses, consent, copyright status, or release approval.
+- Do not expose secrets, private notes, or sensitive data in the output more than needed to identify the issue.
+
+## Procedure
+
+### 1. Identify release context
+
+Record intended audience, destination, public or private status, file types, and source access level.
+
+### 2. Scan for risk categories
+
+Check for secrets, tokens, credentials, private personal notes, sensitive data, excessive copied source text, direct quotes without locators, publisher text in public artifacts, AI-generated claims presented as evidence, license mismatch risk, and local bibliography or source metadata that should stay private.
+
+### 3. Classify severity
+
+Use critical, major, moderate, or minor. Critical means do not release until fixed.
+
+### 4. Specify required fixes
+
+State the smallest fix: remove, redact, verify permission, add locator, replace copied text with paraphrase, cite source, mark as AI-generated, separate private metadata, or get legal review.
+
+### 5. Give release verdict
+
+Use ready to share, share after listed fixes, hold until reviewed, or do not release in current form.
+
+## Output format
+
+```markdown
+# Rights privacy release audit
+
+## Source basis
+
+## What I can verify
+
+## What remains uncertain
+
+## User verification needed
+
+## Release context
+
+## Issue table
+| Severity | File / artifact pointer | Risk | Evidence visible | Required fix | Release impact |
+
+## Secrets and sensitive-data check
+
+## Copyright and quotation check
+
+## License and vendored-material check
+
+## AI-evidence and source-metadata check
+
+## Release verdict
+
+## Limits / failure risks
+
+## Suggested next step
+```
+
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless one skill reduces a named scholarly risk.
+
+## Quality checks
+
+- Critical release blockers are clear.
+- Sensitive data is identified with minimal exposure.
+- Direct quotes without locators are flagged.
+- Legal uncertainty is labeled as uncertainty, not resolved by the audit.
+
+## Failure modes
+
+- Audit becomes legal advice.
+- Sensitive content is repeated unnecessarily.
+- Copyright or license status is invented.
+- Release verdict ignores private metadata or copied source text.
+- Premature citation audit before citations, quotes, page numbers, bibliography entries, or cited claims exist.

@@ -9,30 +9,16 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from plugin_utils import (
-    EXCLUDED_DIRECTORIES,
-    EXCLUDED_FILE_NAMES,
-    EXCLUDED_SUFFIXES,
+    package_files as included_package_files,
     plugin_version,
 )
 
 
-def should_package_file(path: Path, output_path: Path, temporary_output_path: Path) -> bool:
-    if path.resolve() in {output_path.resolve(), temporary_output_path.resolve()}:
-        return False
-    if EXCLUDED_DIRECTORIES.intersection(path.parts):
-        return False
-    if path.name in EXCLUDED_FILE_NAMES:
-        return False
-    if path.suffix in EXCLUDED_SUFFIXES:
-        return False
-    return path.is_file()
-
-
-def package_files(root: Path, output_path: Path, temporary_output_path: Path) -> list[Path]:
+def package_output_files(root: Path, output_path: Path, temporary_output_path: Path) -> list[Path]:
     return [
         path
-        for path in sorted(root.rglob("*"))
-        if should_package_file(path, output_path, temporary_output_path)
+        for path in included_package_files(root)
+        if path.resolve() not in {output_path.resolve(), temporary_output_path.resolve()}
     ]
 
 
@@ -42,7 +28,7 @@ def write_package(root: Path, output_path: Path) -> None:
     if temporary_output_path.exists():
         temporary_output_path.unlink()
     with zipfile.ZipFile(temporary_output_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
-        for path in package_files(root, output_path, temporary_output_path):
+        for path in package_output_files(root, output_path, temporary_output_path):
             archive.write(path, root.name + "/" + str(path.relative_to(root)))
     temporary_output_path.replace(output_path)
 

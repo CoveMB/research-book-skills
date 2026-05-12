@@ -50,16 +50,15 @@ When the user explicitly asks for JSON or a contract artifact, use `shared/contr
 
 ## Files/folders it may read
 
-- This skill's `SKILL.md`, `README.md`, `assets/thesis-tree-template.md`, and `agents/openai.yaml`.
-- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
-- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
+- Bundled skill instructions, metadata, and assets if available (including, but not limited to, `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` in this project or equivalent files in another project).
+- Shared policy docs, especially `docs/SOURCE_LIMITS.md` and `docs/AUTO_SELECTION_GUARDRAILS.md`.
 - User-provided agendas, literature maps, notes, outlines, drafts, and source summaries explicitly named in the request.
 - Related claim ledgers or chapter briefs when argument dependency depends on them.
 
 ## Files/folders it may write
 
 - None by default.
-- May create or update user-requested thesis trees or argument architecture artifacts in the current project.
+- May create or update user-requested thesis trees or argument architecture artifacts in the user-designated project or workspace.
 - Must not rewrite manuscript files or source materials unless explicitly asked.
 
 ## What it must not do
@@ -163,7 +162,7 @@ Offer versions:
 
 ```
 
-Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless one skill reduces a named scholarly risk.
 
 ## Quality checks
 
@@ -173,7 +172,6 @@ Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.m
 - Include the strongest counterargument at the architecture stage, not after drafting.
 - Avoid single-factor determinism or reductionism unless strongly evidenced.
 - Do not make a thesis sound proven when the evidence path is only proposed.
-- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 

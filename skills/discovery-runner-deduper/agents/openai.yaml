@@ -1,0 +1,6 @@
+interface:
+  display_name: "Discovery Runner Deduper"
+  short_description: "Process academic index exports, library catalogue exports, bibliography exports, tabular files, or pasted candidate source records (for example, OpenAlex, Semantic Scholar, Elicit, scite, library catalogues, CSV, BIB, or RIS) into deduped screening records, duplicate clusters, and search-log updates."
+  default_prompt: "Use discovery-runner-deduper to dedupe these candidate sources, screen them, and draft a search-log update."
+policy:
+  allow_implicit_invocation: true

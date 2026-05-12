@@ -1,5 +1,13 @@
 # Citation audit checklist
 
+## Source basis
+
+## What I can verify
+
+## What remains uncertain
+
+## User verification needed
+
 - [ ] Every factual, causal, field-specific, or controversial claim has support.
 - [ ] Citations actually support the sentence they are attached to.
 - [ ] Direct quotes have page/locator information.

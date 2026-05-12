@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added six gated research skills for source notes, claim traceability, extraction tables, discovery dedupe, release audits, and comparable-title verification.
+- Updated routing, workflow, architecture, mode registry, public README, and prompt examples for the new skills.
 - Added research intent routing skill.
 - Added automatic selection guardrails across existing research-book skills.
 - Added normal and deep routing modes for research-intent handling.

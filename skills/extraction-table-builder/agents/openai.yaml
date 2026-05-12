@@ -1,0 +1,6 @@
+interface:
+  display_name: "Extraction Table Builder"
+  short_description: "Turn source notes, annotations, excerpts, or reading notes into structured extraction tables, source matrices, and comparison grids before synthesis, literature mapping, or claim drafting."
+  default_prompt: "Use extraction-table-builder to turn these source notes into an extraction table and source matrix without synthesizing beyond the material."
+policy:
+  allow_implicit_invocation: true

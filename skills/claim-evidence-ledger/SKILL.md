@@ -26,6 +26,7 @@ Use when the user provides prose, notes, outline, chapter draft, thesis, or argu
 ## Do not use this skill when
 
 - The user asks only for citation formatting; use `citation-integrity-auditor`.
+- The claims already exist and the user needs source-note, citekey, locator, or evidence-chain mapping; use `claim-traceability-graph`.
 - The user needs source credibility rather than claim extraction; use `methodology-source-auditor`.
 - The text is purely stylistic with no research claims.
 
@@ -76,16 +77,15 @@ When the user explicitly asks for JSON or a contract artifact, use `shared/contr
 
 ## Files/folders it may read
 
-- This skill's `SKILL.md`, `README.md`, `assets/claim-ledger-template.csv`, and `agents/openai.yaml`.
-- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
-- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
+- Bundled skill instructions, metadata, and assets if available (including, but not limited to, `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` in this project or equivalent files in another project).
+- Shared policy docs, especially `docs/SOURCE_LIMITS.md` and `docs/AUTO_SELECTION_GUARDRAILS.md`.
 - User-provided drafts, notes, source excerpts, citations, bibliographies, and claim lists explicitly named in the request.
 - Related chapter or argument artifacts when claim context matters.
 
 ## Files/folders it may write
 
 - None by default.
-- May create or update user-requested claim ledgers, CSVs, or audit notes in the current project.
+- May create or update user-requested claim ledgers, CSVs, or audit notes in the user-designated project or workspace.
 - Must not alter source files, citation databases, or manuscript drafts unless explicitly asked.
 
 ## What it must not do
@@ -145,7 +145,7 @@ Recommend source types, not fake sources.
 
 ```
 
-Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless one skill reduces a named scholarly risk.
 
 ## Quality checks
 
@@ -155,7 +155,6 @@ Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.m
 - Do not invent citations or page numbers.
 - Preserve the user's thesis where possible, but make it defensible.
 - Unsupported in the provided material does not mean false; it means not yet supported here.
-- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 

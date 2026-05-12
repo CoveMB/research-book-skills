@@ -39,43 +39,27 @@ The output usually includes the global thesis as currently expressed, chapter fu
 
 ## Procedure
 
-1. State the source basis and source access level.
-2. Follow the skill's `SKILL.md` procedure instead of working from memory.
-3. Produce the stated output format and keep verified facts, interpretation, speculation, and recommendation separate.
-4. End with verification gaps. Add a risk-gated follow-up only when it is useful.
+Follow the shared procedure in `docs/SKILL_OPERATIONAL_BOUNDARIES.md`.
 
 ## Quality checks
 
-- Evidence strength must match claim strength.
-- Missing source access must be marked clearly.
-- Uncertainty, limits, and user verification needs must be visible.
-- Output should preserve scholarly caution without becoming vague.
+Apply the shared quality checks in `docs/SKILL_OPERATIONAL_BOUNDARIES.md`; keep any skill-specific caveats visible in the output.
 
 ## Failure modes
 
-- Fabricated citations, quotes, page numbers, source metadata, datasets, market facts, or field consensus.
-- Confident synthesis from partial sources.
-- Generic prose or structure that hides weak evidence or weak reasoning.
-- Overstated claims, missing counterarguments, or unclear source basis.
+Use the shared failure modes in `docs/SKILL_OPERATIONAL_BOUNDARIES.md`; call out the skill-specific failure most relevant to the request.
 
 ## Files/folders it may read
 
-- This skill's `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` when present and relevant.
-- User-provided drafts, notes, sources, artifacts, or project files explicitly named in the request.
-- Shared project documentation when it is needed for workflow, quality, or artifact compatibility.
+Follow the shared read boundary in `docs/SKILL_OPERATIONAL_BOUNDARIES.md`.
 
 ## Files/folders it may write
 
-- None by default.
-- May create or update user-requested research artifacts, notes, drafts, or review files in the current project.
-- Must not overwrite source material, bibliography databases, manuscript files, or plugin files without explicit user request.
+Follow the shared write boundary in `docs/SKILL_OPERATIONAL_BOUNDARIES.md`.
 
 ## What it must not do
 
-- Invent missing scholarly facts or verification.
-- Treat unavailable evidence as confirmed.
-- Use style polish to mask weak argument, weak sources, or unsupported claims.
-- Claim external searches, source checks, or database access that did not happen.
+Follow the shared prohibitions in `docs/SKILL_OPERATIONAL_BOUNDARIES.md`.
 
 ## Best next steps
 

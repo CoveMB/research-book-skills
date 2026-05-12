@@ -25,44 +25,27 @@ Use at the start of a research interaction, when the user's next step is unclear
 
 ## Procedure
 
-1. Detect whether the prompt is a scholarly research task.
-2. Classify intent, artifact stage, source access level, and risk level.
-3. Choose the smallest useful skill or a short 2-4 skill sequence.
-4. Apply normal mode or deep mode.
-5. State what can be verified, what remains uncertain, and what the user must verify.
+Follow the shared procedure in `docs/SKILL_OPERATIONAL_BOUNDARIES.md`.
 
 ## Quality checks
 
-- Route choice must reduce a concrete scholarly risk.
-- Deep lookup must be denied unless it is explicitly requested or needed for evidence quality.
-- Deep mode must attempt lookup where available without treating unavailable lookup as verified.
-- The answer must label source access and verification limits.
-- Do not invent citations, page numbers, quotes, DOIs, field consensus, or source metadata.
+Apply the shared quality checks in `docs/SKILL_OPERATIONAL_BOUNDARIES.md`; keep any skill-specific caveats visible in the output.
 
 ## Failure modes
 
-- Treating any mention of a topic as permission for live source search.
-- Routing to multiple skills when one skill is enough.
-- Claiming field consensus from model knowledge only.
-- Auditing citations before extracting claims from an uncited draft.
-- Ignoring pure fiction, casual opinion, or grammar-only requests that should not trigger.
+Use the shared failure modes in `docs/SKILL_OPERATIONAL_BOUNDARIES.md`; call out the skill-specific failure most relevant to the request.
 
 ## Files/folders it may read
 
-- This skill's `SKILL.md`, `README.md`, and `agents/openai.yaml`.
-- Routing docs such as `docs/SKILL_INDEX.md`, `MODE_REGISTRY.md`, and `docs/ARCHITECTURE.md` when package-level context matters.
-- User-provided files explicitly named in the request.
+Follow the shared read boundary in `docs/SKILL_OPERATIONAL_BOUNDARIES.md`.
 
 ## Files/folders it may write
 
-- None by default.
-- User-requested workflow notes or routing artifacts in the current project.
+Follow the shared write boundary in `docs/SKILL_OPERATIONAL_BOUNDARIES.md`.
 
 ## What it must not do
 
-- Do not browse, validate sources, or verify citations by default.
-- Do not treat model knowledge as source verification.
-- Do not route casual, fictional, grammar-only, or non-research tasks.
+Follow the shared prohibitions in `docs/SKILL_OPERATIONAL_BOUNDARIES.md`.
 
 ## Best next steps
 

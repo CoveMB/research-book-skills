@@ -1,5 +1,13 @@
 # Research agenda template
 
+## Source basis
+
+## What I can verify
+
+## What remains uncertain
+
+## User verification needed
+
 ## One-sentence project definition
 
 ## Central research question

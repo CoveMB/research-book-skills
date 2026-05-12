@@ -57,16 +57,15 @@ Classify each case as:
 
 ## Files/folders it may read
 
-- This skill's `SKILL.md`, `README.md`, `assets/case-study-dossier-template.md`, and `agents/openai.yaml`.
-- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
-- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
+- Bundled skill instructions, metadata, and assets if available (including, but not limited to, `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` in this project or equivalent files in another project).
+- Shared policy docs, especially `docs/SOURCE_LIMITS.md` and `docs/AUTO_SELECTION_GUARDRAILS.md`.
 - User-provided case notes, source excerpts, timelines, datasets, chapter drafts, and argument artifacts explicitly named in the request.
 - Related claim ledgers or chapter briefs when case function depends on the argument.
 
 ## Files/folders it may write
 
 - None by default.
-- May create or update user-requested case dossiers, comparison tables, or integration plans in the current project.
+- May create or update user-requested case dossiers, comparison tables, or integration plans in the user-designated project or workspace.
 - Must not alter original sources, datasets, or manuscript files unless explicitly asked.
 
 ## What it must not do
@@ -142,7 +141,7 @@ Include timeline, actors, source base, relevance, limits, and chapter placement.
 
 ```
 
-Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless one skill reduces a named scholarly risk.
 
 ## Quality checks
 
@@ -151,7 +150,6 @@ Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.m
 - Include failures and counterexamples where they strengthen credibility.
 - Make the limits of comparison explicit.
 - Do not generalize beyond the case-selection design.
-- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 

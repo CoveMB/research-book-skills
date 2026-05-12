@@ -7,7 +7,11 @@
   "required": [
     "schema_version",
     "artifact_type",
-    "project_title"
+    "project_title",
+    "source_basis",
+    "what_i_can_verify",
+    "what_remains_uncertain",
+    "user_verification_needed"
   ],
   "properties": {
     "schema_version": {
@@ -30,6 +34,18 @@
     },
     "created_at": {
       "$ref": "#/$defs/non_empty_string"
+    },
+    "source_basis": {
+      "$ref": "#/$defs/non_empty_string"
+    },
+    "what_i_can_verify": {
+      "$ref": "#/$defs/non_empty_strings"
+    },
+    "what_remains_uncertain": {
+      "$ref": "#/$defs/non_empty_strings"
+    },
+    "user_verification_needed": {
+      "$ref": "#/$defs/non_empty_strings"
     },
     "central_research_question": {
       "$ref": "#/$defs/non_empty_string"

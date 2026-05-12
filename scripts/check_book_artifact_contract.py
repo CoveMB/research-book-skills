@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import argparse
-import json
 import sys
-from json import JSONDecodeError
 from pathlib import Path
 from typing import Any
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from plugin_utils import load_json_object_result
 
 
 SCHEMA_RELATIVE_PATH = Path("shared/contracts/book/book_artifact.schema.json")
@@ -32,19 +33,6 @@ SUPPORTED_SCHEMA_KEYWORDS = {
     "title",
     "type",
 }
-
-
-def load_json(path: Path) -> tuple[dict[str, Any] | None, str | None]:
-    try:
-        payload = json.loads(path.read_text(encoding="utf-8"))
-    except JSONDecodeError as exc:
-        return None, f"{path}: malformed JSON at line {exc.lineno}, column {exc.colno}: {exc.msg}"
-    except OSError as exc:
-        return None, f"{path}: unable to read file: {exc}"
-
-    if not isinstance(payload, dict):
-        return None, f"{path}: JSON root must be an object"
-    return payload, None
 
 
 def location(path_parts: list[str]) -> str:
@@ -260,7 +248,7 @@ def validate_schema(schema_path: Path) -> tuple[dict[str, Any] | None, list[str]
     if not schema_path.is_file():
         return None, [f"{schema_path}: missing book_artifact.schema.json"]
 
-    schema, error = load_json(schema_path)
+    schema, error = load_json_object_result(schema_path)
     if error is not None:
         return None, [error]
     assert schema is not None
@@ -288,7 +276,7 @@ def example_files(examples_dir: Path) -> tuple[list[Path], list[str]]:
 def validate_examples(schema: dict[str, Any], files: list[Path]) -> list[str]:
     errors: list[str] = []
     for path in files:
-        payload, error = load_json(path)
+        payload, error = load_json_object_result(path)
         if error is not None:
             errors.append(error)
             continue
@@ -296,6 +284,39 @@ def validate_examples(schema: dict[str, Any], files: list[Path]) -> list[str]:
         for validation_error in validate_value(schema, schema, payload, []):
             errors.append(f"{path}: {validation_error}")
     return errors
+
+
+def schema_artifact_types(schema: dict[str, Any]) -> set[str]:
+    properties = schema.get("properties")
+    if not isinstance(properties, dict):
+        return set()
+    artifact_type = properties.get("artifact_type")
+    if not isinstance(artifact_type, dict):
+        return set()
+    enum = artifact_type.get("enum")
+    if not isinstance(enum, list):
+        return set()
+    return {value for value in enum if isinstance(value, str)}
+
+
+def example_artifact_types(files: list[Path]) -> set[str]:
+    artifact_types: set[str] = set()
+    for path in files:
+        payload, error = load_json_object_result(path)
+        if error is not None or payload is None:
+            continue
+        artifact_type = payload.get("artifact_type")
+        if isinstance(artifact_type, str):
+            artifact_types.add(artifact_type)
+    return artifact_types
+
+
+def validate_example_coverage(schema: dict[str, Any], files: list[Path]) -> list[str]:
+    found_types = example_artifact_types(files)
+    return [
+        f"missing example for artifact_type {artifact_type!r}"
+        for artifact_type in sorted(schema_artifact_types(schema) - found_types)
+    ]
 
 
 def check(root: Path) -> list[str]:
@@ -309,6 +330,7 @@ def check(root: Path) -> list[str]:
         return errors
 
     errors.extend(validate_examples(schema, files))
+    errors.extend(validate_example_coverage(schema, files))
     return errors
 
 

@@ -14,11 +14,11 @@ This skill can auto-detect research intent and route the user to the smallest us
 
 ## When to use
 
-Use when the prompt involves scholarly or research nonfiction work, source discovery, literature review, evidence quality, citations, claims, methodology, thesis design, chapters, manuscript continuity, case studies, proposal positioning, or an unclear next step in a research project.
+Use when the prompt involves scholarly or research nonfiction work, source discovery, source notes, extraction tables, literature review, evidence quality, citations, claims, methodology, thesis design, chapters, manuscript continuity, case studies, proposal positioning, release risk, or an unclear next step in a research project.
 
 ## Automatic selection guidance
 
-- High-signal triggers: research intent, start research, literature review, source quality, evidence audit, citations, claims, methodology, thesis, chapters, manuscript continuity, case studies, or book proposal positioning.
+- High-signal triggers: research intent, start research, literature review, source notes, extraction tables, source quality, evidence audit, claim traceability, citations, methodology, thesis, chapters, manuscript continuity, case studies, release audit, comparable titles, or book proposal positioning.
 - Light-route behavior: classify the request, select one next skill or a short sequence, and state what remains unverified.
 - Deep-work gate: Normal mode lookup gate controls when plan-first routing may escalate into lookup.
 - Noise and slowdown guard: prefer light routing first; do not browse, validate sources, or audit citations just because a topic is named.
@@ -84,7 +84,7 @@ Stop conditions:
 
 ## Inputs expected
 
-- User prompt, topic, draft, notes, thesis, outline, source list, bibliography, proposal, or manuscript context.
+- User prompt, topic, draft, notes, thesis, outline, source list, candidate export, bibliography, proposal, or manuscript context.
 - Any source material or access level the user provides.
 - The user's visible goal: plan, discover, map, audit, draft, revise, verify, or propose.
 
@@ -115,9 +115,8 @@ Follow `docs/SOURCE_LIMITS.md`: state the source access level, separate source b
 
 ## Files/folders it may read
 
-- This skill's `SKILL.md`, `README.md`, and `agents/openai.yaml`.
-- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
-- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
+- Bundled skill instructions, metadata, and assets if available (including, but not limited to, `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` in this project or equivalent files in another project).
+- Shared policy docs, especially `docs/SOURCE_LIMITS.md` and `docs/AUTO_SELECTION_GUARDRAILS.md`.
 - `docs/ROUTING_MATRIX.md` for canonical skill-routing choices.
 - `docs/ARCHITECTURE.md`, `MODE_REGISTRY.md`, `docs/SKILL_INDEX.md`, `docs/QUALITY_STANDARD.md`, and `shared/contracts/book/book_artifact.schema.json` when routing, artifacts, or quality gates matter.
 - User-provided files, drafts, notes, bibliographies, artifacts, or source excerpts explicitly named in the request.
@@ -125,7 +124,7 @@ Follow `docs/SOURCE_LIMITS.md`: state the source access level, separate source b
 ## Files/folders it may write
 
 - None by default.
-- May create or update user-requested routing notes, workflow plans, or book artifacts in the current project when explicitly asked.
+- May create or update user-requested routing notes, workflow plans, or book artifacts in the user-designated project or workspace when explicitly asked.
 - Must not rewrite source files, manuscripts, bibliographies, or skill files unless the user asks for that maintenance work.
 
 ## What it must not do
@@ -188,7 +187,7 @@ This is a non-contract routing output unless the user explicitly asks for a book
 
 ```
 
-The `## Suggested next step` section is optional. Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless one skill reduces a named scholarly risk.
 
 ## Quality checks
 

@@ -57,6 +57,14 @@ Output artifact: `search-log.md`.
 
 Contract artifact type: `source_discovery_log`.
 
+When a search has produced exported candidates, use `discovery-runner-deduper` before treating the results as a usable corpus. It should create candidate matrices, duplicate clusters, keep/reject logs, and search-log updates. It must keep planned searches separate from completed searches.
+
+## 2.1. Source-note and extraction sprint
+
+Use `annotation-to-source-note` when document highlights, reference-manager notes, excerpts, or manual reading notes need source-bound notes with quote, paraphrase, summary, interpretation, metadata, and locator gaps kept visible.
+
+Use `extraction-table-builder` when source notes need comparable fields before synthesis. It should create source-level rows, passage-level rows, coding decisions, limitations, follow-up questions, and a cross-source matrix only where the material supports comparison.
+
 ## 3. Literature mapping sprint
 
 Use `literature-review-mapper` to create:
@@ -96,11 +104,14 @@ Use `scholarly-prose-editor` after the chapter's logic is stable. Do not use pro
 
 ## 7. Evidence audit sprint
 
-Use `claim-evidence-ledger` before `citation-integrity-auditor`, so the claims and evidence status are clear before citation audit.
+Use `claim-evidence-ledger` before `claim-traceability-graph`, so the claims and evidence status are clear before chain audit.
+
+Use `claim-traceability-graph` before `citation-integrity-auditor` when claims need to be connected to source notes, citekeys, locators, and repair actions. It should not treat nearby citations as proof.
 
 Output artifacts:
 
 - `claim-evidence-ledger.csv`
+- `claim-traceability-graph.md`
 - `citation-integrity-audit.md`
 
 Contract artifact type: `claim_evidence_ledger`.
@@ -117,7 +128,13 @@ Contract artifact type: `continuity_review`.
 
 Use `book-proposal-scholarship` once the thesis, audience, source base, and chapter structure are stable.
 
+Use `book-comps-verifier` for comparable titles, audience claims, market claims, timeliness claims, and press positioning before sending the proposal.
+
 Contract artifact type: `book_proposal`.
+
+## 10. Release sprint
+
+Use `rights-privacy-release-auditor` before sharing notes, source packets, proposal materials, manuscript exports, or research artifacts outside the project. It should report release blockers and required fixes. It should not delete, redact, rewrite, publish, or send files unless the user asks.
 
 ## Validation
 

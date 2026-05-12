@@ -1,5 +1,13 @@
 # Annotated bibliography entry
 
+## Source basis
+
+## What I can verify
+
+## What remains uncertain
+
+## User verification needed
+
 **Source:**
 **Type:**
 **Main argument:**

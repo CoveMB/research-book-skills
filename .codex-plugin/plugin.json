@@ -1,7 +1,7 @@
 {
   "name": "scholarly-research-book",
   "version": "1.0.0",
-  "description": "Agent Skills plugin for rigorous research nonfiction and research book writing: research intent routing, research agenda, source discovery, literature review, argument architecture, chapters, prose, citations, and manuscript continuity.",
+  "description": "Agent Skills plugin for rigorous research nonfiction and research book writing: research intent routing, source discovery, source notes, extraction tables, literature review, argument architecture, chapters, claim traceability, citations, release audits, and proposal support.",
   "author": {
     "name": "Cove"
   },
@@ -16,14 +16,19 @@
     "nonfiction",
     "argument",
     "research-intent-routing",
+    "source-notes",
+    "extraction-tables",
+    "claim-traceability",
+    "release-audit",
+    "comparable-titles",
     "artifact-contract",
     "workflow-orchestration"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Research Book Skills",
-    "shortDescription": "Research intent routing plus argument, citation, and manuscript workflows for scholarly nonfiction.",
-    "longDescription": "A local plugin with focused Agent Skills for planning, researching, drafting, auditing, and revising scholarly nonfiction or a research book. Includes lightweight research-intent routing, staged architecture docs, a mode registry, book artifact contracts, source discovery, literature review mapping, claim-evidence ledgers, counterargument review, citation integrity checks, and book proposal support.",
+    "shortDescription": "Research intent routing plus source, argument, citation, release, and proposal workflows for scholarly nonfiction.",
+    "longDescription": "A local plugin with focused Agent Skills for planning, researching, drafting, auditing, and revising scholarly nonfiction or a research book. Includes lightweight research-intent routing, staged architecture docs, a mode registry, book artifact contracts, source discovery, source notes, extraction tables, literature review mapping, claim-evidence ledgers, claim traceability, counterargument review, citation integrity checks, release audits, comp verification, and book proposal support.",
     "developerName": "Generated local package",
     "category": "Productivity",
     "capabilities": [
@@ -37,6 +42,9 @@
       "Use research-intent-router to classify this research request, choose the smallest useful skill route, and decide whether deep source lookup is needed.",
       "Use research-intent-router in deep mode to route this research request and attempt source lookup with verification limits.",
       "Use Research Book Skills to turn my book idea into a staged research and writing plan.",
+      "Use annotation-to-source-note to turn my highlights into source-bound notes with locator gaps marked.",
+      "Use extraction-table-builder to build a source matrix before synthesis.",
+      "Use rights-privacy-release-auditor to check this packet before external sharing.",
       "Audit this chapter with the claim-evidence ledger and citation-integrity auditor.",
       "Map this literature into schools of thought, debates, gaps, and a chapter strategy.",
       "Create JSON book artifacts that follow the book artifact contract."

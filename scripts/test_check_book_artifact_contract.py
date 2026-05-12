@@ -144,12 +144,67 @@ def valid_claim_ledger() -> dict:
     }
 
 
+def valid_chapter_brief() -> dict:
+    return {
+        "schema_version": "book-artifact-v1",
+        "artifact_type": "chapter_brief",
+        "project_title": "Fixture Book",
+        "section_outline": [
+            {
+                "section": "Introduction",
+                "function": "Frame the chapter problem.",
+                "key_claim": "The chapter needs a clear opening claim.",
+            }
+        ],
+    }
+
+
+def valid_book_proposal() -> dict:
+    return {
+        "schema_version": "book-artifact-v1",
+        "artifact_type": "book_proposal",
+        "project_title": "Fixture Book",
+        "comparable_titles": [
+            {
+                "title": "Unverified Comparable",
+                "verification_status": "unverified",
+            }
+        ],
+    }
+
+
+def valid_source_discovery_log() -> dict:
+    return {
+        "schema_version": "book-artifact-v1",
+        "artifact_type": "source_discovery_log",
+        "project_title": "Fixture Book",
+        "search_log": [
+            {
+                "useful_results": 0,
+            }
+        ],
+    }
+
+
+def write_valid_coverage_examples(root: Path, *, skip: set[str] | None = None) -> None:
+    skipped = skip or set()
+    examples = {
+        "claim_evidence_ledger": ("claim-ledger.json", valid_claim_ledger()),
+        "chapter_brief": ("chapter-brief.json", valid_chapter_brief()),
+        "book_proposal": ("book-proposal.json", valid_book_proposal()),
+        "source_discovery_log": ("source-discovery-log.json", valid_source_discovery_log()),
+    }
+    for artifact_type, (name, payload) in examples.items():
+        if artifact_type not in skipped:
+            write_example(root, name, payload)
+
+
 class TestBookArtifactContract(unittest.TestCase):
     def test_valid_examples_pass(self) -> None:
         with TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
             write_schema(root)
-            write_example(root, "claim-ledger.json", valid_claim_ledger())
+            write_valid_coverage_examples(root)
 
             result = run_checker(root)
 
@@ -211,6 +266,7 @@ class TestBookArtifactContract(unittest.TestCase):
         with TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
             write_schema(root)
+            write_valid_coverage_examples(root, skip={"book_proposal"})
             write_example(
                 root,
                 "book-proposal.json",
@@ -260,6 +316,17 @@ class TestBookArtifactContract(unittest.TestCase):
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("unexpected_field", result.stdout)
+
+    def test_missing_example_for_schema_artifact_type_fails(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            write_schema(root)
+            write_example(root, "claim-ledger.json", valid_claim_ledger())
+
+            result = run_checker(root)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("missing example for artifact_type", result.stdout)
 
     def test_unresolved_schema_reference_fails(self) -> None:
         with TemporaryDirectory() as temporary_directory:

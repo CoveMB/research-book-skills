@@ -3,6 +3,16 @@
   "artifact_type": "literature_map",
   "project_title": "Fixture Research Book",
   "created_at": "2026-05-12",
+  "source_basis": "Fixture example; no live source lookup or full-text verification performed.",
+  "what_i_can_verify": [
+    "The artifact follows the shared book artifact schema."
+  ],
+  "what_remains_uncertain": [
+    "Field structure, consensus, and gaps require a representative source set."
+  ],
+  "user_verification_needed": [
+    "Replace fixture clusters with verified literature mapping from actual sources."
+  ],
   "field_overview": "The literature should be mapped by claims, methods, assumptions, and topic.",
   "fields_and_subfields": [
     "Primary field named by the user",

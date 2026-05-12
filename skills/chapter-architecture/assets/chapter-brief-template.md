@@ -1,5 +1,13 @@
 # Chapter brief
 
+## Source basis
+
+## What I can verify
+
+## What remains uncertain
+
+## User verification needed
+
 ## Chapter purpose
 
 ## Central question

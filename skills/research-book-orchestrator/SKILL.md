@@ -10,7 +10,7 @@ metadata:
 
 ## Purpose
 
-Coordinate a research-book workflow with scholarly standards from idea to manuscript. This skill does not replace the specialized skills. It decides which skill should be used next, sequences the work, and keeps the project grounded in scholarly standards.
+Coordinate a research-book workflow with scholarly standards from idea to manuscript and external sharing. This skill does not replace the specialized skills. It decides which skill should be used next, sequences the work, and keeps the project grounded in scholarly standards.
 
 Use `docs/ARCHITECTURE.md` as the stage map and `MODE_REGISTRY.md` as the route registry when the user asks for a full workflow, mode choice, or package-level orchestration.
 
@@ -18,7 +18,7 @@ Use `docs/ARCHITECTURE.md` as the stage map and `MODE_REGISTRY.md` as the route 
 
 - The user has a broad book idea and needs a complete workflow.
 - The user is unsure whether to start with sources, outline, argument, chapters, or citation audit.
-- The task spans multiple phases of a research nonfiction manuscript.
+- The task spans multiple phases of a research nonfiction manuscript, source trail, proposal, or release packet.
 - The project involves academic standards, evidence management, citations, literature review, or peer-review style critique.
 
 ## Inputs expected
@@ -36,14 +36,14 @@ Use `docs/ARCHITECTURE.md` as the stage map and `MODE_REGISTRY.md` as the route 
 
 ## Automatic selection guidance
 
-- High-signal triggers: broad multi-stage research book task, unclear next step, or mixed request spanning sources, argument, chapters, evidence, citations, and revision.
+- High-signal triggers: broad multi-stage research book task, unclear next step, or mixed request spanning sources, notes, extraction, argument, chapters, evidence, citations, proposal, release, and revision.
 - Light-route behavior: produce a workflow diagnosis and route sequence without performing source validation itself.
 - Deep-work gate: send source lookup, citation verification, and claim audits to specialized skills only when the route requires them.
 - Noise and slowdown guard: do not replace narrow specialist skills when the user's request has one clear owner.
 
 ## Core routing map
 
-Use `docs/ROUTING_MATRIX.md` as the canonical route table. This skill should summarize only the route sequence needed for the current project, not duplicate the full route matrix.
+Use `docs/ROUTING_MATRIX.md` as the canonical route table. This skill should summarize only the route sequence needed for the user-designated project or workspace, not duplicate the full route matrix.
 
 ## Operating principles
 
@@ -62,16 +62,15 @@ Follow `docs/SOURCE_LIMITS.md`: state the source access level, separate source b
 
 ## Files/folders it may read
 
-- This skill's `SKILL.md`, `README.md`, and `agents/openai.yaml`.
-- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
-- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
+- Bundled skill instructions, metadata, and assets if available (including, but not limited to, `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` in this project or equivalent files in another project).
+- Shared policy docs, especially `docs/SOURCE_LIMITS.md` and `docs/AUTO_SELECTION_GUARDRAILS.md`.
 - `docs/ARCHITECTURE.md`, `MODE_REGISTRY.md`, `docs/QUALITY_STANDARD.md`, and `shared/contracts/book/book_artifact.schema.json` when routing, artifacts, or quality gates matter.
 - User-provided files, drafts, notes, bibliographies, and artifacts explicitly named in the request.
 
 ## Files/folders it may write
 
 - None by default.
-- May create or update user-requested workflow plans or book artifacts in the current project when explicitly asked.
+- May create or update user-requested workflow plans or book artifacts in the user-designated project or workspace when explicitly asked.
 - Must not rewrite skill files, source files, external libraries, or citation databases unless the user explicitly requests that maintenance work.
 
 ## What it must not do
@@ -88,13 +87,14 @@ Classify the project into one or more phases:
 
 - Phase A: concept and scope
 - Phase B: source discovery
-- Phase C: literature mapping
-- Phase D: argument architecture
-- Phase E: chapter architecture
-- Phase F: drafting and style
-- Phase G: evidence and citation audit
-- Phase H: whole-manuscript continuity
-- Phase I: proposal and external positioning
+- Phase C: source notes, extraction, and candidate screening
+- Phase D: literature mapping
+- Phase E: argument architecture
+- Phase F: chapter architecture
+- Phase G: drafting and style
+- Phase H: evidence, traceability, and citation audit
+- Phase I: whole-manuscript continuity
+- Phase J: proposal, comparable titles, and release review
 
 ### 2. Identify missing inputs
 

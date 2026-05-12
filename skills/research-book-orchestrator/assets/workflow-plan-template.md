@@ -1,5 +1,13 @@
 # Research book workflow plan
 
+## Source basis
+
+## What I can verify
+
+## What remains uncertain
+
+## User verification needed
+
 ## Project diagnosis
 
 ## Recommended skill sequence

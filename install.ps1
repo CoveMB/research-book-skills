@@ -13,6 +13,14 @@ if (-not $Python) {
     throw "Python is required but was not found."
 }
 
+$PythonVersion = & $Python.Source -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"
+if ($LASTEXITCODE -ne 0) {
+    throw "Python 3.10 or newer is required."
+}
+if ([version]$PythonVersion -lt [version]"3.10") {
+    throw "Python 3.10 or newer is required."
+}
+
 if ($args -notcontains "--dry-run") {
     Write-Host "Tip: run .\install.ps1 --dry-run to preview changes before installing."
 }

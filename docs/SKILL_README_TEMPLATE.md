@@ -27,7 +27,7 @@ Describe the main output. Note that follow-up suggestions are optional and risk-
 
 ## Procedure
 
-1. State the source basis and source access level using `docs/SOURCE_LIMITS.md`.
+1. State the source basis and source access level using the available source-access policy (including, but not limited to, `docs/SOURCE_LIMITS.md` in this project or an equivalent policy in another project).
 2. Follow the procedure in the skill's `SKILL.md`.
 3. Produce the stated output format and keep verified facts, interpretation, speculation, and recommendation separate.
 4. End with verification gaps. Add a risk-gated follow-up only when it is useful.
@@ -46,13 +46,13 @@ Describe the main output. Note that follow-up suggestions are optional and risk-
 
 ## Files/folders it may read
 
-- This skill's `SKILL.md`, `README.md`, relevant `assets/`, `references/`, and `agents/openai.yaml`.
+- Bundled skill instructions, metadata, and assets if available (including, but not limited to, `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` in this project or equivalent files in another project).
 - User-provided project material explicitly named in the request.
 
 ## Files/folders it may write
 
 - None by default.
-- User-requested artifacts or notes in the current project.
+- User-requested artifacts or notes in the user-designated project or workspace.
 
 ## What it must not do
 

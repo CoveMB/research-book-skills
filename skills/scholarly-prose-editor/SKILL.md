@@ -27,6 +27,7 @@ Use when the user provides a paragraph, section, chapter excerpt, proposal, abst
 
 - The user needs chapter structure; use `chapter-architecture`.
 - The user needs citation verification; use `citation-integrity-auditor`.
+- The user needs privacy, copyright, quote, license, or release risk checked before sharing; use `rights-privacy-release-auditor`.
 - The user asks for new source-backed claims rather than prose revision.
 
 ## Inputs expected
@@ -52,16 +53,15 @@ Follow `docs/SOURCE_LIMITS.md`: state the source access level, separate source b
 
 ## Files/folders it may read
 
-- This skill's `SKILL.md`, `README.md`, `assets/style-sheet-template.md`, and `agents/openai.yaml`.
-- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
-- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
+- Bundled skill instructions, metadata, and assets if available (including, but not limited to, `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` in this project or equivalent files in another project).
+- Shared policy docs, especially `docs/SOURCE_LIMITS.md` and `docs/AUTO_SELECTION_GUARDRAILS.md`.
 - User-provided passages, manuscript files, style sheets, source notes, and constraints explicitly named in the request.
 - Related claim ledgers or citation audits when evidence issues should remain visible.
 
 ## Files/folders it may write
 
 - None by default.
-- May create or update user-requested revised passages, style sheets, or edit notes in the current project.
+- May create or update user-requested revised passages, style sheets, or edit notes in the user-designated project or workspace.
 - Must not overwrite manuscript files unless the user explicitly asks for file edits.
 
 ## What it must not do
@@ -125,7 +125,7 @@ Confirm whether the edit introduced any new factual claims. The default should b
 
 ```
 
-Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless one skill reduces a named scholarly risk.
 
 ## Editing modes
 
@@ -145,7 +145,6 @@ Ask or infer one:
 - Avoid promotional or formulaic phrasing.
 - Keep specialized terms if they are necessary, but define them.
 - Preserve warranted hedging when evidence remains uncertain.
-- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 

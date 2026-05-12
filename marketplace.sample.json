@@ -1,7 +1,7 @@
 {
-  "name": "local-research-plugins",
+  "name": "local-personal-plugins",
   "interface": {
-    "displayName": "Local Research Plugins"
+    "displayName": "Local Personal Plugins"
   },
   "plugins": [
     {

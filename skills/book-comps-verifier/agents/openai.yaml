@@ -1,0 +1,6 @@
+interface:
+  display_name: "Book Comps Verifier"
+  short_description: "Verify comparable titles and positioning claims for research nonfiction proposals, press pitches, agent queries, grant applications, audience claims, market claims, timeliness claims, and publication positioning."
+  default_prompt: "Use book-comps-verifier to verify these comparable titles and flag stale, mismatched, fabricated, or unverified positioning claims."
+policy:
+  allow_implicit_invocation: true

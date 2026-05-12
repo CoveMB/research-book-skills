@@ -1,0 +1,6 @@
+interface:
+  display_name: "Claim Traceability Graph"
+  short_description: "Map manuscript or note claims to claim IDs, source notes, citekeys, locators, and evidence status when traceability, unsupported claims, orphan claims, or incomplete evidence chains need review."
+  default_prompt: "Use claim-traceability-graph to map these claims to source notes, citekeys, locators, evidence status, and repair actions."
+policy:
+  allow_implicit_invocation: true

@@ -16,14 +16,20 @@ Use `docs/ROUTING_MATRIX.md` for canonical skill-routing choices.
 | `orchestrate` | `research-book-orchestrator` | Staged workflow plan | Very High | "full book workflow", "where should I start", "plan my research book" |
 | `agenda` | `scholarly-research-agenda` | Book Research Agenda | Very High | "book idea", "research question", "scope", "contribution" |
 | `source-discovery` | `systematic-source-discovery` | Source Discovery Log | High | "find sources", "search strategy", "source plan" |
+| `discovery-dedupe` | `discovery-runner-deduper` | Candidate Matrix and Search-Log Update | High | "dedupe candidates", "screen search results", "CSV", "BIB", "RIS" |
+| `source-note` | `annotation-to-source-note` | Source Note | High | "annotations", "PDF highlights", "Zotero notes", "source notes" |
+| `extraction-table` | `extraction-table-builder` | Extraction Table or Source Matrix | High | "extraction table", "source matrix", "compare sources" |
 | `literature-map` | `literature-review-mapper` | Literature Map | High | "map literature", "schools of thought", "debates", "gaps" |
 | `argument-architecture` | `argument-architecture` | Thesis Tree | High | "thesis tree", "argument structure", "book-level argument" |
 | `counterargument-review` | `counterargument-peer-review` | Peer-Review Style Critique | High | "challenge thesis", "strong objections", "peer review" |
 | `chapter-architecture` | `chapter-architecture` | Chapter Brief | High | "chapter outline", "chapter structure", "chapter logic" |
 | `claim-ledger` | `claim-evidence-ledger` | Claim-Evidence Ledger | High | "audit claims", "evidence status", "overclaiming" |
+| `claim-traceability` | `claim-traceability-graph` | Claim Traceability Graph | High | "trace claims", "evidence chain", "orphan claims", "locators" |
 | `citation-audit` | `citation-integrity-auditor` | Citation Integrity Audit | High | "check citations", "unsupported claims", "quote verification" |
+| `release-audit` | `rights-privacy-release-auditor` | Rights Privacy Release Audit | High | "release audit", "share externally", "privacy", "copyright", "license" |
 | `continuity-audit` | `manuscript-continuity-editor` | Continuity Review | High | "whole manuscript", "concept drift", "contradictions", "repetition" |
 | `proposal` | `book-proposal-scholarship` | Research Book Proposal | High | "book proposal", "press proposal", "comparable titles" |
+| `comps-verification` | `book-comps-verifier` | Comparable Title Verification | High | "comps", "comparable titles", "press positioning", "audience claims" |
 
 ## Automatic selection rule
 

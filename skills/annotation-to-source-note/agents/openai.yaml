@@ -1,0 +1,6 @@
+interface:
+  display_name: "Annotation to Source Note"
+  short_description: "Convert reference-manager notes, document highlights, manual annotations, excerpts, or reading notes (for example, Zotero notes or PDF highlights) into source-bound notes while preserving quote, paraphrase, summary, interpretation, citekey, metadata, and locator gaps."
+  default_prompt: "Use annotation-to-source-note to convert these annotations into source-bound notes and flag missing metadata or locators."
+policy:
+  allow_implicit_invocation: true

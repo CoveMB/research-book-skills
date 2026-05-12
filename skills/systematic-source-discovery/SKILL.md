@@ -26,6 +26,7 @@ Use when the user needs to find credible sources, build a literature base, avoid
 ## Do not use this skill when
 
 - The user needs the topic made researchable first; use `scholarly-research-agenda`.
+- The user already has exported or queried candidate results that need dedupe or screening; use `discovery-runner-deduper`.
 - The user already has sources and needs field structure; use `literature-review-mapper`.
 - The user asks whether a specific source is credible; use `methodology-source-auditor`.
 
@@ -58,16 +59,15 @@ When the user explicitly asks for JSON or a contract artifact, use `shared/contr
 
 ## Files/folders it may read
 
-- This skill's `SKILL.md`, `README.md`, `assets/search-log-template.md`, `references/search-strategy-guide.md`, and `agents/openai.yaml`.
-- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
-- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
+- Bundled skill instructions, metadata, and assets if available (including, but not limited to, `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` in this project or equivalent files in another project).
+- Shared policy docs, especially `docs/SOURCE_LIMITS.md` and `docs/AUTO_SELECTION_GUARDRAILS.md`.
 - User-provided research agendas, source lists, bibliographies, notes, and search logs explicitly named in the request.
 - Project workflow docs when aligning source discovery with book artifacts.
 
 ## Files/folders it may write
 
 - None by default.
-- May create or update a user-requested search plan, query bank, or search log in the current project.
+- May create or update a user-requested search plan, query bank, or search log in the user-designated project or workspace.
 - Must not alter source databases, bibliography managers, or repository files without explicit permission.
 
 ## What it must not do
@@ -172,7 +172,7 @@ Record every search query, venue, date, filters, number of useful hits, and note
 
 ```
 
-Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless one skill reduces a named scholarly risk.
 
 ## Quality checks
 
@@ -182,7 +182,6 @@ Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.m
 - Avoid overreliance on search-engine snippets.
 - Mark any live-search requirement clearly when current information is needed.
 - Mark unsearched venues as planned venues, not evidence.
-- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 

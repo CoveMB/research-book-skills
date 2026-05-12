@@ -26,6 +26,7 @@ Use when the user provides sources, citations, excerpts, abstracts, notes, PDFs,
 ## Do not use this skill when
 
 - The user only needs a search strategy; use `systematic-source-discovery`.
+- The user needs annotations or highlights converted into source-bound notes with quote and locator gaps; use `annotation-to-source-note`.
 - The user asks whether sources are credible enough for a claim; use `methodology-source-auditor`.
 - The user provides no source material and only wants a general topic plan.
 
@@ -42,16 +43,15 @@ Follow `docs/SOURCE_LIMITS.md`: state the source access level, separate source b
 
 ## Files/folders it may read
 
-- This skill's `SKILL.md`, `README.md`, `assets/annotation-template.md`, and `agents/openai.yaml`.
-- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
-- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
+- Bundled skill instructions, metadata, and assets if available (including, but not limited to, `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` in this project or equivalent files in another project).
+- Shared policy docs, especially `docs/SOURCE_LIMITS.md` and `docs/AUTO_SELECTION_GUARDRAILS.md`.
 - User-provided sources, excerpts, PDFs, notes, bibliographies, and project files explicitly named in the request.
 - Related project artifacts when chapter placement or source relevance depends on them.
 
 ## Files/folders it may write
 
 - None by default.
-- May create or update user-requested annotated bibliography files or notes in the current project.
+- May create or update user-requested annotated bibliography files or notes in the user-designated project or workspace.
 - Must not alter original source files, bibliography databases, or citation keys unless explicitly asked.
 
 ## What it must not do
@@ -124,7 +124,7 @@ Recommend book chapter or section placement.
 
 ```
 
-Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless one skill reduces a named scholarly risk.
 
 ## Short table option
 
@@ -139,7 +139,6 @@ Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.m
 - Distinguish source argument from user's interpretation.
 - Include how the source might challenge the book as well as how it helps.
 - Do not infer a source's full argument from a title, citation, or abstract alone.
-- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 

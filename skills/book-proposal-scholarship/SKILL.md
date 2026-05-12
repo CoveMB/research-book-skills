@@ -26,6 +26,7 @@ Use when the user has a book idea, outline, chapter summaries, literature map, o
 ## Do not use this skill when
 
 - The thesis, audience, or chapter structure is not stable enough for proposal work.
+- The user only needs comparable titles or positioning claims verified; use `book-comps-verifier`.
 - The user only needs prose polishing; use `scholarly-prose-editor`.
 - The user asks for citation or source verification; use `citation-integrity-auditor`.
 
@@ -63,16 +64,15 @@ When the user explicitly asks for JSON or a contract artifact, use `shared/contr
 
 ## Files/folders it may read
 
-- This skill's `SKILL.md`, `README.md`, `assets/book-proposal-template.md`, and `agents/openai.yaml`.
-- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
-- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
+- Bundled skill instructions, metadata, and assets if available (including, but not limited to, `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` in this project or equivalent files in another project).
+- Shared policy docs, especially `docs/SOURCE_LIMITS.md` and `docs/AUTO_SELECTION_GUARDRAILS.md`.
 - User-provided proposals, outlines, chapter summaries, literature maps, sample chapters, CV notes, and comparable-title lists explicitly named in the request.
 - Related book artifacts when proposal claims depend on prior research work.
 
 ## Files/folders it may write
 
 - None by default.
-- May create or update user-requested proposal drafts, comparable-title tables, or submission notes in the current project.
+- May create or update user-requested proposal drafts, comparable-title tables, or submission notes in the user-designated project or workspace.
 - Must not overwrite proposal or manuscript files unless explicitly asked.
 
 ## What it must not do
@@ -165,7 +165,7 @@ Recommend missing research, proposal materials, and sample chapter priorities.
 
 ```
 
-Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless one skill reduces a named scholarly risk.
 
 ## Quality checks
 
@@ -174,7 +174,6 @@ Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.m
 - Academic proposal style should be specific about contribution and source base.
 - Trade proposal style should be specific about reader need and narrative hook.
 - Label public relevance and market timing claims as claims needing evidence unless verified.
-- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 

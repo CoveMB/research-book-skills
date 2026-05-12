@@ -50,16 +50,15 @@ When the user explicitly asks for JSON or a contract artifact, use `shared/contr
 
 ## Files/folders it may read
 
-- This skill's `SKILL.md`, `README.md`, `assets/research-agenda-template.md`, and `agents/openai.yaml`.
-- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
-- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
+- Bundled skill instructions, metadata, and assets if available (including, but not limited to, `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` in this project or equivalent files in another project).
+- Shared policy docs, especially `docs/SOURCE_LIMITS.md` and `docs/AUTO_SELECTION_GUARDRAILS.md`.
 - User-provided book premises, notes, outlines, bibliographies, or project files explicitly named in the request.
 - Repository quality docs when the user asks for contract-compatible or workflow-aligned artifacts.
 
 ## Files/folders it may write
 
 - None by default.
-- May create or update a user-requested research agenda artifact in the current project.
+- May create or update a user-requested research agenda artifact in the user-designated project or workspace.
 - Must not modify source texts, citation databases, or plugin files unless explicitly asked.
 
 ## What it must not do
@@ -176,7 +175,7 @@ Assess whether the project is answerable at book scale. Check scope size, likely
 
 ```
 
-Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless one skill reduces a named scholarly risk.
 
 ## Quality checks
 
@@ -185,7 +184,6 @@ Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.m
 - Each major question must imply a source strategy.
 - The project must have boundaries tight enough to write a chapter, not a conversation topic.
 - Treat the provisional thesis as provisional until source discovery and literature mapping test it.
-- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 

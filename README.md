@@ -2,7 +2,7 @@
 
 Version: 1.0.0
 
-Research Book Skills is a local skills plugin for people writing scholarly nonfiction, research monographs, long-form essays, or book proposals. It helps turn loose research work into concrete artifacts: a research agenda, source discovery log, literature map, thesis tree, chapter brief, claim ledger, citation audit, continuity review, and proposal.
+Research Book Skills is a local skills plugin for people writing scholarly nonfiction, research monographs, long-form essays, or book proposals. It helps turn loose research work into concrete artifacts: a research agenda, source discovery log, source notes, extraction tables, literature map, thesis tree, chapter brief, claim ledger, claim traceability graph, citation audit, release audit, continuity review, comparable-title check, and proposal.
 
 The package assumes a person is still doing the research. It can sort, pressure-test, and clean up the work, but it will not treat model memory as source verification. It keeps asking practical scholarly questions: what kind of claim is this, what evidence can support it, where is the argument too strong, and what would an expert reader challenge?
 
@@ -30,7 +30,7 @@ Preview the install first:
 ./install.sh --dry-run
 ```
 
-Full manual install paths are in [`docs/INSTALLATION.md`](docs/INSTALLATION.md). The manual guide covers personal marketplace install, repo marketplace install, direct skill-folder install, upload notes for single-skill environments, validation, and uninstall steps.
+Full manual install paths are in [`docs/INSTALLATION.md`](docs/INSTALLATION.md). The manual guide covers personal marketplace install, direct skill-folder install, upload notes for single-skill environments, validation, and uninstall steps.
 
 ## Try it first
 
@@ -58,6 +58,18 @@ For citation problems:
 Use citation-integrity-auditor. Check whether the citations in this draft support the claims they are attached to.
 ```
 
+For source notes:
+
+```text
+Use annotation-to-source-note. Turn these document highlights into source-bound notes and flag missing locators.
+```
+
+For release review:
+
+```text
+Use rights-privacy-release-auditor. Check this proposal packet before I share it outside the project.
+```
+
 ## What it helps with
 
 Use this package when the project needs clearer research structure, stricter source discipline, stronger argument design, or manuscript repair. It works before drafting, while drafting, and after a draft exists.
@@ -66,10 +78,16 @@ Typical jobs:
 
 - turn a broad book idea into research questions, scope boundaries, and contribution claims
 - design a repeatable source search instead of collecting sources randomly
+- dedupe candidate source exports and keep search logs honest
+- turn annotations and highlights into source-bound notes
+- build extraction tables before trying to synthesize uneven notes
 - map a literature into schools, debates, gaps, and usable chapter logic
 - build a thesis tree with warrants, assumptions, evidence, and counterarguments
 - audit claims for evidence strength, citation needs, and overstatement
+- trace claims to source notes, citekeys, locators, and repair actions
 - check citation/source fit without inventing page numbers or fake references
+- audit release packets for privacy, copyright, quote, license, and local metadata risks
+- verify comparable titles before proposal submission
 - keep chapters consistent across concepts, tone, thesis, and structure
 - shape a research book proposal around the actual argument and source base
 
@@ -79,7 +97,7 @@ Use [`docs/SKILL_INDEX.md`](docs/SKILL_INDEX.md) for the full skill list and [`d
 
 - unclear request: start with `research-intent-router`
 - whole-project planning: use `research-book-orchestrator`
-- source, argument, chapter, claim, citation, continuity, and proposal work: choose the narrow specialist in the skill index
+- source, note, extraction, argument, chapter, claim, citation, release, continuity, and proposal work: choose the narrow specialist in the skill index
 
 Every skill folder has its own `README.md` with example requests, useful inputs, expected outputs, and common failure modes.
 

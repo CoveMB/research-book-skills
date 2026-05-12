@@ -46,16 +46,15 @@ When the user explicitly asks for JSON or a contract artifact, use `shared/contr
 
 ## Files/folders it may read
 
-- This skill's `SKILL.md`, `README.md`, `assets/chapter-brief-template.md`, and `agents/openai.yaml`.
-- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
-- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
+- Bundled skill instructions, metadata, and assets if available (including, but not limited to, `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` in this project or equivalent files in another project).
+- Shared policy docs, especially `docs/SOURCE_LIMITS.md` and `docs/AUTO_SELECTION_GUARDRAILS.md`.
 - User-provided chapter drafts, outlines, notes, source excerpts, thesis trees, and continuity artifacts explicitly named in the request.
 - Adjacent chapter files when the user asks for transitions or whole-book fit.
 
 ## Files/folders it may write
 
 - None by default.
-- May create or update user-requested chapter briefs, outlines, or planning notes in the current project.
+- May create or update user-requested chapter briefs, outlines, or planning notes in the user-designated project or workspace.
 - Must not rewrite manuscript chapters unless the user explicitly asks for drafting or restructuring edits.
 
 ## What it must not do
@@ -161,7 +160,7 @@ Common risks:
 
 ```
 
-Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless one skill reduces a named scholarly risk.
 
 ## Quality checks
 
@@ -170,7 +169,6 @@ Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.m
 - Include counterargument or complication where appropriate.
 - Endings should synthesize, not merely stop.
 - Do not turn a topic list into a chapter plan without claims and evidence anchors.
-- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 

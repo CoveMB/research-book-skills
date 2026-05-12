@@ -1,5 +1,13 @@
 # Source audit rubric
 
+## Source basis
+
+## What I can verify
+
+## What remains uncertain
+
+## User verification needed
+
 | Dimension | Questions | Rating |
 |---|---|---|
 | Source type | What kind of source is this? | High/Medium/Low/Contextual |
