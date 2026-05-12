@@ -36,7 +36,7 @@ My book idea feels too broad. Help me decide what belongs in scope and what shou
 
 ## Typical output
 
-The output usually includes a one-sentence project definition, central research question, subquestions, provisional thesis, contribution claim, scope boundaries, terms needing definition, evidence plan, risks, and recommended next skill.
+The output usually includes a one-sentence project definition, central research question, subquestions, provisional thesis, contribution claim, scope boundaries, terms needing definition, evidence plan, risks, and an optional risk-gated suggested step.
 
 ## Procedure
 

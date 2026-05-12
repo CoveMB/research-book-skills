@@ -15,6 +15,8 @@ This package is a book-length research workflow, not a loose set of writing prom
 ```mermaid
 flowchart TD
     Start([Book idea or manuscript material])
+    Router[0. Research intent router]
+    Specialists[Specialists: choose the smallest useful skill]
     Orchestrator[research-book-orchestrator]
     Agenda[1. Research agenda]
     Discovery[2. Source discovery]
@@ -29,7 +31,10 @@ flowchart TD
     Proposal[11. Book proposal]
     End([Book-ready artifacts])
 
-    Start --> Orchestrator
+    Start --> Router
+    Router --> Specialists
+    Specialists --> Orchestrator
+    Specialists --> Agenda
     Orchestrator --> Agenda
     Agenda --> Discovery
     Discovery --> Literature
@@ -47,13 +52,14 @@ flowchart TD
     class Agenda,Discovery,Literature,Argument,Review,Chapter,Evidence,Citation,Continuity,Proposal gate
 ```
 
-You can enter the workflow at any stage. The orchestrator decides whether to run every stage or route directly to one skill.
+You can enter the workflow at any stage. The research intent router chooses the smallest useful skill first; the orchestrator handles broader multi-stage workflow planning.
 
 ## Stage matrix
 
 | Stage | Primary skill | Artifact | Gate |
 |---|---|---|---|
-| 0. Orchestration | `research-book-orchestrator` | Workflow plan | Correct route chosen; assumptions labeled |
+| 0. Intent routing | `research-intent-router` | Research intent route; non-contract routing output | Smallest useful skill chosen; deep lookup justified or declined |
+| 0.1. Orchestration | `research-book-orchestrator` | Workflow plan | Correct route chosen; assumptions labeled |
 | 1. Agenda | `scholarly-research-agenda` | Book Research Agenda | Question is answerable; scope has boundaries |
 | 2. Source discovery | `systematic-source-discovery` | Source Discovery Log | Search venues separated from verified sources |
 | 3. Literature mapping | `literature-review-mapper` | Literature Map | Consensus, controversy, and gaps separated |
@@ -71,6 +77,8 @@ You can enter the workflow at any stage. The orchestrator decides whether to run
 ```mermaid
 graph TD
     O[research-book-orchestrator]
+    T[research-intent-router]
+    Specialists[Specialists]
     A[scholarly-research-agenda]
     S[systematic-source-discovery]
     L[literature-review-mapper]
@@ -87,6 +95,9 @@ graph TD
     X[book-proposal-scholarship]
     Contract[book artifact contract]
 
+    T --> Specialists
+    Specialists --> O
+    Specialists --> A
     O --> A
     O --> S
     O --> L
@@ -134,6 +145,7 @@ JSON artifacts must use `schema_version: "book-artifact-v1"` and one of the arti
 
 | Gate | Blocks on | Why it matters |
 |---|---|---|
+| Intent route gate | Unclear research intent, artifact stage, source access, or risk level | Prevents noisy skill chains and premature deep lookup |
 | Scope gate | Vague central question or undefined audience | Prevents scope drift |
 | Source gate | Unclear source strategy or undocumented search path | Prevents cherry-picking |
 | Literature gate | One-sided literature map | Prevents literature blindness |

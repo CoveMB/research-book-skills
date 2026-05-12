@@ -1,6 +1,6 @@
 ---
 name: systematic-source-discovery
-description: Design rigorous research source-discovery strategies, keyword sets, database searches, citation-chaining plans, primary-source targets, and search logs for research books and literature reviews.
+description: Design rigorous source-discovery strategies when research books or literature reviews need source plans, keyword banks, database searches, inclusion rules, citation chaining, primary-source targets, candidate sources, or search logs.
 license: MIT
 metadata:
   version: "1.0.0"
@@ -15,6 +15,19 @@ Create a repeatable source-discovery strategy for research nonfiction: search te
 ## When to use
 
 Use when the user needs to find high-quality sources, build a literature base, avoid cherry-picking, or document how sources were discovered.
+
+## Automatic selection guidance
+
+- High-signal triggers: find sources, search strategy, source plan, keyword bank, database search, inclusion criteria, citation chaining, primary-source targets, or search log.
+- Light-route behavior: create search families, query banks, venues, and inclusion/exclusion rules before collecting candidates.
+- Deep-work gate: browse or collect candidate sources only when the user asks for actual sources, source existence matters now, or router deep mode routes here.
+- Noise and slowdown guard: do not launch broad live search for a vague topic before agenda and scope are stable.
+
+## Do not use this skill when
+
+- The user needs the topic made researchable first; use `scholarly-research-agenda`.
+- The user already has sources and needs field structure; use `literature-review-mapper`.
+- The user asks whether a specific source is credible; use `methodology-source-auditor`.
 
 ## Inputs expected
 
@@ -45,11 +58,13 @@ Before creating a search plan, state the source access level as one of:
 - model knowledge only
 - live/current search needed
 
-Every output must separate source basis, what can be verified from available material, what remains uncertain, and what the user must verify. Do not invent citations, page numbers, quotations, DOIs, datasets, market facts, field consensus, source metadata, or claims of having searched a database. Separate verified facts, interpretation, speculation, and recommendation.
+Apply `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, and include What I can verify, What remains uncertain, and User verification needed. Do not invent citations or source support.
 
 ## Files/folders it may read
 
 - This skill's `SKILL.md`, `README.md`, `assets/search-log-template.md`, `references/search-strategy-guide.md`, and `agents/openai.yaml`.
+- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
+- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
 - User-provided research agendas, source lists, bibliographies, notes, and search logs explicitly named in the request.
 - Project workflow docs when aligning source discovery with book artifacts.
 
@@ -157,8 +172,15 @@ Record every search query, venue, date, filters, number of useful hits, and note
 
 ## Limits / failure risks
 
-## Next best skill
+## Suggested next step
+
+Use `skill-name` to [specific next action].
+Why this helps scholarship: [named risk reduced].
+Use only if: [condition].
+Skip if: [reason it would add noise now].
 ```
+
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
 
 ## Quality checks
 
@@ -168,6 +190,7 @@ Record every search query, venue, date, filters, number of useful hits, and note
 - Avoid overreliance on search-engine snippets.
 - Mark any live-search requirement clearly when current information is needed.
 - Mark unsearched venues as planned venues, not evidence.
+- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 
@@ -175,3 +198,4 @@ Record every search query, venue, date, filters, number of useful hits, and note
 - Search log mixes completed searches with planned searches.
 - Source list overweights convenient web results.
 - Inclusion criteria are too vague to prevent cherry-picking.
+- Premature citation audit before citations, quotes, page numbers, bibliography entries, or cited claims exist.

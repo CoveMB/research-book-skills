@@ -1,6 +1,6 @@
 ---
 name: argument-architecture
-description: Build a research book-level thesis tree with claims, warrants, evidence, assumptions, counterarguments, chapter sequence, and argumentative dependencies.
+description: Build a research book-level thesis tree when a thesis, notes, literature map, agenda, outline, or draft needs claims, warrants, evidence paths, assumptions, counterarguments, chapter sequence, and dependencies.
 license: MIT
 metadata:
   version: "1.0.0"
@@ -15,6 +15,19 @@ Design the book's argument as a structure rather than a plain outline. This skil
 ## When to use
 
 Use when the user has a thesis, notes, research agenda, literature map, or draft and needs a coherent book-level argument.
+
+## Automatic selection guidance
+
+- High-signal triggers: thesis tree, warrants, assumptions, claim dependencies, argument sequence, or book-level argument structure.
+- Light-route behavior: map existing claims and evidence needs without making the thesis sound proven.
+- Deep-work gate: only evaluate evidence strength when source summaries, excerpts, ledgers, or citations are available.
+- Noise and slowdown guard: do not fabricate support or detour into source discovery unless argument gaps require it.
+
+## Do not use this skill when
+
+- The user needs a chapter-level outline; use `chapter-architecture`.
+- The user needs claim support status; use `claim-evidence-ledger`.
+- The user has only a broad topic with no question or thesis; use `scholarly-research-agenda`.
 
 ## Inputs expected
 
@@ -37,11 +50,13 @@ Before designing the argument, state the source access level as one of:
 - model knowledge only
 - live/current search needed
 
-Every output must separate source basis, what can be verified from available material, what remains uncertain, and what the user must verify. Do not invent citations, page numbers, quotations, DOIs, datasets, market facts, field consensus, source metadata, or claims of having searched a database. Separate verified facts, interpretation, speculation, and recommendation.
+Apply `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, and include What I can verify, What remains uncertain, and User verification needed. Do not invent citations or source support.
 
 ## Files/folders it may read
 
 - This skill's `SKILL.md`, `README.md`, `assets/thesis-tree-template.md`, and `agents/openai.yaml`.
+- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
+- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
 - User-provided agendas, literature maps, notes, outlines, drafts, and source summaries explicitly named in the request.
 - Related claim ledgers or chapter briefs when argument dependency depends on them.
 
@@ -148,8 +163,15 @@ Offer versions:
 
 ## Limits / failure risks
 
-## Next best skill
+## Suggested next step
+
+Use `skill-name` to [specific next action].
+Why this helps scholarship: [named risk reduced].
+Use only if: [condition].
+Skip if: [reason it would add noise now].
 ```
+
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
 
 ## Quality checks
 
@@ -159,6 +181,7 @@ Offer versions:
 - Include the strongest counterargument at the architecture stage, not after drafting.
 - Avoid single-factor determinism or reductionism unless strongly evidenced.
 - Do not make a thesis sound proven when the evidence path is only proposed.
+- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 
@@ -166,3 +189,4 @@ Offer versions:
 - Essential claims lack evidence or failure-impact labels.
 - Thesis variants become rhetorical polish instead of different defensibility levels.
 - Argument sequence ignores what available sources can actually support.
+- Premature citation audit before citations, quotes, page numbers, bibliography entries, or cited claims exist.

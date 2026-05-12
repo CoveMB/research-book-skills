@@ -1,6 +1,6 @@
 ---
 name: book-proposal-scholarship
-description: Develop a serious research nonfiction book proposal with thesis, contribution, audience, market/field positioning, chapter summaries, comparable titles, and sample-material plan.
+description: Develop a serious research nonfiction book proposal when a project needs thesis, contribution, audience, market or field positioning, chapter summaries, comparable titles, and sample-material planning.
 license: MIT
 metadata:
   version: "1.0.0"
@@ -15,6 +15,19 @@ Create a serious research nonfiction book proposal suitable for academic presses
 ## When to use
 
 Use when the user has a book idea, outline, chapter summaries, literature map, or partial manuscript and needs a proposal structure.
+
+## Automatic selection guidance
+
+- High-signal triggers: book proposal, press proposal, pitch, contribution, audience, comparable titles, positioning, chapter summaries, or sample-material plan.
+- Light-route behavior: draft proposal architecture and mark market, comparable-title, and positioning claims by verification status.
+- Deep-work gate: only validate comparable titles, press lists, market facts, or publication facts when the user asks for lookup, provides sources, or arrives through router deep mode.
+- Noise and slowdown guard: do not invent market facts, comparable titles, sales claims, or field consensus.
+
+## Do not use this skill when
+
+- The thesis, audience, or chapter structure is not stable enough for proposal work.
+- The user only needs prose polishing; use `scholarly-prose-editor`.
+- The user asks for citation or source verification; use `citation-integrity-auditor`.
 
 ## Inputs expected
 
@@ -50,11 +63,13 @@ Before drafting a proposal, state the source access level as one of:
 - model knowledge only
 - live/current search needed
 
-Every output must separate source basis, what can be verified from available material, what remains uncertain, and what the user must verify. Do not invent citations, page numbers, quotations, DOIs, datasets, market facts, field consensus, source metadata, or claims of having searched a database. Separate verified facts, interpretation, speculation, and recommendation.
+Apply `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, and include What I can verify, What remains uncertain, and User verification needed. Do not invent citations or source support.
 
 ## Files/folders it may read
 
 - This skill's `SKILL.md`, `README.md`, `assets/book-proposal-template.md`, and `agents/openai.yaml`.
+- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
+- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
 - User-provided proposals, outlines, chapter summaries, literature maps, sample chapters, CV notes, and comparable-title lists explicitly named in the request.
 - Related book artifacts when proposal claims depend on prior research work.
 
@@ -150,8 +165,15 @@ Recommend missing research, proposal materials, and sample chapter priorities.
 
 ## Limits / failure risks
 
-## Next best skill
+## Suggested next step
+
+Use `skill-name` to [specific next action].
+Why this helps scholarship: [named risk reduced].
+Use only if: [condition].
+Skip if: [reason it would add noise now].
 ```
+
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
 
 ## Quality checks
 
@@ -160,6 +182,7 @@ Recommend missing research, proposal materials, and sample chapter priorities.
 - Academic proposal style should be specific about contribution and source base.
 - Trade proposal style should be specific about reader need and narrative hook.
 - Label public relevance and market timing claims as claims needing evidence unless verified.
+- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 
@@ -167,3 +190,4 @@ Recommend missing research, proposal materials, and sample chapter priorities.
 - Comparable titles are fabricated, stale, or poorly matched.
 - Chapter summaries list topics without evidence or argument function.
 - Audience positioning is too broad to guide press or agent fit.
+- Premature citation audit before citations, quotes, page numbers, bibliography entries, or cited claims exist.

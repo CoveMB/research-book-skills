@@ -1,6 +1,6 @@
 ---
 name: counterargument-peer-review
-description: Simulate rigorous research peer review by generating strong objections, rival explanations, missing literatures, positional blind spots, and thesis revisions.
+description: Simulate rigorous research peer review when a thesis, chapter, outline, proposal, or argument needs strong objections, rival explanations, missing literatures, positional blind spots, and revision paths.
 license: MIT
 metadata:
   version: "1.0.0"
@@ -15,6 +15,19 @@ Stress-test a research argument. The goal is not negativity; it is to make the b
 ## When to use
 
 Use when the user has a thesis, chapter draft, outline, proposal, or argument and wants serious critique.
+
+## Automatic selection guidance
+
+- High-signal triggers: challenge this, peer review, strong objections, rival explanations, missing literatures, one-sided argument, brittle thesis, or review preparation.
+- Light-route behavior: steelman the argument, then identify objections and revision options tied to known source limits.
+- Deep-work gate: only claim that a literature is missing or settled when a corpus, source list, live search, or router deep mode lookup supports it.
+- Noise and slowdown guard: do not generate generic objections detached from the user's thesis, audience, and evidence base.
+
+## Do not use this skill when
+
+- The user needs a thesis tree before critique; use `argument-architecture`.
+- The user needs citation verification; use `citation-integrity-auditor`.
+- The user asks for line editing rather than intellectual stress-testing.
 
 ## Inputs expected
 
@@ -37,11 +50,13 @@ Before reviewing, state the source access level as one of:
 - model knowledge only
 - live/current search needed
 
-Every output must separate source basis, what can be verified from available material, what remains uncertain, and what the user must verify. Do not invent citations, page numbers, quotations, DOIs, datasets, market facts, field consensus, source metadata, or claims of having searched a database. Separate verified facts, interpretation, speculation, and recommendation.
+Apply `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, and include What I can verify, What remains uncertain, and User verification needed. Do not invent citations or source support.
 
 ## Files/folders it may read
 
 - This skill's `SKILL.md`, `README.md`, and `agents/openai.yaml`.
+- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
+- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
 - User-provided drafts, proposals, outlines, notes, claim ledgers, literature maps, and source excerpts explicitly named in the request.
 - Related argument or chapter artifacts when critique depends on manuscript structure.
 
@@ -143,8 +158,15 @@ For high-severity objections, state what evidence would falsify or materially we
 
 ## Limits / failure risks
 
-## Next best skill
+## Suggested next step
+
+Use `skill-name` to [specific next action].
+Why this helps scholarship: [named risk reduced].
+Use only if: [condition].
+Skip if: [reason it would add noise now].
 ```
+
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
 
 ## Severity scale
 
@@ -160,6 +182,7 @@ For high-severity objections, state what evidence would falsify or materially we
 - Do not replace critique with generic warnings.
 - Always offer constructive fixes.
 - Do not name specific missing sources unless they are provided or verified.
+- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 
@@ -167,3 +190,4 @@ For high-severity objections, state what evidence would falsify or materially we
 - Rival explanations are weaker than real expert objections would be.
 - Missing literatures are fabricated instead of named as fields to check.
 - Thesis revisions preserve confidence by hiding uncertainty.
+- Premature citation audit before citations, quotes, page numbers, bibliography entries, or cited claims exist.

@@ -1,6 +1,6 @@
 ---
 name: scholarly-prose-editor
-description: Edit research nonfiction prose for clarity, precision, structure, rhythm, readability, and authorial voice while preserving nuance and avoiding generic AI style.
+description: Edit research nonfiction prose when passages, chapter excerpts, proposals, abstracts, or introductions need clarity, precision, structure, rhythm, compression, readability, or voice while preserving nuance and evidence limits.
 license: MIT
 metadata:
   version: "1.0.0"
@@ -15,6 +15,19 @@ Improve serious nonfiction prose without flattening the author's voice or over-p
 ## When to use
 
 Use when the user provides a paragraph, section, chapter excerpt, proposal, abstract, or introduction that needs clearer research prose.
+
+## Automatic selection guidance
+
+- High-signal triggers: edit prose, clarity, precision, structure, rhythm, compression, readability, authorial voice, abstract, introduction, or proposal language.
+- Light-route behavior: revise only the supplied prose and flag unsupported claims without adding new factual content.
+- Deep-work gate: route to `claim-evidence-ledger` when prose problems hide evidence gaps or overclaiming.
+- Noise and slowdown guard: do not transform a prose edit into a research audit unless claim risk is visible.
+
+## Do not use this skill when
+
+- The user needs chapter structure; use `chapter-architecture`.
+- The user needs citation verification; use `citation-integrity-auditor`.
+- The user asks for new source-backed claims rather than prose revision.
 
 ## Inputs expected
 
@@ -43,11 +56,13 @@ Before editing, state the source access level as one of:
 - model knowledge only
 - live/current search needed
 
-Every output must separate source basis, what can be verified from available material, what remains uncertain, and what the user must verify. Do not invent citations, page numbers, quotations, DOIs, datasets, market facts, field consensus, source metadata, or claims of having searched a database. Separate verified facts, interpretation, speculation, and recommendation.
+Apply `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, and include What I can verify, What remains uncertain, and User verification needed. Do not invent citations or source support.
 
 ## Files/folders it may read
 
 - This skill's `SKILL.md`, `README.md`, `assets/style-sheet-template.md`, and `agents/openai.yaml`.
+- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
+- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
 - User-provided passages, manuscript files, style sheets, source notes, and constraints explicitly named in the request.
 - Related claim ledgers or citation audits when evidence issues should remain visible.
 
@@ -113,7 +128,16 @@ Confirm whether the edit introduced any new factual claims. The default should b
 ## Optional stronger alternatives
 
 ## Limits / failure risks
+
+## Suggested next step
+
+Use `skill-name` to [specific next action].
+Why this helps scholarship: [named risk reduced].
+Use only if: [condition].
+Skip if: [reason it would add noise now].
 ```
+
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
 
 ## Editing modes
 
@@ -133,6 +157,7 @@ Ask or infer one:
 - Avoid promotional or generic AI phrasing.
 - Keep specialized terms if they are necessary, but define them.
 - Preserve warranted hedging when evidence remains uncertain.
+- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 
@@ -140,3 +165,4 @@ Ask or infer one:
 - Revision introduces new facts without evidence.
 - Hedging is removed where uncertainty is intellectually necessary.
 - Sentence-level polish hides structural or evidentiary problems.
+- Premature citation audit before citations, quotes, page numbers, bibliography entries, or cited claims exist.

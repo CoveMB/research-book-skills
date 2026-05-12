@@ -1,6 +1,6 @@
 ---
 name: scholarly-research-agenda
-description: Turn a broad research book idea into precise research questions, scope boundaries, contribution claims, key terms, evidence needs, and an initial research agenda. Use before source gathering or outlining.
+description: Turn a broad research book idea, topic, thesis intuition, manifesto, or interdisciplinary question into precise research questions, scope boundaries, contribution claims, key terms, evidence needs, and an initial agenda before source gathering or outlining.
 license: MIT
 metadata:
   version: "1.0.0"
@@ -15,6 +15,19 @@ Transform a broad nonfiction or research book idea into a disciplined research a
 ## When to use
 
 Use this when the user has a broad intellectual project, book premise, thesis idea, manifesto, research theme, or interdisciplinary question and needs it made researchable.
+
+## Automatic selection guidance
+
+- High-signal triggers: start research on a subject, broad topic, research question, scope, contribution, audience, key terms, or evidence plan.
+- Light-route behavior: clarify the question, boundaries, contribution, and evidence needs before source discovery.
+- Deep-work gate: continue to `systematic-source-discovery` only after the question and scope are stable enough to guide a search.
+- Noise and slowdown guard: do not browse or validate sources just because a topic is named.
+
+## Do not use this skill when
+
+- The user already has a stable question and asks to find sources; use `systematic-source-discovery`.
+- The user asks for chapter structure; use `chapter-architecture`.
+- The user asks for citation verification; use `citation-integrity-auditor`.
 
 ## Inputs expected
 
@@ -37,11 +50,13 @@ Before creating the agenda, state the source access level as one of:
 - model knowledge only
 - live/current search needed
 
-Every output must separate source basis, what can be verified from available material, what remains uncertain, and what the user must verify. Do not invent citations, page numbers, quotations, DOIs, datasets, market facts, field consensus, source metadata, or claims of having searched a database. Separate verified facts, interpretation, speculation, and recommendation.
+Apply `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, and include What I can verify, What remains uncertain, and User verification needed. Do not invent citations or source support.
 
 ## Files/folders it may read
 
 - This skill's `SKILL.md`, `README.md`, `assets/research-agenda-template.md`, and `agents/openai.yaml`.
+- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
+- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
 - User-provided book premises, notes, outlines, bibliographies, or project files explicitly named in the request.
 - Repository quality docs when the user asks for contract-compatible or workflow-aligned artifacts.
 
@@ -161,8 +176,15 @@ Assess whether the project is answerable at book scale. Check scope size, likely
 
 ## Limits / failure risks
 
-## Next best skill
+## Suggested next step
+
+Use `skill-name` to [specific next action].
+Why this helps scholarship: [named risk reduced].
+Use only if: [condition].
+Skip if: [reason it would add noise now].
 ```
+
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
 
 ## Quality checks
 
@@ -171,6 +193,7 @@ Assess whether the project is answerable at book scale. Check scope size, likely
 - Each major question must imply a source strategy.
 - The project must have boundaries tight enough to write a chapter, not a conversation topic.
 - Treat the provisional thesis as provisional until source discovery and literature mapping test it.
+- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 
@@ -178,3 +201,4 @@ Assess whether the project is answerable at book scale. Check scope size, likely
 - Question mixes empirical, normative, and speculative claims without separation.
 - Agenda assumes sources exist without verification.
 - Contribution claim overstates novelty before literature mapping.
+- Premature citation audit before citations, quotes, page numbers, bibliography entries, or cited claims exist.

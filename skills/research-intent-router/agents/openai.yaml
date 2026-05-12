@@ -1,0 +1,6 @@
+interface:
+  display_name: "Research Intent Router"
+  short_description: "Auto-detect research intent for scholarly nonfiction tasks, choose the smallest useful research-book skill, and apply normal plan-first or deep source lookup limits."
+  default_prompt: "Use research-intent-router in normal mode to classify this research request, choose the smallest useful skill route, and decide whether deep source lookup is needed."
+policy:
+  allow_implicit_invocation: true

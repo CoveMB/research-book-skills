@@ -36,7 +36,7 @@ Use this bibliography to identify the debates my thesis must answer.
 
 ## Typical output
 
-The output usually includes a field overview, disciplines and subfields, schools of thought, major debates, consensus and controversy map, intellectual genealogy, gaps, implications for the book thesis, missing sources, and recommended next skill.
+The output usually includes a field overview, disciplines and subfields, schools of thought, major debates, consensus and controversy map, intellectual genealogy, gaps, implications for the book thesis, missing sources, and an optional risk-gated suggested step.
 
 ## Procedure
 

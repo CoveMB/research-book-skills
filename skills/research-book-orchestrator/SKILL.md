@@ -1,6 +1,6 @@
 ---
 name: research-book-orchestrator
-description: Coordinate a full research nonfiction or research book workflow. Use for project planning, routing tasks across research agenda, source discovery, literature review, argument design, chapter work, evidence ledgers, citation audits, and manuscript revision.
+description: Coordinate a full research nonfiction or research book workflow when a project spans multiple stages, has an unclear next step, or mixes agenda, sources, literature review, argument, chapters, evidence ledgers, citation audits, and manuscript revision.
 license: MIT
 metadata:
   version: "1.0.0"
@@ -33,6 +33,13 @@ Use `docs/ARCHITECTURE.md` as the stage map and `MODE_REGISTRY.md` as the route 
 - The user asks for a narrow one-step task that clearly belongs to another skill.
 - The user only wants a stylistic edit, citation audit, literature map, or chapter outline.
 - The project is pure fiction or casual writing without research standards.
+
+## Automatic selection guidance
+
+- High-signal triggers: broad multi-stage research book task, unclear next step, or mixed request spanning sources, argument, chapters, evidence, citations, and revision.
+- Light-route behavior: produce a workflow diagnosis and route sequence without performing source validation itself.
+- Deep-work gate: send source lookup, citation verification, and claim audits to specialized skills only when the route requires them.
+- Noise and slowdown guard: do not replace narrow specialist skills when the user's request has one clear owner.
 
 ## Core routing map
 
@@ -76,11 +83,13 @@ Before routing or planning, state the source access level as one of:
 - model knowledge only
 - live/current search needed
 
-Every output must separate source basis, what can be verified from available material, what remains uncertain, and what the user must verify. Do not invent citations, page numbers, quotations, DOIs, datasets, market facts, field consensus, source metadata, or claims of having searched a database. Separate verified facts, interpretation, speculation, and recommendation.
+Apply `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, and include What I can verify, What remains uncertain, and User verification needed. Do not invent citations or source support.
 
 ## Files/folders it may read
 
 - This skill's `SKILL.md`, `README.md`, and `agents/openai.yaml`.
+- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
+- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
 - `docs/ARCHITECTURE.md`, `MODE_REGISTRY.md`, `docs/QUALITY_STANDARD.md`, and `shared/contracts/book/book_artifact.schema.json` when routing, artifacts, or quality gates matter.
 - User-provided files, drafts, notes, bibliographies, and artifacts explicitly named in the request.
 

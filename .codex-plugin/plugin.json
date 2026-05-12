@@ -1,7 +1,7 @@
 {
   "name": "scholarly-research-book",
   "version": "1.0.0",
-  "description": "Agent Skills plugin for rigorous research nonfiction and research book writing: research agenda, source discovery, literature review, argument architecture, chapters, prose, citations, and manuscript continuity.",
+  "description": "Agent Skills plugin for rigorous research nonfiction and research book writing: research intent routing, research agenda, source discovery, literature review, argument architecture, chapters, prose, citations, and manuscript continuity.",
   "author": {
     "name": "Generated local scholarly skills pack",
     "url": "https://agentskills.io"
@@ -16,14 +16,15 @@
     "academic-writing",
     "nonfiction",
     "argument",
+    "research-intent-routing",
     "artifact-contract",
     "workflow-orchestration"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Research Book Skills",
-    "shortDescription": "Research, argument, citation, and manuscript workflows for scholarly nonfiction.",
-    "longDescription": "A local Codex-compatible plugin bundling focused Agent Skills for planning, researching, drafting, auditing, and revising a serious research nonfiction or research book. Includes staged architecture docs, a mode registry, book artifact contracts, source discovery, literature review mapping, claim-evidence ledgers, counterargument review, citation integrity checks, and book proposal support.",
+    "shortDescription": "Research intent routing plus argument, citation, and manuscript workflows for scholarly nonfiction.",
+    "longDescription": "A local plugin bundling focused Agent Skills for planning, researching, drafting, auditing, and revising a serious research nonfiction or research book. Includes lightweight research-intent routing, staged architecture docs, a mode registry, book artifact contracts, source discovery, literature review mapping, claim-evidence ledgers, counterargument review, citation integrity checks, and book proposal support.",
     "developerName": "Generated local package",
     "category": "Productivity",
     "capabilities": [
@@ -34,6 +35,8 @@
     "composerIcon": "./assets/icon.svg",
     "logo": "./assets/logo.svg",
     "defaultPrompt": [
+      "Use research-intent-router to classify this research request, choose the smallest useful skill route, and decide whether deep source lookup is needed.",
+      "Use research-intent-router in deep mode to route this research request and attempt source lookup with verification limits.",
       "Use Research Book Skills to turn my book idea into a staged research and writing plan.",
       "Audit this chapter with the claim-evidence ledger and citation-integrity auditor.",
       "Map this literature into schools of thought, debates, gaps, and a chapter strategy.",

@@ -1,6 +1,6 @@
 ---
 name: manuscript-continuity-editor
-description: Review multiple chapters or a whole manuscript for thesis coherence, repetition, contradictions, concept tracking, tone consistency, chapter order, and revision priorities.
+description: Review multiple chapters or a whole manuscript when thesis coherence, repetition, contradictions, concept tracking, tone consistency, chapter order, argument drift, or revision priorities need diagnosis.
 license: MIT
 metadata:
   version: "1.0.0"
@@ -15,6 +15,19 @@ Evaluate coherence across a long research nonfiction manuscript: argument progre
 ## When to use
 
 Use when the user provides multiple chapters, a table of contents, chapter summaries, manuscript outline, proposal, or revision plan.
+
+## Automatic selection guidance
+
+- High-signal triggers: whole manuscript, multiple chapters, contradictions, repetition, concept drift, thesis drift, chapter order, tone consistency, or continuity review.
+- Light-route behavior: map continuity risks and route evidence problems to claim or citation audit only when needed.
+- Deep-work gate: cross-file review requires the user to provide chapter files, excerpts, or summaries.
+- Noise and slowdown guard: do not perform line edits across a manuscript when structural continuity is the requested task.
+
+## Do not use this skill when
+
+- The user has only one chapter; use `chapter-architecture`.
+- The user asks for claim support status; use `claim-evidence-ledger`.
+- The user asks for sentence-level prose revision; use `scholarly-prose-editor`.
 
 ## Inputs expected
 
@@ -33,11 +46,13 @@ Before reviewing continuity, state the source access level as one of:
 - model knowledge only
 - live/current search needed
 
-Every output must separate source basis, what can be verified from available material, what remains uncertain, and what the user must verify. Do not invent citations, page numbers, quotations, DOIs, datasets, market facts, field consensus, source metadata, or claims of having searched a database. Separate verified facts, interpretation, speculation, and recommendation.
+Apply `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, and include What I can verify, What remains uncertain, and User verification needed. Do not invent citations or source support.
 
 ## Files/folders it may read
 
 - This skill's `SKILL.md`, `README.md`, `assets/continuity-map-template.md`, and `agents/openai.yaml`.
+- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
+- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
 - User-provided chapters, outlines, proposals, chapter summaries, style sheets, claim ledgers, and citation audits explicitly named in the request.
 - Adjacent manuscript files only when the user asks for cross-chapter review.
 
@@ -130,8 +145,15 @@ Rank fixes by impact.
 
 ## Limits / failure risks
 
-## Next best skill
+## Suggested next step
+
+Use `skill-name` to [specific next action].
+Why this helps scholarship: [named risk reduced].
+Use only if: [condition].
+Skip if: [reason it would add noise now].
 ```
+
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
 
 ## Quality checks
 
@@ -140,6 +162,7 @@ Rank fixes by impact.
 - Preserve useful recurring motifs while cutting accidental repetition.
 - Flag missing transitions between major argument stages.
 - Do not treat a repeated claim as stronger merely because it appears in many chapters.
+- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 
@@ -147,3 +170,4 @@ Rank fixes by impact.
 - Concept tracking ignores shifts in definition or scope.
 - Repetition map treats motif and redundancy as the same problem.
 - Continuity recommendations require chapters or evidence not supplied.
+- Premature citation audit before citations, quotes, page numbers, bibliography entries, or cited claims exist.

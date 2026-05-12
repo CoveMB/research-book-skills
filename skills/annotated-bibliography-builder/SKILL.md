@@ -1,6 +1,6 @@
 ---
 name: annotated-bibliography-builder
-description: Create research-grade annotated bibliographies that summarize argument, method, evidence, relevance, limitations, key terms, and chapter placement for research book sources.
+description: Create research-grade annotated bibliographies when sources, citations, excerpts, abstracts, notes, PDFs, or bibliographies need structured notes on argument, method, evidence, relevance, limits, and chapter placement.
 license: MIT
 metadata:
   version: "1.0.0"
@@ -15,6 +15,19 @@ Produce high-quality research annotations that help a book author remember what 
 ## When to use
 
 Use when the user provides sources, citations, excerpts, abstracts, notes, PDFs, or a bibliography and needs structured annotations.
+
+## Automatic selection guidance
+
+- High-signal triggers: provided sources, citations, abstracts, PDFs, notes, bibliographies, or requests for source annotations.
+- Light-route behavior: classify available source access and produce an annotation plan or focused annotations from the supplied material.
+- Deep-work gate: only infer method, argument, or relevance from full text, abstracts, excerpts, notes, explicit source lookup, or router deep mode results.
+- Noise and slowdown guard: do not browse for missing metadata or summarize unseen sources unless the user asks for source lookup.
+
+## Do not use this skill when
+
+- The user only needs a search strategy; use `systematic-source-discovery`.
+- The user asks whether sources are credible enough for a claim; use `methodology-source-auditor`.
+- The user provides no source material and only wants a general topic plan.
 
 ## Inputs expected
 
@@ -33,11 +46,13 @@ Before annotating, state the source access level as one of:
 - model knowledge only
 - live/current search needed
 
-Every output must separate source basis, what can be verified from available material, what remains uncertain, and what the user must verify. Do not invent citations, page numbers, quotations, DOIs, datasets, market facts, field consensus, source metadata, or claims of having searched a database. Separate verified facts, interpretation, speculation, and recommendation.
+Apply `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, and include What I can verify, What remains uncertain, and User verification needed. Do not invent citations or source support.
 
 ## Files/folders it may read
 
 - This skill's `SKILL.md`, `README.md`, `assets/annotation-template.md`, and `agents/openai.yaml`.
+- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
+- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
 - User-provided sources, excerpts, PDFs, notes, bibliographies, and project files explicitly named in the request.
 - Related project artifacts when chapter placement or source relevance depends on them.
 
@@ -112,7 +127,16 @@ Recommend book chapter or section placement.
 [Repeat]
 
 ## Limits / failure risks
+
+## Suggested next step
+
+Use `skill-name` to [specific next action].
+Why this helps scholarship: [named risk reduced].
+Use only if: [condition].
+Skip if: [reason it would add noise now].
 ```
+
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
 
 ## Short table option
 
@@ -127,6 +151,7 @@ Recommend book chapter or section placement.
 - Distinguish source argument from user's interpretation.
 - Include how the source might challenge the book as well as how it helps.
 - Do not infer a source's full argument from a title, citation, or abstract alone.
+- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 
@@ -134,3 +159,4 @@ Recommend book chapter or section placement.
 - Summary collapses method, evidence, and argument into one vague note.
 - Relevance to the book is asserted without explaining the claim it can support.
 - Missing citation details are silently filled in.
+- Premature citation audit before citations, quotes, page numbers, bibliography entries, or cited claims exist.

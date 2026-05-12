@@ -1,6 +1,6 @@
 ---
 name: case-study-integration
-description: Select, compare, and integrate case studies into research arguments while avoiding cherry-picking, weak analogy, anecdotal overreach, and unsupported generalization.
+description: Select, compare, and integrate case studies when examples, analogies, counter-cases, comparison sets, or case dossiers must strengthen a research argument without cherry-picking or overgeneralization.
 license: MIT
 metadata:
   version: "1.0.0"
@@ -15,6 +15,19 @@ Help a research book use case studies responsibly. Cases can illustrate, test, c
 ## When to use
 
 Use when the user needs examples, cases, comparative examples, narrative dossiers, or comparative case design.
+
+## Automatic selection guidance
+
+- High-signal triggers: case study, example selection, analogy, comparison, counter-case, narrative dossier, cherry-picking risk, or generalization limits.
+- Light-route behavior: classify the intended case function and name what each case can and cannot prove.
+- Deep-work gate: only assess case evidence quality when case sources, notes, datasets, or citations are available.
+- Noise and slowdown guard: do not treat illustrative cases as proof of broad causal or universal claims.
+
+## Do not use this skill when
+
+- The user needs a general literature map; use `literature-review-mapper`.
+- The user asks whether a source's method is credible; use `methodology-source-auditor`.
+- The example is only decorative and does not affect the research argument.
 
 ## Inputs expected
 
@@ -33,7 +46,7 @@ Before selecting or integrating cases, state the source access level as one of:
 - model knowledge only
 - live/current search needed
 
-Every output must separate source basis, what can be verified from available material, what remains uncertain, and what the user must verify. Do not invent citations, page numbers, quotations, DOIs, datasets, market facts, field consensus, source metadata, or claims of having searched a database. Separate verified facts, interpretation, speculation, and recommendation.
+Apply `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, and include What I can verify, What remains uncertain, and User verification needed. Do not invent citations or source support.
 
 ## Case functions
 
@@ -53,6 +66,8 @@ Classify each case as:
 ## Files/folders it may read
 
 - This skill's `SKILL.md`, `README.md`, `assets/case-study-dossier-template.md`, and `agents/openai.yaml`.
+- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
+- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
 - User-provided case notes, source excerpts, timelines, datasets, chapter drafts, and argument artifacts explicitly named in the request.
 - Related claim ledgers or chapter briefs when case function depends on the argument.
 
@@ -131,8 +146,15 @@ Include timeline, actors, source base, relevance, limits, and chapter placement.
 
 ## Limits / failure risks
 
-## Next best skill
+## Suggested next step
+
+Use `skill-name` to [specific next action].
+Why this helps scholarship: [named risk reduced].
+Use only if: [condition].
+Skip if: [reason it would add noise now].
 ```
+
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
 
 ## Quality checks
 
@@ -141,6 +163,7 @@ Include timeline, actors, source base, relevance, limits, and chapter placement.
 - Include failures and counterexamples where they strengthen credibility.
 - Make the limits of comparison explicit.
 - Do not generalize beyond the case-selection design.
+- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 
@@ -148,3 +171,4 @@ Include timeline, actors, source base, relevance, limits, and chapter placement.
 - Comparison ignores key contextual differences.
 - Counter-cases are absent, making selection bias invisible.
 - Case wording overgeneralizes beyond the evidence base.
+- Premature citation audit before citations, quotes, page numbers, bibliography entries, or cited claims exist.

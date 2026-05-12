@@ -1,6 +1,6 @@
 ---
 name: literature-review-mapper
-description: Map a research literature into schools of thought, debates, consensus, intellectual genealogy, methods, gaps, and how each cluster supports or challenges a book thesis.
+description: Map a research literature when a topic, source list, bibliography, annotations, or notes need schools of thought, debates, consensus, intellectual genealogy, methods, gaps, and thesis implications.
 license: MIT
 metadata:
   version: "1.0.0"
@@ -15,6 +15,19 @@ Create an intellectual map of a research field. The goal is not to summarize sou
 ## When to use
 
 Use when the user has a topic, source list, annotations, or scattered notes and needs a literature review structure for a research book or serious nonfiction project.
+
+## Automatic selection guidance
+
+- High-signal triggers: literature review, schools of thought, debates, gaps, consensus, controversy, intellectual genealogy, methods, or thesis implications.
+- Light-route behavior: map the supplied corpus or clearly mark the map as provisional when the corpus is partial.
+- Deep-work gate: do not synthesize field consensus or missing literatures without a representative source set, explicit lookup, or router deep mode lookup.
+- Noise and slowdown guard: do not summarize sources one by one when the user needs field structure.
+
+## Do not use this skill when
+
+- The user needs source search queries; use `systematic-source-discovery`.
+- The user needs annotations for individual sources; use `annotated-bibliography-builder`.
+- The user needs source credibility or method quality; use `methodology-source-auditor`.
 
 ## Inputs expected
 
@@ -33,11 +46,13 @@ Before mapping the literature, state the source access level as one of:
 - model knowledge only
 - live/current search needed
 
-Every output must separate source basis, what can be verified from available material, what remains uncertain, and what the user must verify. Do not invent citations, page numbers, quotations, DOIs, datasets, market facts, field consensus, source metadata, or claims of having searched a database. Separate verified facts, interpretation, speculation, and recommendation.
+Apply `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, and include What I can verify, What remains uncertain, and User verification needed. Do not invent citations or source support.
 
 ## Files/folders it may read
 
 - This skill's `SKILL.md`, `README.md`, `assets/lit-map-template.md`, and `agents/openai.yaml`.
+- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
+- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
 - User-provided bibliographies, annotations, source notes, literature maps, and project files explicitly named in the request.
 - Related research agenda or source discovery artifacts when available.
 
@@ -130,8 +145,15 @@ Gaps can be empirical, theoretical, contextual, methodological, geographic, conc
 
 ## Limits / failure risks
 
-## Next best skill
+## Suggested next step
+
+Use `skill-name` to [specific next action].
+Why this helps scholarship: [named risk reduced].
+Use only if: [condition].
+Skip if: [reason it would add noise now].
 ```
+
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
 
 ## Quality checks
 
@@ -141,6 +163,7 @@ Gaps can be empirical, theoretical, contextual, methodological, geographic, conc
 - Distinguish a gap in the user's reading from a gap in the field.
 - Flag areas that require a specialist review.
 - Do not infer field consensus from a small or one-sided source list.
+- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 
@@ -148,3 +171,4 @@ Gaps can be empirical, theoretical, contextual, methodological, geographic, conc
 - Missing opposing literature makes the thesis look stronger than it is.
 - Interdisciplinary sources are forced into one field's categories.
 - Speculative gaps are stated as proven scholarly absences.
+- Premature citation audit before citations, quotes, page numbers, bibliography entries, or cited claims exist.

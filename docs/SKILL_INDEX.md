@@ -1,9 +1,10 @@
 # Skill index
 
-Use this file to choose a skill. Use `MODE_REGISTRY.md` for route names and artifact outputs.
+Use this file to choose a skill. Use `MODE_REGISTRY.md` for route names and artifact outputs. Use `docs/ROUTING_MATRIX.md` for canonical automatic routing.
 
 | Skill folder | Display name | When to use |
 |---|---|---|
+| `research-intent-router` | Research Intent Router | Auto-detect scholarly research intent, choose the smallest useful research-book skill, and gate deep source lookup so it only runs when it materially improves evidence quality. |
 | `research-book-orchestrator` | Research Book Orchestrator | Coordinate a full research nonfiction or research book workflow. Use for project planning, routing tasks across research agenda, source discovery, literature review, argument design, chapter work, evidence ledgers, citation audits, and manuscript revision. |
 | `scholarly-research-agenda` | Research Agenda | Turn a broad research book idea into precise research questions, scope boundaries, contribution claims, key terms, evidence needs, and an initial research agenda. Use before source gathering or outlining. |
 | `systematic-source-discovery` | Systematic Source Discovery | Design rigorous research source-discovery strategies, keyword sets, database searches, citation-chaining plans, primary-source targets, and search logs for research books and literature reviews. |
@@ -24,15 +25,24 @@ Use this file to choose a skill. Use `MODE_REGISTRY.md` for route names and arti
 
 For a serious research book, start with:
 
-1. `scholarly-research-agenda`
-2. `systematic-source-discovery`
-3. `literature-review-mapper`
-4. `argument-architecture`
-5. `claim-evidence-ledger`
-6. `counterargument-peer-review`
-7. `citation-integrity-auditor`
+1. `research-intent-router`
+2. `scholarly-research-agenda`
+3. `systematic-source-discovery`
+4. `literature-review-mapper`
+5. `argument-architecture`
+6. `claim-evidence-ledger`
+7. `counterargument-peer-review`
+8. `citation-integrity-auditor`
 
 These catch the common failures: vague scope, weak sources, literature blindness, unsupported claims, one-sided argument, and citation errors.
+
+## Automatic selection policy
+
+Use `research-intent-router` as the light first pass when a prompt could match several research skills. It should classify intent, artifact stage, source access, and risk level, then choose the smallest useful skill or short skill sequence. It should not run live/deep source lookup unless the user asks to find or check sources, source existence or metadata is central, quote/page/citation verification is requested, a claim depends on current facts, or a high-risk claim would otherwise be unsupported.
+
+Router modes: `research-route-normal` and `research-route-deep`. See `MODE_REGISTRY.md` for mode behavior.
+
+Suggested next steps are optional and risk-gated. They should appear only when one follow-on skill reduces a named scholarly risk; the shared policy lives in `docs/AUTO_SELECTION_GUARDRAILS.md`, with route gates in `docs/ROUTING_MATRIX.md`.
 
 ## Later-stage manuscript set
 

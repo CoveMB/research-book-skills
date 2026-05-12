@@ -1,6 +1,6 @@
 ---
 name: chapter-architecture
-description: Design research nonfiction chapters with purpose, central question, main claim, concept definitions, evidence placement, counterarguments, transitions, and revision priorities.
+description: Design or diagnose research nonfiction chapters when chapter purpose, central question, claim, section sequence, concept definitions, evidence placement, counterarguments, transitions, or revision priorities matter.
 license: MIT
 metadata:
   version: "1.0.0"
@@ -15,6 +15,19 @@ Turn research, notes, or a chapter idea into a coherent chapter architecture. A 
 ## When to use
 
 Use when the user is planning, restructuring, or diagnosing a chapter in a research nonfiction manuscript.
+
+## Automatic selection guidance
+
+- High-signal triggers: chapter outline, section sequence, chapter thesis, evidence placement, transitions, chapter function, or restructuring a research chapter.
+- Light-route behavior: produce a chapter brief with claims, evidence anchors, and unresolved research needs.
+- Deep-work gate: only move into prose drafting or citation checks after the chapter's argument and evidence logic are stable.
+- Noise and slowdown guard: block prose polish when chapter logic, claim support, or evidence placement is the real problem.
+
+## Do not use this skill when
+
+- The user needs book-level argument design; use `argument-architecture`.
+- The user only wants sentence-level editing; use `scholarly-prose-editor`.
+- The chapter depends on unresolved claim support; use `claim-evidence-ledger`.
 
 ## Inputs expected
 
@@ -33,11 +46,13 @@ Before designing the chapter, state the source access level as one of:
 - model knowledge only
 - live/current search needed
 
-Every output must separate source basis, what can be verified from available material, what remains uncertain, and what the user must verify. Do not invent citations, page numbers, quotations, DOIs, datasets, market facts, field consensus, source metadata, or claims of having searched a database. Separate verified facts, interpretation, speculation, and recommendation.
+Apply `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, and include What I can verify, What remains uncertain, and User verification needed. Do not invent citations or source support.
 
 ## Files/folders it may read
 
 - This skill's `SKILL.md`, `README.md`, `assets/chapter-brief-template.md`, and `agents/openai.yaml`.
+- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
+- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
 - User-provided chapter drafts, outlines, notes, source excerpts, thesis trees, and continuity artifacts explicitly named in the request.
 - Adjacent chapter files when the user asks for transitions or whole-book fit.
 
@@ -146,8 +161,15 @@ Common risks:
 
 ## Limits / failure risks
 
-## Next best skill
+## Suggested next step
+
+Use `skill-name` to [specific next action].
+Why this helps scholarship: [named risk reduced].
+Use only if: [condition].
+Skip if: [reason it would add noise now].
 ```
+
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
 
 ## Quality checks
 
@@ -156,6 +178,7 @@ Common risks:
 - Include counterargument or complication where appropriate.
 - Endings should synthesize, not merely stop.
 - Do not turn a topic list into a chapter plan without claims and evidence anchors.
+- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 
@@ -163,3 +186,4 @@ Common risks:
 - Evidence placement is vague or detached from claims.
 - Case study sections become anecdotal proof.
 - Opening and ending are stylistic but not argumentative.
+- Premature citation audit before citations, quotes, page numbers, bibliography entries, or cited claims exist.

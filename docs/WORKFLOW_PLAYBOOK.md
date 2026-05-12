@@ -2,7 +2,26 @@
 
 For the staged architecture, see `docs/ARCHITECTURE.md`. For route names and outputs, see `MODE_REGISTRY.md`.
 
-## 0. Start with the orchestrator
+## 0. Start with the research intent router
+
+Prompt:
+
+```text
+Use research-intent-router. I want to start research on [topic]. Classify the request, choose the smallest useful skill route, and say whether deep source lookup is needed.
+```
+
+Use `research-intent-router` to classify:
+
+- intent: plan, discover, map, audit, draft, revise, verify, or propose
+- artifact stage: idea, source list, notes, draft, chapter, manuscript, or proposal
+- source access level
+- scholarly risk level
+
+Default: light routing first. Do not run live/deep source lookup unless the user asks to find or check sources, source existence or metadata is central, citation/page/quote verification is requested, current facts matter, or a high-risk claim would otherwise be unsupported.
+
+Router modes: `research-route-normal` and `research-route-deep`. See `MODE_REGISTRY.md` for mode behavior.
+
+## 0.1. Use the orchestrator for multi-stage work
 
 Prompt:
 

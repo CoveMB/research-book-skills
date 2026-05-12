@@ -2,7 +2,7 @@
 
 Version: 1.0.0
 
-A local Agent Skills / Codex plugin for serious research nonfiction and research book writing. It bundles 15 focused `SKILL.md` workflows: research agenda design, systematic source discovery, literature review mapping, source auditing, argument architecture, chapter structure, prose editing, citation integrity, manuscript continuity, case-study integration, and book proposal development.
+A local Agent Skills plugin for serious research nonfiction and research book writing. It bundles 16 focused `SKILL.md` workflows: research intent routing, research agenda design, systematic source discovery, literature review mapping, source auditing, argument architecture, chapter structure, prose editing, citation integrity, manuscript continuity, case-study integration, and book proposal development.
 
 The package now follows a staged book workflow with architecture docs, a mode registry, an artifact contract, examples, and validation scripts.
 
@@ -60,6 +60,7 @@ Each skill folder now includes a `README.md` with plain-language guidance, book-
 
 | Skill | Use it when |
 |---|---|
+| [`research-intent-router`](skills/research-intent-router/README.md) | A research prompt needs automatic intent detection, smallest-useful-skill routing, and a decision on whether deep source lookup is justified. |
 | [`research-book-orchestrator`](skills/research-book-orchestrator/README.md) | The project needs a staged plan, a next-step diagnosis, or routing across several research and writing tasks. |
 | [`scholarly-research-agenda`](skills/scholarly-research-agenda/README.md) | A broad idea needs research questions, scope boundaries, contribution claims, terms, and an evidence plan. |
 | [`systematic-source-discovery`](skills/systematic-source-discovery/README.md) | The book needs a repeatable source search, query bank, inclusion rules, citation-chaining plan, or search log. |
@@ -82,7 +83,11 @@ Each skill folder now includes a `README.md` with plain-language guidance, book-
 - `MODE_REGISTRY.md` lists modes and outputs.
 - `shared/contracts/book/book_artifact.schema.json` defines the JSON artifact contract used by examples under `examples/book_artifacts/`.
 
+Router modes: `research-route-normal` and `research-route-deep`. See `MODE_REGISTRY.md` for mode behavior.
+
 ## Recommended first workflow
+
+Use `research-intent-router` when the next skill is unclear. For a new research book with no route ambiguity, use:
 
 1. `scholarly-research-agenda`
 2. `systematic-source-discovery`
@@ -93,6 +98,10 @@ Each skill folder now includes a `README.md` with plain-language guidance, book-
 7. `counterargument-peer-review`
 8. `citation-integrity-auditor`
 9. `manuscript-continuity-editor`
+
+## Suggested next steps
+
+Skill responses may end with an optional `## Suggested next step` only when one follow-on skill reduces a named scholarly risk. This is not a default footer. See `docs/AUTO_SELECTION_GUARDRAILS.md` and `docs/ROUTING_MATRIX.md` for the full gate.
 
 ## Quality standard
 

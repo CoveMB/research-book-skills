@@ -1,6 +1,6 @@
 ---
 name: citation-integrity-auditor
-description: Audit research drafts for citation accuracy, unsupported claims, quote integrity, page-number needs, fabricated-reference risk, source-claim mismatch, and bibliography problems.
+description: Audit citation accuracy when drafts, footnotes, bibliographies, quotes, paraphrases, page numbers, source-claim fit, fabricated-reference risk, or unsupported cited claims need verification.
 license: MIT
 metadata:
   version: "1.0.0"
@@ -15,6 +15,19 @@ Protect a manuscript from citation errors, fabricated references, unsupported cl
 ## When to use
 
 Use when the user has a draft with citations, footnotes, bibliography, quoted material, paraphrases, or claims that need verification.
+
+## Automatic selection guidance
+
+- High-signal triggers: citation accuracy, unsupported claims, quotes, page numbers, bibliography mismatch, source-claim fit, fabricated-reference risk, or citation audit.
+- Light-route behavior: classify verification availability and mark unverified items without guessing.
+- Deep-work gate: exact quote, page, DOI, or source-claim verification requires source text, images, PDFs, database access, explicit lookup, or router deep mode with available lookup tools.
+- Noise and slowdown guard: a nearby citation is not proof; do not resolve missing locators from memory.
+
+## Do not use this skill when
+
+- The draft has claims but few or no citations; use `claim-evidence-ledger` first.
+- The user asks to find sources rather than check existing citations; use `systematic-source-discovery`.
+- The user only wants style editing with no evidentiary check.
 
 ## Inputs expected
 
@@ -41,7 +54,7 @@ Before auditing citations, state the source access level as one of:
 - model knowledge only
 - live/current search needed
 
-Every output must separate source basis, what can be verified from available material, what remains uncertain, and what the user must verify. Do not invent citations, page numbers, quotations, DOIs, datasets, market facts, field consensus, source metadata, or claims of having searched a database. Separate verified facts, interpretation, speculation, and recommendation.
+Apply `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, and include What I can verify, What remains uncertain, and User verification needed. Do not invent citations or source support.
 
 ## Audit categories
 
@@ -69,6 +82,8 @@ Use distinct verification statuses:
 ## Files/folders it may read
 
 - This skill's `SKILL.md`, `README.md`, `assets/citation-audit-checklist.md`, and `agents/openai.yaml`.
+- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
+- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
 - User-provided drafts, citation lists, bibliography files, source excerpts, page images, PDFs, and notes explicitly named in the request.
 - Related claim ledgers when citation audit depends on claim classification.
 
@@ -141,8 +156,15 @@ Offer safer wording, stronger source types, or citation placement changes.
 
 ## Limits / failure risks
 
-## Next best skill
+## Suggested next step
+
+Use `skill-name` to [specific next action].
+Why this helps scholarship: [named risk reduced].
+Use only if: [condition].
+Skip if: [reason it would add noise now].
 ```
+
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
 
 ## Severity scale
 
@@ -158,6 +180,7 @@ Offer safer wording, stronger source types, or citation placement changes.
 - Flag weak support, especially when a weak source supports a strong causal claim.
 - Prefer precise statements over citation padding.
 - Do not mark verification as failed when the source is unavailable; mark it unavailable.
+- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 
@@ -165,3 +188,4 @@ Offer safer wording, stronger source types, or citation placement changes.
 - Missing source text leads to invented verification.
 - Formatting issues distract from evidentiary problems.
 - Direct quotes are checked without exact source text and locator.
+- Premature follow-on skill suggestion when the citation audit resolves the only concrete scholarly risk.

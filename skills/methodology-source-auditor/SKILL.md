@@ -1,6 +1,6 @@
 ---
 name: methodology-source-auditor
-description: Evaluate source credibility, methodology, evidence quality, bias, generalizability, and what each source can or cannot support in a research manuscript.
+description: Evaluate source credibility when articles, books, reports, datasets, case studies, journalism, or web sources need method, evidence quality, bias, generalizability, and source-claim support limits audited.
 license: MIT
 metadata:
   version: "1.0.0"
@@ -15,6 +15,19 @@ Assess whether sources are credible enough for a research book and identify what
 ## When to use
 
 Use when the user has articles, books, reports, source data, case studies, working papers, journalism, or web sources and needs source quality evaluated.
+
+## Automatic selection guidance
+
+- High-signal triggers: source credibility, methodology, evidence quality, bias, generalizability, source strength, or whether a source can support a specific claim.
+- Light-route behavior: audit only the provided or named sources against the claims they are meant to support.
+- Deep-work gate: broad literature search happens only when needed to compare source quality, when the user asks, or when router deep mode routes here with lookup available.
+- Noise and slowdown guard: do not turn a targeted source audit into a full literature review.
+
+## Do not use this skill when
+
+- The user needs source discovery; use `systematic-source-discovery`.
+- The user needs structured source notes; use `annotated-bibliography-builder`.
+- The user needs quote/page verification; use `citation-integrity-auditor`.
 
 ## Inputs expected
 
@@ -49,11 +62,13 @@ Before auditing, state the source access level as one of:
 - model knowledge only
 - live/current search needed
 
-Every output must separate source basis, what can be verified from available material, what remains uncertain, and what the user must verify. Do not invent citations, page numbers, quotations, DOIs, datasets, market facts, field consensus, source metadata, or claims of having searched a database. Separate verified facts, interpretation, speculation, and recommendation.
+Apply `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, and include What I can verify, What remains uncertain, and User verification needed. Do not invent citations or source support.
 
 ## Files/folders it may read
 
 - This skill's `SKILL.md`, `README.md`, `assets/source-audit-rubric.md`, and `agents/openai.yaml`.
+- `docs/SOURCE_LIMITS.md` for shared source-access and verification rules.
+- `docs/AUTO_SELECTION_GUARDRAILS.md` for shared automatic-trigger guardrails.
 - User-provided sources, excerpts, data descriptions, bibliographies, and manuscript files explicitly named in the request.
 - Related claim ledgers or chapter notes when source-use fit depends on them.
 
@@ -132,8 +147,15 @@ Decide whether to use as core evidence, contextual support, counterpoint, object
 
 ## Limits / failure risks
 
-## Next best skill
+## Suggested next step
+
+Use `skill-name` to [specific next action].
+Why this helps scholarship: [named risk reduced].
+Use only if: [condition].
+Skip if: [reason it would add noise now].
 ```
+
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`. The section may be omitted. If included, it must identify the named scholarly risk it reduces and use one skill only.
 
 ## Quality checks
 
@@ -143,6 +165,7 @@ Decide whether to use as core evidence, contextual support, counterpoint, object
 - Do not generalize from a single case without warning.
 - Treat old sources carefully: they may be canonical but not current.
 - Do not claim methodological quality is high unless method and evidence are visible enough to assess.
+- Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.
 
 ## Failure modes
 
@@ -150,3 +173,4 @@ Decide whether to use as core evidence, contextual support, counterpoint, object
 - Audit overgeneralizes from source type without reading visible evidence.
 - Contextual sources are treated as direct evidence.
 - Missing method details are converted into false confidence.
+- Premature citation audit before citations, quotes, page numbers, bibliography entries, or cited claims exist.
