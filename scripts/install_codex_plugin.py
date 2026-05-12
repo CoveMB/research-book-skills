@@ -12,7 +12,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import shutil
 import subprocess
 import sys
@@ -21,6 +20,10 @@ from pathlib import Path
 
 PLUGIN_NAME = "scholarly-research-book"
 MARKETPLACE_NAME = "local-personal-plugins"
+VALIDATION_SCRIPTS = [
+    "validate_plugin.py",
+    "check_book_artifact_contract.py",
+]
 
 
 def home() -> Path:
@@ -31,14 +34,23 @@ def plugin_root_from_script() -> Path:
     return Path(__file__).resolve().parents[1]
 
 
-def run_validation(root: Path) -> None:
-    script = root / "scripts" / "validate_plugin.py"
-    result = subprocess.run([sys.executable, str(script), str(root)], text=True, capture_output=True)
+def run_script(script: Path, root: Path) -> None:
+    command = [sys.executable, str(script)]
+    if script.name == "check_book_artifact_contract.py":
+        command.extend(["--path", str(root)])
+    else:
+        command.append(str(root))
+    result = subprocess.run(command, text=True, capture_output=True)
     if result.returncode != 0:
         print(result.stdout)
         print(result.stderr, file=sys.stderr)
         raise SystemExit(result.returncode)
     print(result.stdout.strip())
+
+
+def run_validation(root: Path) -> None:
+    for script_name in VALIDATION_SCRIPTS:
+        run_script(root / "scripts" / script_name, root)
 
 
 def load_json(path: Path) -> dict:
@@ -80,16 +92,51 @@ def update_marketplace(path: Path, plugin_source_path: str, dry_run: bool) -> No
     print(f"Updated marketplace: {path}")
 
 
+def plugin_manifest_name(path: Path) -> str:
+    manifest_path = path / ".codex-plugin" / "plugin.json"
+    if not manifest_path.exists():
+        return ""
+    try:
+        payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except Exception:
+        return ""
+    return str(payload.get("name", "")) if isinstance(payload, dict) else ""
+
+
+def is_safe_destination(dest: Path) -> bool:
+    if not dest.exists():
+        return dest.name == PLUGIN_NAME
+    if plugin_manifest_name(dest) == PLUGIN_NAME:
+        return True
+    return dest.name == PLUGIN_NAME and not any(dest.iterdir())
+
+
+def ensure_safe_destination(dest: Path) -> None:
+    if not is_safe_destination(dest):
+        raise ValueError(
+            f"Refusing to replace destination outside expected plugin path: {dest}"
+        )
+
+
 def copy_plugin(src: Path, dest: Path, dry_run: bool) -> None:
+    ensure_safe_destination(dest)
     if dry_run:
         print(f"Would copy plugin from {src} to {dest}")
         return
     if dest.exists():
         shutil.rmtree(dest)
     dest.parent.mkdir(parents=True, exist_ok=True)
-    ignore = shutil.ignore_patterns("*.zip", "__pycache__", ".DS_Store")
+    ignore = shutil.ignore_patterns("*.zip", "__pycache__", ".DS_Store", ".git")
     shutil.copytree(src, dest, ignore=ignore)
     print(f"Copied plugin to {dest}")
+
+
+def print_dry_run_plan(root: Path, dest: Path, marketplace: Path, source_path: str) -> None:
+    print("Dry run: no files will be copied or written.")
+    print(f"Plugin root: {root}")
+    print(f"Destination: {dest}")
+    print(f"Marketplace: {marketplace}")
+    print(f"Marketplace source path: {source_path}")
 
 
 def main() -> int:
@@ -105,10 +152,18 @@ def main() -> int:
     if not (root / ".codex-plugin" / "plugin.json").exists():
         print(f"Not a plugin root: {root}", file=sys.stderr)
         return 1
-    run_validation(root)
-    copy_plugin(root, args.dest.expanduser(), args.dry_run)
-    update_marketplace(args.marketplace.expanduser(), args.source_path, args.dry_run)
-    print("Done. Restart Codex, then open the plugin directory and install/enable 'Research Book Skills'.")
+    dest = args.dest.expanduser()
+    marketplace = args.marketplace.expanduser()
+    if args.dry_run:
+        print_dry_run_plan(root, dest, marketplace, args.source_path)
+    try:
+        run_validation(root)
+        copy_plugin(root, dest, args.dry_run)
+        update_marketplace(marketplace, args.source_path, args.dry_run)
+    except ValueError as exc:
+        print(f"Install failed: {exc}", file=sys.stderr)
+        return 1
+    print("Done. Restart the app, then open the plugin directory and install/enable 'Research Book Skills'.")
     return 0
 
 

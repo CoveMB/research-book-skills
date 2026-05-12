@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 cd "$(dirname "$0")"
+
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "python3 is required but was not found." >&2
+  exit 127
+fi
+
+export PYTHONDONTWRITEBYTECODE=1
+
 python3 scripts/validate_plugin.py .
 python3 scripts/check_book_artifact_contract.py --path .
-python3 scripts/test_check_book_artifact_contract.py
-python3 scripts/test_plugin_structure.py
+python3 -m unittest discover -s scripts -p 'test_*.py'

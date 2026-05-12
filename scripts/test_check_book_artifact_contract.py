@@ -207,6 +207,90 @@ class TestBookArtifactContract(unittest.TestCase):
             self.assertEqual(result.returncode, 1)
             self.assertIn("source_pointer", result.stdout)
 
+    def test_unverified_comparable_title_does_not_require_source_pointer(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            write_schema(root)
+            write_example(
+                root,
+                "book-proposal.json",
+                {
+                    "schema_version": "book-artifact-v1",
+                    "artifact_type": "book_proposal",
+                    "project_title": "Fixture Book",
+                    "comparable_titles": [
+                        {
+                            "title": "Unverified Comparable",
+                            "verification_status": "unverified",
+                        }
+                    ],
+                },
+            )
+
+            result = run_checker(root)
+
+            self.assertEqual(
+                result.returncode,
+                0,
+                msg=f"stdout={result.stdout!r} stderr={result.stderr!r}",
+            )
+
+    def test_invalid_artifact_type_enum_fails(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            write_schema(root)
+            payload = valid_claim_ledger()
+            payload["artifact_type"] = "invented_artifact"
+            write_example(root, "claim-ledger.json", payload)
+
+            result = run_checker(root)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("expected one of", result.stdout)
+
+    def test_unexpected_property_fails_with_property_name(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            write_schema(root)
+            payload = valid_claim_ledger()
+            payload["unexpected_field"] = "not allowed"
+            write_example(root, "claim-ledger.json", payload)
+
+            result = run_checker(root)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("unexpected_field", result.stdout)
+
+    def test_unresolved_schema_reference_fails(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            write_schema(root)
+            schema_path = root / "shared" / "contracts" / "book" / "book_artifact.schema.json"
+            schema = json.loads(schema_path.read_text(encoding="utf-8"))
+            schema["properties"]["project_title"] = {"$ref": "#/$defs/missing"}
+            schema_path.write_text(json.dumps(schema), encoding="utf-8")
+            write_example(root, "claim-ledger.json", valid_claim_ledger())
+
+            result = run_checker(root)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("unresolved schema reference", result.stdout)
+
+    def test_missing_artifact_type_does_not_trigger_artifact_specific_requirements(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            write_schema(root)
+            payload = valid_claim_ledger()
+            del payload["artifact_type"]
+            write_example(root, "claim-ledger.json", payload)
+
+            result = run_checker(root)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("artifact_type", result.stdout)
+            self.assertNotIn("section_outline", result.stdout)
+            self.assertNotIn("comparable_titles", result.stdout)
+
     def test_number_below_minimum_fails(self) -> None:
         with TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)

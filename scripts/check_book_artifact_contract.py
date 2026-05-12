@@ -55,7 +55,23 @@ def value_matches_type(value: Any, expected_type: str) -> bool:
     return True if checker is None else checker(value)
 
 
+def const_property_conditions(condition: dict[str, Any]) -> dict[str, Any]:
+    properties = condition.get("properties")
+    if not isinstance(properties, dict):
+        return {}
+    return {
+        key: property_schema["const"]
+        for key, property_schema in properties.items()
+        if isinstance(key, str) and isinstance(property_schema, dict) and "const" in property_schema
+    }
+
+
 def condition_matches(schema: dict[str, Any], condition: dict[str, Any], value: Any) -> bool:
+    const_properties = const_property_conditions(condition)
+    if const_properties:
+        if not isinstance(value, dict):
+            return False
+        return all(key in value and value[key] == expected for key, expected in const_properties.items())
     return validate_value(schema, condition, value, []) == []
 
 
