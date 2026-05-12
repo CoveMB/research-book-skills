@@ -1,0 +1,43 @@
+# citation-integrity-auditor
+
+## What it does
+
+Use this skill to protect a research draft from citation problems. It checks whether claims have support, whether citations match the claim they are meant to support, whether quotes need exact verification, whether page numbers are missing, and whether bibliography details look incomplete.
+
+It does not pretend to verify sources it cannot see. If source text is unavailable, it marks verification as unavailable and states what would be needed.
+
+## When to use it in the book writing process
+
+Use it after a draft has citations, footnotes, bibliography entries, paraphrases, or quoted material. It is most useful after the claim-evidence ledger, because the ledger identifies what needs support and the citation audit checks whether the support is actually there.
+
+Use it before submitting a proposal, chapter, article, sample chapter, or full manuscript.
+
+## Good inputs
+
+- Draft text with citations, footnotes, or bibliography.
+- Source excerpts, PDFs, page images, or notes when available.
+- Bibliography entries.
+- A list of claims the author is worried about.
+- Style requirements, if citation formatting also needs review.
+
+## Example requests
+
+```text
+Audit this chapter for unsupported claims, citation-source mismatch, and missing page numbers.
+```
+
+```text
+Check whether these quotes have enough locator information and whether the surrounding claims overstate the source.
+```
+
+```text
+Review this bibliography and flag missing details, possible fabricated references, and weak source types.
+```
+
+## Typical output
+
+Expect a citation integrity audit with summary verdict, claim-level audit, quotation audit, bibliography issues, high-priority repairs, claims safe as interpretation or argument, severity labels, and next best skill.
+
+## Best next steps
+
+After this skill, repair citations and source wording. Then use `scholarly-prose-editor` for prose cleanup or `manuscript-continuity-editor` for a whole-manuscript pass.

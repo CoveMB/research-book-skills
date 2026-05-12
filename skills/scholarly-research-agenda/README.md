@@ -1,0 +1,43 @@
+# scholarly-research-agenda
+
+## What it does
+
+Use this skill to turn a broad book idea into research questions that can actually be answered. It clarifies the intellectual object of the book, separates different kinds of questions, sets boundaries, drafts a provisional thesis, and names the evidence the project will need.
+
+It is especially helpful when a book idea is interesting but still too large. "A book about technology and democracy" may be a theme, but it is not yet a research agenda. This skill narrows that theme into a central question, subquestions, scope limits, terms to define, and an evidence plan.
+
+## When to use it in the book writing process
+
+Use it before serious source gathering, literature review, chapter outlining, or drafting. It gives the project a research spine before the author spends weeks collecting material that may not serve the argument.
+
+Use it again when the thesis changes. A research agenda is not a prison. It is a working contract between the question, the scope, and the evidence.
+
+## Good inputs
+
+- A book idea, premise, or half-formed thesis.
+- Intended audience, such as academic, serious trade, professional, or general reader.
+- Fields or disciplines the book touches.
+- Known cases, examples, or source types.
+- Constraints such as timeline, length, geography, period, or method.
+
+## Example requests
+
+```text
+I want to write a research book about why public institutions struggle to adopt digital tools. Turn this into a research agenda.
+```
+
+```text
+Use my rough thesis and audience. Break it into research questions, evidence needs, and scope boundaries.
+```
+
+```text
+My book idea feels too broad. Help me decide what belongs in scope and what should be excluded.
+```
+
+## Typical output
+
+The output usually includes a one-sentence project definition, central research question, subquestions, provisional thesis, contribution claim, scope boundaries, terms needing definition, evidence plan, risks, and recommended next skill.
+
+## Best next steps
+
+After this skill, use `systematic-source-discovery` to build a source strategy. If the user already has many sources, move to `literature-review-mapper` and check whether the agenda matches the field.

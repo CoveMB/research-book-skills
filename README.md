@@ -54,6 +54,28 @@ See `docs/INSTALLATION.md` for:
 
 See `docs/SKILL_INDEX.md` for the skill list and use cases.
 
+## Quick skill summary
+
+Each skill folder now includes a `README.md` with plain-language guidance, book-process timing, useful inputs, example requests, expected outputs, and suggested next steps.
+
+| Skill | Use it when |
+|---|---|
+| [`research-book-orchestrator`](skills/research-book-orchestrator/README.md) | The project needs a staged plan, a next-step diagnosis, or routing across several research and writing tasks. |
+| [`scholarly-research-agenda`](skills/scholarly-research-agenda/README.md) | A broad idea needs research questions, scope boundaries, contribution claims, terms, and an evidence plan. |
+| [`systematic-source-discovery`](skills/systematic-source-discovery/README.md) | The book needs a repeatable source search, query bank, inclusion rules, citation-chaining plan, or search log. |
+| [`literature-review-mapper`](skills/literature-review-mapper/README.md) | Sources need to be grouped into schools, debates, methods, consensus, gaps, and thesis implications. |
+| [`annotated-bibliography-builder`](skills/annotated-bibliography-builder/README.md) | Individual sources need structured notes on argument, method, evidence, relevance, limits, and chapter placement. |
+| [`methodology-source-auditor`](skills/methodology-source-auditor/README.md) | The author needs to know whether sources are credible enough for the claims they are asked to support. |
+| [`claim-evidence-ledger`](skills/claim-evidence-ledger/README.md) | A draft, outline, or thesis needs claim extraction, evidence status, citation needs, risk labels, and safer wording. |
+| [`argument-architecture`](skills/argument-architecture/README.md) | The book needs a thesis tree, warrants, assumptions, counterarguments, dependencies, and chapter-level argument sequence. |
+| [`counterargument-peer-review`](skills/counterargument-peer-review/README.md) | A thesis, chapter, outline, or proposal needs strong objections, rival explanations, missing literatures, and revision strategy. |
+| [`chapter-architecture`](skills/chapter-architecture/README.md) | A chapter needs a central question, claim, section sequence, evidence placement, transitions, and revision risks. |
+| [`scholarly-prose-editor`](skills/scholarly-prose-editor/README.md) | Research prose needs clearer style, rhythm, structure, precision, or compression without adding unsupported facts. |
+| [`citation-integrity-auditor`](skills/citation-integrity-auditor/README.md) | A draft needs checks for unsupported claims, citation-source mismatch, quote integrity, page needs, and bibliography issues. |
+| [`manuscript-continuity-editor`](skills/manuscript-continuity-editor/README.md) | Multiple chapters need review for thesis coherence, repetition, contradictions, concept tracking, tone, and chapter order. |
+| [`case-study-integration`](skills/case-study-integration/README.md) | Cases or examples need careful selection, comparison, counter-cases, source limits, and safer claim wording. |
+| [`book-proposal-scholarship`](skills/book-proposal-scholarship/README.md) | The project needs a proposal with thesis, contribution, audience, source base, chapter summaries, and submission risks. |
+
 ## Architecture and modes
 
 - `docs/ARCHITECTURE.md` describes the stage flow, skill graph, quality gates, artifact levels, and package structure.
