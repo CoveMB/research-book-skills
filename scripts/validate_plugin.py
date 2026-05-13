@@ -21,6 +21,7 @@ from plugin_utils import (
     agent_policy_fields,
     load_json_object_result,
     MIN_SHARED_DESCRIPTION_TERMS,
+    is_generated_path,
     nested_mapping,
     nested_string,
     parse_markdown_frontmatter,
@@ -297,13 +298,16 @@ def validate_skill_dir(
 def validate_project_references(root: Path) -> list[str]:
     errors: list[str] = []
     for path in sorted(root.rglob("*")):
-        if ".git" in path.parts or path.is_dir():
+        if ".git" in path.parts or path.is_dir() or path.is_symlink():
             continue
-        if path.relative_to(root).parts[:1] == ("skills",):
+        relative_path = path.relative_to(root)
+        if is_generated_path(relative_path):
+            continue
+        if relative_path.parts[:1] == ("skills",):
             continue
         if path.suffix in {".md", ".yaml", ".yml"}:
             errors.extend(
-                f"{path.relative_to(root)}: {error}"
+                f"{relative_path}: {error}"
                 for error in broken_local_references(root, path)
             )
     return errors

@@ -38,6 +38,8 @@ LCCN_RE = re.compile(r"^[a-z]{0,3}\d{6,10}$")
 LOOKUP_PROVIDERS = {"none", "crossref"}
 CROSSREF_WORKS_ENDPOINT = "https://api.crossref.org/v1/works/"
 CROSSREF_USER_AGENT = "research-book-plugin/1.0 (public metadata lookup)"
+MAX_CROSSREF_RESPONSE_BYTES = 1_000_000
+MAX_LOOKUP_TIMEOUT_SECONDS = 60.0
 
 
 class MetadataPairSpec(NamedTuple):
@@ -385,6 +387,18 @@ def metadata_lookup_consent_errors(*, lookup_provider: str, allow_network: bool)
     return []
 
 
+def bounded_lookup_timeout(value: str) -> float:
+    try:
+        timeout = float(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("lookup timeout must be a number") from exc
+    if timeout <= 0 or timeout > MAX_LOOKUP_TIMEOUT_SECONDS:
+        raise argparse.ArgumentTypeError(
+            f"lookup timeout must be greater than 0 and at most {MAX_LOOKUP_TIMEOUT_SECONDS:g} seconds"
+        )
+    return timeout
+
+
 def crossref_work_url(doi: str) -> str:
     encoded_doi = urllib.parse.quote(normalize_identifier(doi), safe="")
     return f"{CROSSREF_WORKS_ENDPOINT}{encoded_doi}"
@@ -461,7 +475,10 @@ def fetch_crossref_metadata(doi: str, timeout: float) -> dict[str, str]:
         headers={"Accept": "application/json", "User-Agent": CROSSREF_USER_AGENT},
     )
     with urllib.request.urlopen(request, timeout=timeout) as response:
-        payload = json.loads(response.read().decode("utf-8"))
+        response_body = response.read(MAX_CROSSREF_RESPONSE_BYTES + 1)
+    if len(response_body) > MAX_CROSSREF_RESPONSE_BYTES:
+        raise ValueError(f"Crossref response exceeded {MAX_CROSSREF_RESPONSE_BYTES} bytes")
+    payload = json.loads(response_body.decode("utf-8"))
     message = payload.get("message") if isinstance(payload, dict) else None
     return public_metadata_from_crossref_message(message) if isinstance(message, dict) else {}
 
@@ -507,7 +524,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     )
     parser.add_argument(
         "--lookup-timeout",
-        type=float,
+        type=bounded_lookup_timeout,
         default=10.0,
         help="Network timeout in seconds for explicit public metadata lookup.",
     )

@@ -337,7 +337,11 @@ def is_allowed_package_path(relative_path: Path) -> bool:
 
 
 def should_include_package_file(root: Path, path: Path) -> bool:
-    if not path.is_file():
+    if path.is_symlink() or not path.is_file():
+        return False
+    try:
+        path.resolve().relative_to(root.resolve())
+    except ValueError:
         return False
     relative_path = path.relative_to(root)
     return is_allowed_package_path(relative_path) and not is_generated_path(relative_path)

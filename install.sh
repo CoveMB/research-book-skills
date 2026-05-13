@@ -12,6 +12,8 @@ if ! python3 -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 10) e
   exit 1
 fi
 
+export PYTHONDONTWRITEBYTECODE=1
+
 if [[ " $* " != *" --dry-run "* ]]; then
   echo "Tip: run ./install.sh --dry-run to preview changes before installing."
 fi

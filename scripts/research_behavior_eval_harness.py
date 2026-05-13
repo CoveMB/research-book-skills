@@ -160,12 +160,11 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps({"errors": [str(error)]}, indent=2))
         return 1
 
-    if args.quiet:
-        pass
-    elif args.format == "markdown":
-        print(format_markdown_runbook(report), end="")
-    else:
-        print(json.dumps(report, indent=2))
+    if not args.quiet:
+        if args.format == "markdown":
+            print(format_markdown_runbook(report), end="")
+        else:
+            print(json.dumps(report, indent=2))
 
     has_errors = bool(report["fixtures"]["validation_errors"] or report["outputs"]["validation_errors"])
     return 1 if has_errors else 0

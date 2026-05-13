@@ -133,6 +133,32 @@ class TestExecutableSafeguards(unittest.TestCase):
             self.assertFalse(any("/build/" in name for name in names))
             self.assertFalse(any("/coverage/" in name for name in names))
 
+    def test_package_and_installer_exclude_symlinked_files(self) -> None:
+        installer = load_module("install_codex_plugin.py")
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory) / "plugin"
+            write_minimal_plugin(root)
+            docs_dir = root / "docs"
+            docs_dir.mkdir()
+            outside_file = Path(temporary_directory) / "outside-secret.md"
+            outside_file.write_text("secret", encoding="utf-8")
+            linked_file = docs_dir / "linked-secret.md"
+            try:
+                linked_file.symlink_to(outside_file)
+            except (NotImplementedError, OSError) as error:
+                self.skipTest(f"symlink creation unavailable: {error}")
+
+            output_path = Path(temporary_directory) / "bundle.zip"
+            result = run_script("package_plugin.py", "--root", str(root), "--out", str(output_path))
+            destination = Path(temporary_directory) / "sample-plugin"
+            installer.copy_plugin(root, destination, dry_run=False)
+
+            self.assertEqual(result.returncode, 0, msg=f"stdout={result.stdout} stderr={result.stderr}")
+            with zipfile.ZipFile(output_path) as archive:
+                names = archive.namelist()
+            self.assertNotIn(f"{root.name}/docs/linked-secret.md", names)
+            self.assertFalse((destination / "docs" / "linked-secret.md").exists())
+
     def test_package_validates_plugin_before_writing_zip(self) -> None:
         with TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory) / "plugin"
@@ -189,6 +215,19 @@ class TestExecutableSafeguards(unittest.TestCase):
                 installer.copy_plugin(source, source, dry_run=False)
 
             self.assertTrue((source / ".codex-plugin" / "plugin.json").exists())
+
+    def test_installer_refuses_existing_file_destination(self) -> None:
+        installer = load_module("install_codex_plugin.py")
+        with TemporaryDirectory() as temporary_directory:
+            source = Path(temporary_directory) / "source" / "sample-plugin"
+            destination = Path(temporary_directory) / "sample-plugin"
+            write_minimal_plugin(source)
+            destination.write_text("not a directory", encoding="utf-8")
+
+            with self.assertRaises(ValueError):
+                installer.copy_plugin(source, destination, dry_run=False)
+
+            self.assertEqual(destination.read_text(encoding="utf-8"), "not a directory")
 
     def test_installer_excludes_generated_files(self) -> None:
         installer = load_module("install_codex_plugin.py")
@@ -593,7 +632,9 @@ class TestExecutableSafeguards(unittest.TestCase):
             "check_citation_metadata.py": [
                 "Check local citation metadata exports without private text.",
                 "--input",
+                "--lookup-provider",
                 "--allow-network",
+                "--lookup-timeout",
             ],
             "check_source_candidates.py": [
                 "Check local source candidate exports",
@@ -607,11 +648,13 @@ class TestExecutableSafeguards(unittest.TestCase):
             ],
             "install_codex_plugin.py": [
                 "Install Research Book Skills Plugin locally.",
+                "--source-path",
                 "--dry-run",
             ],
             "run_package_checks.py": [
                 "Run package validation checks.",
                 "--scope",
+                "--root",
             ],
         }
 

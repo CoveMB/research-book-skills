@@ -9,6 +9,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import check_citation_metadata as checker
 from check_citation_metadata import (
     METADATA_PAIR_SPECS,
     crossref_work_url,
@@ -280,6 +281,53 @@ class TestCitationMetadataChecks(unittest.TestCase):
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("requires --allow-network", result.stdout)
+
+    def test_lookup_timeout_must_be_positive_and_bounded(self) -> None:
+        with self.assertRaises(checker.argparse.ArgumentTypeError):
+            checker.bounded_lookup_timeout("0")
+        with self.assertRaises(checker.argparse.ArgumentTypeError):
+            checker.bounded_lookup_timeout("999")
+
+    def test_public_lookup_passes_timeout_and_enriches_public_metadata(self) -> None:
+        observed: dict[str, object] = {}
+        original_fetch = checker.fetch_crossref_metadata
+
+        def fake_fetch_crossref_metadata(doi: str, timeout: float) -> dict[str, str]:
+            observed["doi"] = doi
+            observed["timeout"] = timeout
+            return {"authoritative_title": "Crossref Fixture"}
+
+        checker.fetch_crossref_metadata = fake_fetch_crossref_metadata
+        try:
+            records = checker.enrich_records_with_public_lookup(
+                [{"claimed_doi": "https://doi.org/10.0000/fixture"}],
+                lookup_provider="crossref",
+                timeout=2.5,
+            )
+        finally:
+            checker.fetch_crossref_metadata = original_fetch
+
+        self.assertEqual(observed, {"doi": "10.0000/fixture", "timeout": 2.5})
+        self.assertEqual(records[0]["authoritative_title"], "Crossref Fixture")
+
+    def test_crossref_response_body_size_is_capped(self) -> None:
+        class LargeResponse:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_args):
+                return None
+
+            def read(self, size: int = -1) -> bytes:
+                return b"{" + (b"x" * size)
+
+        original_urlopen = checker.urllib.request.urlopen
+        checker.urllib.request.urlopen = lambda *_args, **_kwargs: LargeResponse()
+        try:
+            with self.assertRaises(ValueError):
+                checker.fetch_crossref_metadata("10.0000/fixture", timeout=1.0)
+        finally:
+            checker.urllib.request.urlopen = original_urlopen
 
 
 if __name__ == "__main__":

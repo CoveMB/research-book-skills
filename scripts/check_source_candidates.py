@@ -192,22 +192,22 @@ def normalized_candidate(record: dict[str, Any], index: int) -> dict[str, Any]:
     return {**candidate, "metadata_confidence": metadata_confidence(candidate)}
 
 
-def duplicate_keys(candidate: dict[str, Any]) -> list[tuple[str, str, str, str, bool]]:
-    keys: list[tuple[str, str, str, str, bool]] = []
+def duplicate_keys(candidate: dict[str, Any]) -> list[tuple[str, str]]:
+    keys: list[tuple[str, str]] = []
     if candidate["doi"]:
-        keys.append(("doi", candidate["doi"], "doi", "high", False))
+        keys.append(("doi", candidate["doi"]))
     for identifier in candidate["stable_identifiers"]:
-        keys.append(("stable_identifier", identifier.casefold(), "stable_identifier", "high", False))
+        keys.append(("stable_identifier", identifier.casefold()))
     title_key = normalize_title(candidate["title"])
     if title_key:
-        keys.append(("normalized_title", title_key, "normalized_title", "medium", True))
+        keys.append(("normalized_title", title_key))
     return keys
 
 
 def grouped_duplicate_candidates(candidates: list[dict[str, Any]]) -> dict[tuple[str, str], list[dict[str, Any]]]:
     groups: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
     for candidate in candidates:
-        for _, key, basis, _, _ in duplicate_keys(candidate):
+        for basis, key in duplicate_keys(candidate):
             groups[(basis, key)].append(candidate)
     return {key: value for key, value in groups.items() if len(value) > 1}
 
@@ -252,18 +252,19 @@ def duplicate_clusters(candidates: list[dict[str, Any]]) -> list[dict[str, Any]]
     return clusters
 
 
-def search_status_summary(candidates: list[dict[str, Any]], records: list[dict[str, Any]]) -> dict[str, Any]:
+def search_status_summary(candidates: list[dict[str, Any]], validation_errors: list[str]) -> dict[str, Any]:
     counts = dict(sorted(Counter(candidate["search_status"] for candidate in candidates).items()))
     return {
         "status_counts": counts,
-        "validation_errors": search_status_errors(records),
+        "validation_errors": validation_errors,
     }
 
 
 def build_candidate_report(path: Path) -> dict[str, Any]:
     records = read_records(path)
     candidates = [normalized_candidate(record, index) for index, record in enumerate(records)]
-    errors = [*private_field_errors(records), *search_status_errors(records)]
+    search_errors = search_status_errors(records)
+    errors = [*private_field_errors(records), *search_errors]
     return {
         "schema_version": "source-candidate-check-v1",
         "execution_mode": "deterministic-local",
@@ -271,7 +272,7 @@ def build_candidate_report(path: Path) -> dict[str, Any]:
         "limits": LIMITS,
         "records": candidates,
         "duplicate_clusters": duplicate_clusters(candidates),
-        "search_status": search_status_summary(candidates, records),
+        "search_status": search_status_summary(candidates, search_errors),
         "errors": errors,
     }
 

@@ -9,4 +9,4 @@ fi
 
 export PYTHONDONTWRITEBYTECODE=1
 
-python3 scripts/run_package_checks.py --scope full --root .
+python3 scripts/run_package_checks.py --scope full

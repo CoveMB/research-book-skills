@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -21,6 +22,7 @@ COMPACT_RESULT_MARKERS = [
     "How to use this result",
     "Next action",
 ]
+FIXTURE_ID_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 
 def read_json_object(path: Path) -> dict[str, Any]:
@@ -60,6 +62,16 @@ def normalized_count(text: str, phrase: str) -> int:
 def fixture_identifier(fixture: dict[str, Any]) -> str:
     value = fixture.get("id")
     return value if isinstance(value, str) and value else "<missing id>"
+
+
+def invalid_fixture_id_errors(fixture: dict[str, Any]) -> list[str]:
+    identifier = fixture_identifier(fixture)
+    return [] if FIXTURE_ID_RE.match(identifier) else [f"{identifier}: id must be lowercase kebab-case"]
+
+
+def output_filename_for_fixture(fixture: dict[str, Any]) -> str:
+    identifier = fixture_identifier(fixture)
+    return f"{identifier}.md" if FIXTURE_ID_RE.match(identifier) else "invalid-fixture-id.md"
 
 
 def missing_fixture_keys(fixture: dict[str, Any]) -> list[str]:
@@ -106,12 +118,13 @@ def validate_fixture_document(fixture_path: Path) -> list[str]:
     errors.extend(duplicate_fixture_id_errors(fixtures))
     for fixture in fixtures:
         errors.extend(missing_fixture_keys(fixture))
+        errors.extend(invalid_fixture_id_errors(fixture))
         errors.extend(invalid_fixture_lists(fixture))
     return errors
 
 
 def output_path_for_fixture(outputs_dir: Path, fixture: dict[str, Any]) -> Path:
-    return outputs_dir / f"{fixture_identifier(fixture)}.md"
+    return outputs_dir / output_filename_for_fixture(fixture)
 
 
 def required_marker_errors(fixture: dict[str, Any], output_text: str) -> list[str]:
@@ -143,6 +156,9 @@ def compact_marker_count_errors(fixture: dict[str, Any], output_text: str) -> li
 
 
 def validate_output_for_fixture(outputs_dir: Path, fixture: dict[str, Any]) -> list[str]:
+    identifier_errors = invalid_fixture_id_errors(fixture)
+    if identifier_errors:
+        return identifier_errors
     output_path = output_path_for_fixture(outputs_dir, fixture)
     if not output_path.exists():
         return [f"{fixture_identifier(fixture)}: missing output file {output_path.name}"]

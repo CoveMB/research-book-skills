@@ -5,58 +5,45 @@ from __future__ import annotations
 import argparse
 import subprocess
 import sys
-from dataclasses import dataclass
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-@dataclass(frozen=True)
-class PackageCheck:
-    label: str
-    command: tuple[str, ...]
-
-
 INSTALL_CHECKS = (
-    PackageCheck("plugin structure", ("scripts/validate_plugin.py", ".")),
-    PackageCheck("book artifact contract", ("scripts/check_book_artifact_contract.py", "--path", ".")),
+    ("scripts/validate_plugin.py", "."),
+    ("scripts/check_book_artifact_contract.py", "--path", "."),
 )
 
 FULL_CHECKS = (
     *INSTALL_CHECKS,
-    PackageCheck(
-        "research behavior fixtures",
-        (
-            "scripts/check_research_behavior_fixtures.py",
-            "--fixtures",
-            "examples/evals/research-skill-behavior-fixtures.json",
-            "--outputs-dir",
-            "examples/evals/outputs",
-        ),
+    (
+        "scripts/check_research_behavior_fixtures.py",
+        "--fixtures",
+        "examples/evals/research-skill-behavior-fixtures.json",
+        "--outputs-dir",
+        "examples/evals/outputs",
     ),
-    PackageCheck(
-        "research behavior harness",
-        (
-            "scripts/research_behavior_eval_harness.py",
-            "--fixtures",
-            "examples/evals/research-skill-behavior-fixtures.json",
-            "--outputs-dir",
-            "examples/evals/outputs",
-            "--quiet",
-        ),
+    (
+        "scripts/research_behavior_eval_harness.py",
+        "--fixtures",
+        "examples/evals/research-skill-behavior-fixtures.json",
+        "--outputs-dir",
+        "examples/evals/outputs",
+        "--quiet",
     ),
-    PackageCheck(
-        "source candidate helper",
-        (
-            "scripts/check_source_candidates.py",
-            "--input",
-            "examples/evals/source-candidates.json",
-            "--quiet",
-        ),
+    (
+        "scripts/check_source_candidates.py",
+        "--input",
+        "examples/evals/source-candidates.json",
+        "--quiet",
     ),
-    PackageCheck("unit tests", ("-m", "unittest", "discover", "-s", "scripts", "-p", "test_*.py")),
+    ("-m", "unittest", "discover", "-s", "scripts", "-p", "test_*.py"),
 )
+
+
+PackageCheck = tuple[str, ...]
 
 
 def checks_for_scope(scope: str) -> tuple[PackageCheck, ...]:
@@ -64,7 +51,7 @@ def checks_for_scope(scope: str) -> tuple[PackageCheck, ...]:
 
 
 def command_with_python(check: PackageCheck) -> list[str]:
-    return [sys.executable, *check.command]
+    return [sys.executable, *check]
 
 
 def run_check(check: PackageCheck, root: Path) -> int:

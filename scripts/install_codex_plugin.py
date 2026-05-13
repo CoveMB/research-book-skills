@@ -19,6 +19,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, NamedTuple
 
+sys.dont_write_bytecode = True
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from plugin_utils import copy_package_tree, load_plugin_manifest, plugin_manifest_path, plugin_name
 
@@ -182,8 +183,12 @@ def plugin_manifest_name(path: Path) -> str:
 
 
 def is_safe_destination(dest: Path, expected_plugin_name: str) -> bool:
+    if dest.is_symlink():
+        return False
     if not dest.exists():
         return dest.name == expected_plugin_name
+    if not dest.is_dir():
+        return False
     if plugin_manifest_name(dest) == expected_plugin_name:
         return True
     return dest.name == expected_plugin_name and not any(dest.iterdir())

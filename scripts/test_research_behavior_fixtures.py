@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 import sys
 import unittest
 from pathlib import Path
@@ -9,9 +10,13 @@ from tempfile import TemporaryDirectory
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from check_research_behavior_fixtures import (
+    output_path_for_fixture,
     validate_fixture_document,
     validate_fixture_outputs,
 )
+
+
+SCRIPT = Path(__file__).resolve().parent / "check_research_behavior_fixtures.py"
 
 
 def fixture_document(*fixtures: dict) -> dict:
@@ -109,6 +114,29 @@ class TestResearchBehaviorFixtures(unittest.TestCase):
 
             self.assertIn("duplicate fixture id 'compact-routing'", errors)
 
+    def test_fixture_id_cannot_escape_outputs_dir(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            fixture_path = write_fixture_file(root, fixture_document(fixture("../secret")))
+            outputs_dir = root / "outputs"
+            outputs_dir.mkdir()
+            (root / "secret.md").write_text(
+                "\n".join([
+                    "Source basis: user prompt only.",
+                    "How to use this result: TRIAGE ONLY - Pick the next step.",
+                    "Next action: Use the smallest route.",
+                ]),
+                encoding="utf-8",
+            )
+
+            document_errors = validate_fixture_document(fixture_path)
+            output_errors = validate_fixture_outputs(fixture_path, outputs_dir)
+            unsafe_output_path = output_path_for_fixture(outputs_dir, fixture("../secret")).resolve()
+
+            self.assertIn("../secret: id must be lowercase kebab-case", document_errors)
+            self.assertEqual(output_errors, document_errors)
+            self.assertTrue(unsafe_output_path.is_relative_to(outputs_dir.resolve()))
+
     def test_missing_output_file_fails(self) -> None:
         with TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
@@ -141,6 +169,31 @@ class TestResearchBehaviorFixtures(unittest.TestCase):
 
             self.assertIn("compact-routing: expected exactly 1 'How to use this result', found 2", errors)
             self.assertIn("compact-routing: expected exactly 1 'Next action', found 2", errors)
+
+    def test_cli_checks_outputs_dir_flag(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            fixture_path = write_fixture_file(root, fixture_document(fixture()))
+            outputs_dir = root / "outputs"
+            outputs_dir.mkdir()
+            (outputs_dir / "compact-routing.md").write_text(
+                "\n".join([
+                    "Source basis: user prompt only.",
+                    "How to use this result: TRIAGE ONLY - Pick the next step.",
+                    "Next action: Use the smallest route.",
+                ]),
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [sys.executable, str(SCRIPT), "--fixtures", str(fixture_path), "--outputs-dir", str(outputs_dir)],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+
+            self.assertEqual(result.returncode, 0, msg=f"stdout={result.stdout} stderr={result.stderr}")
+            self.assertIn("OK: research behavior fixtures are valid.", result.stdout)
 
 
 if __name__ == "__main__":

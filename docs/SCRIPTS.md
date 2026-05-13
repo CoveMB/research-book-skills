@@ -80,7 +80,7 @@ The checker is deterministic and no-network. It does not run a model or verify s
 
 Default mode is deterministic and no-network. It rejects private fields such as `full_text`, `excerpt`, `abstract`, `notes`, `source_text`, and `private_notes`; pass public citation metadata only.
 
-Optional public lookup is consent-gated. `--lookup-provider crossref --allow-network` can enrich missing authoritative metadata from Crossref by submitting DOI identifiers only. Do not pass draft text, source text, abstracts, notes, private fields, or manuscript excerpts to the checker.
+Optional public lookup is consent-gated. `--lookup-provider crossref --allow-network` can enrich missing authoritative metadata from Crossref by submitting DOI identifiers only; use `--lookup-timeout seconds` to keep that explicit lookup bounded. Do not pass draft text, source text, abstracts, notes, private fields, or manuscript excerpts to the checker.
 
 ### Packager
 

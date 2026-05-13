@@ -36,6 +36,13 @@ SUPPORTED_SCHEMA_KEYWORDS = {
     "title",
     "type",
 }
+TYPE_CHECKERS = {
+    "object": lambda item: isinstance(item, dict),
+    "array": lambda item: isinstance(item, list),
+    "string": lambda item: isinstance(item, str),
+    "integer": lambda item: isinstance(item, int) and not isinstance(item, bool),
+    "boolean": lambda item: isinstance(item, bool),
+}
 
 
 def location(path_parts: list[str]) -> str:
@@ -51,6 +58,9 @@ def unsupported_schema_keywords(subschema: Any, path_parts: list[str]) -> list[s
         for key in subschema
         if key not in SUPPORTED_SCHEMA_KEYWORDS
     ]
+    expected_type = subschema.get("type")
+    if "type" in subschema and expected_type not in TYPE_CHECKERS:
+        errors.append(f"unsupported schema type {expected_type!r} at {location(path_parts)}")
 
     schema_maps = ["$defs", "properties"]
     for map_key in schema_maps:
@@ -93,15 +103,8 @@ def resolve_reference(schema: dict[str, Any], reference: str) -> dict[str, Any] 
 
 
 def value_matches_type(value: Any, expected_type: str) -> bool:
-    type_checkers = {
-        "object": lambda item: isinstance(item, dict),
-        "array": lambda item: isinstance(item, list),
-        "string": lambda item: isinstance(item, str),
-        "integer": lambda item: isinstance(item, int) and not isinstance(item, bool),
-        "boolean": lambda item: isinstance(item, bool),
-    }
-    checker = type_checkers.get(expected_type)
-    return True if checker is None else checker(value)
+    checker = TYPE_CHECKERS.get(expected_type)
+    return False if checker is None else checker(value)
 
 
 def const_property_conditions(condition: dict[str, Any]) -> dict[str, Any]:
@@ -288,7 +291,7 @@ def validate_examples(schema: dict[str, Any], files: list[Path]) -> list[str]:
         assert payload is not None
         for validation_error in validate_value(schema, schema, payload, []):
             errors.append(f"{path}: {validation_error}")
-        for boundary_error in validate_artifact_boundaries(schema, payload):
+        for boundary_error in validate_artifact_field_boundaries(schema, payload):
             errors.append(f"{path}: {boundary_error}")
     return errors
 
@@ -342,10 +345,6 @@ def validate_artifact_field_boundaries(schema: dict[str, Any], payload: dict[str
         for key in sorted(payload)
         if key not in allowed_fields
     ]
-
-
-def validate_artifact_boundaries(schema: dict[str, Any], payload: dict[str, Any]) -> list[str]:
-    return validate_artifact_field_boundaries(schema, payload)
 
 
 def schema_artifact_types(schema: dict[str, Any]) -> set[str]:

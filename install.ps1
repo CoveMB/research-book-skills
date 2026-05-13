@@ -21,6 +21,8 @@ if ([version]$PythonVersion -lt [version]"3.10") {
     throw "Python 3.10 or newer is required."
 }
 
+$env:PYTHONDONTWRITEBYTECODE = "1"
+
 if ($args -notcontains "--dry-run") {
     Write-Host "Tip: run .\install.ps1 --dry-run to preview changes before installing."
 }
