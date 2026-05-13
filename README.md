@@ -225,7 +225,7 @@ It also does not replace a researcher, editor, advisor, peer reviewer, or fact-c
 ## Package layout
 
 ```text
-scholarly-research-book-plugin/
+research-book-plugin/
   .codex-plugin/plugin.json
   skills/
     dyslexia-research-companion/

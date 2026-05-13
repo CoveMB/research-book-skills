@@ -39,7 +39,7 @@ The installer backs up the existing marketplace file with a timestamped `.backup
 `scripts/package_plugin.py` writes the zip to the current directory by default. If that directory is read-only, pass `--out` with a writable path:
 
 ```bash
-python3 scripts/package_plugin.py --root . --out dist/scholarly-research-book-plugin.zip
+python3 scripts/package_plugin.py --root . --out dist/research-book-plugin.zip
 ```
 
 ## A script option is unclear

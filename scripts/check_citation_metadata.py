@@ -37,7 +37,7 @@ OCLC_RE = re.compile(r"^\d+$")
 LCCN_RE = re.compile(r"^[a-z]{0,3}\d{6,10}$")
 LOOKUP_PROVIDERS = {"none", "crossref"}
 CROSSREF_WORKS_ENDPOINT = "https://api.crossref.org/v1/works/"
-CROSSREF_USER_AGENT = "scholarly-research-book-plugin/1.0 (public metadata lookup)"
+CROSSREF_USER_AGENT = "research-book-plugin/1.0 (public metadata lookup)"
 
 
 class MetadataPairSpec(NamedTuple):

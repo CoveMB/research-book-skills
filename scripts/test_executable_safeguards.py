@@ -163,7 +163,7 @@ class TestExecutableSafeguards(unittest.TestCase):
 
         self.assertEqual(
             packager.default_output_path(ROOT).name,
-            "scholarly-research-book-plugin-v1.0.0.zip",
+            "research-book-plugin-v1.0.0.zip",
         )
 
     def test_installer_refuses_to_replace_unexpected_destination(self) -> None:

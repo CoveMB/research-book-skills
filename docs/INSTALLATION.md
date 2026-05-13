@@ -17,14 +17,14 @@ Python 3.10 or newer is only required when you run the bundled install, validati
 ### macOS / Linux
 
 ```bash
-cd scholarly-research-book-plugin
+cd research-book-plugin
 ./install.sh
 ```
 
 ### Windows PowerShell
 
 ```powershell
-cd scholarly-research-book-plugin
+cd research-book-plugin
 .\install.ps1
 ```
 
