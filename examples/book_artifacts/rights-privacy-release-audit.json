@@ -13,6 +13,22 @@
   "user_verification_needed": [
     "Review release packet files before sharing outside the project."
   ],
+  "process_passport": {
+    "stage": "Fixture release audit handoff",
+    "artifact_inputs": [
+      "Fixture release issue row"
+    ],
+    "tool_use_summary": [
+      "No files, metadata, licenses, or permissions were inspected."
+    ],
+    "gate_status": [
+      "Not ready for external sharing until actual release packet files are reviewed."
+    ],
+    "human_checkpoints": [
+      "Human reviewer must approve privacy, rights, quote, license, and metadata decisions before release."
+    ],
+    "handoff_notes": "Use this fixture only to validate release-audit structure and handoff limits."
+  },
   "release_issues": [
     {
       "risk": "medium",

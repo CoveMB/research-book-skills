@@ -47,7 +47,7 @@ Use when the user has a draft with citations, footnotes, bibliography, quoted ma
 
 ## Source basis and AI limits
 
-Follow `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, include What I can verify, What remains uncertain, and User verification needed. Do not invent citations or source support.
+Use `docs/SOURCE_LIMITS.md` for source-access rules. Keep source access level, What I can verify, What remains uncertain, and User verification needed visible. Do not invent citations or source support.
 
 ## Compact output
 
@@ -91,11 +91,13 @@ Use this metadata verification ladder before calling a reference real or bibliog
 
 Flag identifier hijack risk when the DOI, URL, title, author, year, or venue points to a different work than the manuscript claims. Do not repair metadata from memory.
 
-Optional local helper: `python3 scripts/check_citation_metadata.py --input path/to/public-metadata.json` compares user-provided public metadata fields only. It is deterministic and no-network; it rejects private fields such as `full_text`, `excerpt`, `abstract`, `notes`, or `private_notes`.
+Optional local helper: `python3 scripts/check_citation_metadata.py --input path/to/public-metadata.json` compares user-provided public metadata fields only. By default it is deterministic and no-network; it rejects private fields such as `full_text`, `excerpt`, `abstract`, `notes`, or `private_notes`.
+
+Optional public metadata lookup is consent-gated: use `--lookup-provider crossref --allow-network` only when the user has explicitly approved public lookup. This path submits DOI identifiers only, never draft text, source text, abstracts, notes, private fields, or manuscript excerpts. If lookup consent is absent, stay in local no-network mode and mark unresolved metadata as unchecked rather than guessing.
 
 ## Files/folders it may read
 
-- Bundled skill instructions, metadata, and assets if available (including, but not limited to, `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` in this project or equivalent files in another project).
+- Shared operational boundary doc: `docs/SKILL_OPERATIONAL_BOUNDARIES.md`.
 - Shared policy docs, especially `docs/SOURCE_LIMITS.md` and `docs/AUTO_SELECTION_GUARDRAILS.md`.
 - User-provided drafts, citation lists, bibliography files, source excerpts, page images, PDFs, and notes explicitly named in the request.
 - Related claim ledgers when citation audit depends on claim classification.
@@ -192,7 +194,7 @@ Ambiguity: [only if source access or locator status could change the verdict]
 Next action: [one action]
 ```
 
-Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless one skill reduces a named scholarly risk.
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless a follow-on skill reduces a named scholarly risk.
 
 ## Severity scale
 

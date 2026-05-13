@@ -41,7 +41,7 @@ Use before publication, external sharing, or citation audit when a visual or tab
 
 ## Source basis and AI limits
 
-Follow `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, include What I can verify, What remains uncertain, and User verification needed. Do not invent citations or source support.
+Use `docs/SOURCE_LIMITS.md` for source-access rules. Keep source access level, What I can verify, What remains uncertain, and User verification needed visible. Do not invent citations or source support.
 
 ## Compact output
 
@@ -53,7 +53,7 @@ When the user explicitly asks for JSON or a contract artifact, use `shared/contr
 
 ## Files/folders it may read
 
-- Bundled skill instructions, metadata, and assets if available (including, but not limited to, `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` in this project or equivalent files in another project).
+- Shared operational boundary doc: `docs/SKILL_OPERATIONAL_BOUNDARIES.md`.
 - Shared policy docs, especially `docs/SOURCE_LIMITS.md`, `docs/AUTO_SELECTION_GUARDRAILS.md`, and `docs/SKILL_OPERATIONAL_BOUNDARIES.md`.
 - User-provided figures, tables, captions, data files, extracted rows, notebooks, source images, licenses, manuscript sections, and project files explicitly named in the request.
 
@@ -133,7 +133,7 @@ Needed files: [only if data, source image, license, or run log is needed]
 Next action: [one action]
 ```
 
-Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless one skill reduces a named scholarly risk.
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless a follow-on skill reduces a named scholarly risk.
 
 ## Quality checks
 

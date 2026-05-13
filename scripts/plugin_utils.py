@@ -43,7 +43,7 @@ EXCLUDED_DIRECTORIES = {
     "node_modules",
     "venv",
 }
-EXCLUDED_FILE_NAMES = {".DS_Store"}
+EXCLUDED_FILE_NAMES = {".DS_Store", ".env", "local-notes.txt", "secrets.json"}
 EXCLUDED_SUFFIXES = {".log", ".pyc", ".zip", ".tmp"}
 DESCRIPTION_STOPWORDS = {
     "after",
@@ -67,6 +67,12 @@ DESCRIPTION_STOPWORDS = {
     "with",
 }
 MIN_SHARED_DESCRIPTION_TERMS = 8
+REQUIRED_AGENT_POLICY = {
+    "task_type": "research-book-skill",
+    "data_access_level": "user-provided-or-public-metadata",
+    "external_lookup_allowed": "conditional",
+    "confidentiality_gate": "required-before-external-lookup",
+}
 CONTRACT_ARTIFACT_SKILLS = {
     "scholarly-research-agenda": "book_research_agenda",
     "systematic-source-discovery": "source_discovery_log",
@@ -86,6 +92,118 @@ CONTRACT_ARTIFACT_SKILLS = {
     "manuscript-continuity-editor": "continuity_review",
     "book-proposal-scholarship": "book_proposal",
 }
+COMMON_ARTIFACT_FIELDS = {
+    "schema_version",
+    "artifact_type",
+    "project_title",
+    "created_at",
+    "source_basis",
+    "what_i_can_verify",
+    "what_remains_uncertain",
+    "user_verification_needed",
+    "process_passport",
+}
+ARTIFACT_TYPE_FIELDS = {
+    "book_research_agenda": {
+        "central_research_question",
+        "subquestions",
+        "provisional_thesis",
+        "contribution_claim",
+        "scope_boundaries",
+        "evidence_plan",
+        "risks_and_mitigation",
+    },
+    "source_discovery_log": {
+        "search_families",
+        "query_bank",
+        "priority_venues",
+        "inclusion_criteria",
+        "exclusion_criteria",
+        "citation_chaining_plan",
+        "source_targets",
+        "opposing_literature_targets",
+        "search_log",
+        "systematic_review",
+    },
+    "literature_map": {
+        "field_overview",
+        "fields_and_subfields",
+        "schools_of_thought",
+        "major_debates",
+        "consensus_controversy_map",
+        "development_map",
+        "gaps_in_literature",
+        "thesis_implications",
+        "sources_still_needed",
+    },
+    "thesis_tree": {
+        "main_thesis",
+        "thesis_variants",
+        "thesis_claims",
+        "hidden_assumptions",
+        "chapter_argument_sequence",
+        "weak_links",
+    },
+    "chapter_brief": {
+        "chapter_title",
+        "chapter_purpose",
+        "central_question",
+        "chapter_thesis",
+        "key_concepts",
+        "section_outline",
+        "counterarguments_to_include",
+        "opening_options",
+        "ending_bridge",
+        "research_still_needed",
+        "revision_risks",
+    },
+    "claim_evidence_ledger": {
+        "claims",
+        "high_risk_claims",
+        "analysis_provenance",
+        "source_priorities",
+    },
+    "source_note": {"source_notes"},
+    "extraction_table": {"extraction_rows"},
+    "claim_traceability_graph": {"traceability_links"},
+    "citation_integrity_audit": {"citation_audit_rows"},
+    "rights_privacy_release_audit": {"release_issues"},
+    "comps_verification": {"comps_verification_rows"},
+    "scholarly_integrity_audit": {"integrity_checks"},
+    "ai_human_workflow_log": {"workflow_decisions"},
+    "figure_table_integrity_audit": {"figure_table_checks"},
+    "continuity_review": {
+        "global_thesis",
+        "chapter_function_map",
+        "repetition_map",
+        "concept_tracking",
+        "contradictions_or_tensions",
+        "tone_and_audience_consistency",
+        "suggested_restructuring",
+        "priority_revision_list",
+    },
+    "book_proposal": {
+        "title_options",
+        "premise",
+        "core_thesis",
+        "contribution_to_field",
+        "audience",
+        "source_base",
+        "chapter_summaries",
+        "comparable_titles",
+        "author_positioning",
+        "status_and_timeline",
+        "sample_material_plan",
+    },
+}
+
+
+def agent_policy_yaml_lines(*, allow_implicit_invocation: bool = True) -> list[str]:
+    return [
+        "policy:",
+        f"  allow_implicit_invocation: {str(allow_implicit_invocation).lower()}",
+        *(f'  {field_name}: "{value}"' for field_name, value in REQUIRED_AGENT_POLICY.items()),
+    ]
 
 
 def load_json_object(path: Path) -> dict[str, Any]:

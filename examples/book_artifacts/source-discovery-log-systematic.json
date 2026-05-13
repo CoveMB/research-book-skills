@@ -73,6 +73,7 @@
     }
   ],
   "systematic_review": {
+    "review_type": "scoping review",
     "protocol_snapshot": {
       "review_question": "Fixture review question for schema validation.",
       "scope": "Fixture scope only; not a scholarly protocol.",
@@ -91,6 +92,10 @@
         "Counts and searches are placeholders for contract validation."
       ]
     },
+    "reviewer_process": "Fixture reviewer process only: no reviewer screening was performed.",
+    "appraisal_plan": "Fixture appraisal plan only: risk of bias or quality appraisal is not performed in this example.",
+    "synthesis_method": "Fixture evidence-map synthesis only; no real synthesis was performed.",
+    "certainty_assessment": "Fixture certainty note only: no certainty or confidence assessment was performed.",
     "screening_counts": {
       "records_found": 0,
       "records_deduplicated": 0,

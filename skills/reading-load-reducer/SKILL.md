@@ -44,7 +44,7 @@ Use this instead of `literature-review-mapper` when the user needs triage before
 
 ## Source basis and AI limits
 
-Follow `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, include What I can verify, What remains uncertain, and User verification needed. Do not invent citations, page numbers, quotes, source support, or field consensus.
+Use `docs/SOURCE_LIMITS.md` for source-access rules. Keep source access level, What I can verify, What remains uncertain, and User verification needed visible. Do not invent citations or source support.
 
 If only titles, abstracts, or snippets are available, mark triage and skip risk as provisional.
 
@@ -54,7 +54,7 @@ Use compact output when the user asks for low reading load, time-boxed triage, o
 
 ## Files/folders it may read
 
-- Bundled skill instructions, metadata, and assets if available (including, but not limited to, `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` in this project or equivalent files in another project).
+- Shared operational boundary doc: `docs/SKILL_OPERATIONAL_BOUNDARIES.md`.
 - Shared policy docs, especially `docs/SOURCE_LIMITS.md`, `docs/AUTO_SELECTION_GUARDRAILS.md`, `docs/ROUTING_MATRIX.md`, and `docs/SKILL_INDEX.md`.
 - User-provided source excerpts, abstracts, search results, bibliographies, drafts, notes, artifacts, or constraints explicitly named in the request.
 
@@ -158,7 +158,7 @@ Uncertainty: [only if access is thin or meaning is unclear]
 Next action: [first reading action]
 ```
 
-Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless one specialist skill reduces a named scholarly risk.
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless a follow-on skill reduces a named scholarly risk.
 
 Use `Close-reading targets`, `Skim targets`, and `Park or skip` only when those sections add value beyond the triage table and reading plan. Omit them in compact output unless the user asks.
 

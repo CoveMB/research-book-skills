@@ -44,7 +44,7 @@ Use this instead of `scholarly-prose-editor` when accessibility, spelling, or or
 
 ## Source basis and AI limits
 
-Follow `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, include What I can verify, What remains uncertain, and User verification needed. Do not invent citations, page numbers, quotes, source support, or field consensus.
+Use `docs/SOURCE_LIMITS.md` for source-access rules. Keep source access level, What I can verify, What remains uncertain, and User verification needed visible. Do not invent citations or source support.
 
 Treat spelling and grammar cleanup as surface repair. If a correction could change a claim, keep the original wording visible and mark the ambiguity.
 
@@ -54,7 +54,7 @@ Use compact output when the user asks for low reading load, minimal correction, 
 
 ## Files/folders it may read
 
-- Bundled skill instructions, metadata, and assets if available (including, but not limited to, `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` in this project or equivalent files in another project).
+- Shared operational boundary doc: `docs/SKILL_OPERATIONAL_BOUNDARIES.md`.
 - Shared policy docs, especially `docs/SOURCE_LIMITS.md`, `docs/AUTO_SELECTION_GUARDRAILS.md`, `docs/ROUTING_MATRIX.md`, and `docs/SKILL_INDEX.md`.
 - User-provided passages, drafts, source excerpts, style constraints, citation notes, or artifacts explicitly named in the request.
 
@@ -162,7 +162,7 @@ Review: [meaning-preserving notes or "No meaning-changing edits"]
 Next action: [one action]
 ```
 
-Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless one specialist skill reduces a named scholarly risk.
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless a follow-on skill reduces a named scholarly risk.
 
 ## Quality checks
 

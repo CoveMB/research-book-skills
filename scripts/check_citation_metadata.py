@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check local citation metadata exports without network lookup or private text."""
+"""Check local citation metadata exports without private text."""
 from __future__ import annotations
 
 import argparse
@@ -9,6 +9,9 @@ import re
 import string
 import sys
 import unicodedata
+import urllib.error
+import urllib.parse
+import urllib.request
 from pathlib import Path
 from typing import Any
 
@@ -16,13 +19,20 @@ from typing import Any
 PRIVATE_FIELDS = {
     "abstract",
     "excerpt",
+    "full text",
     "full_text",
     "manuscript_text",
+    "manuscript text",
     "notes",
     "private_notes",
+    "private notes",
     "source_text",
+    "source text",
 }
 DOI_RE = re.compile(r"^10\.\d{4,9}/\S+$", re.IGNORECASE)
+LOOKUP_PROVIDERS = {"none", "crossref"}
+CROSSREF_WORKS_ENDPOINT = "https://api.crossref.org/v1/works/"
+CROSSREF_USER_AGENT = "scholarly-research-book-plugin/1.0 (public metadata lookup)"
 
 
 def read_json_records(path: Path) -> list[dict[str, Any]]:
@@ -33,12 +43,24 @@ def read_json_records(path: Path) -> list[dict[str, Any]]:
         records = payload["records"]
     else:
         raise ValueError("JSON input must be a list or an object with a records list")
-    return [record for record in records if isinstance(record, dict)]
+    return validate_metadata_records(records)
 
 
 def read_csv_records(path: Path) -> list[dict[str, Any]]:
     with path.open(newline="", encoding="utf-8") as handle:
-        return [dict(row) for row in csv.DictReader(handle)]
+        return validate_metadata_records([dict(row) for row in csv.DictReader(handle)])
+
+
+def validate_metadata_records(records: list[Any]) -> list[dict[str, Any]]:
+    if not records:
+        raise ValueError("input must contain at least one metadata record")
+
+    valid_records: list[dict[str, Any]] = []
+    for index, record in enumerate(records, start=1):
+        if not isinstance(record, dict):
+            raise ValueError(f"record {index} must be an object")
+        valid_records.append(record)
+    return valid_records
 
 
 def read_records(path: Path) -> list[dict[str, Any]]:
@@ -55,11 +77,24 @@ def record_id(record: dict[str, Any], index: int = 0) -> str:
     return str(value) if value else f"record-{index + 1}"
 
 
+def normalized_field_name(field: str) -> str:
+    return " ".join(field.replace("_", " ").casefold().split())
+
+
+NORMALIZED_PRIVATE_FIELDS = {normalized_field_name(private_field) for private_field in PRIVATE_FIELDS}
+
+
+def is_private_field(field: str) -> bool:
+    return normalized_field_name(field) in NORMALIZED_PRIVATE_FIELDS
+
+
 def private_field_errors(records: list[dict[str, Any]]) -> list[str]:
     errors: list[str] = []
     for index, record in enumerate(records):
         identifier = record_id(record, index)
-        for field in sorted(PRIVATE_FIELDS & set(record.keys())):
+        for field in sorted(record.keys()):
+            if not is_private_field(field):
+                continue
             if str(record.get(field, "")).strip():
                 errors.append(f"{identifier}: remove private field {field!r}")
     return errors
@@ -163,9 +198,140 @@ def evaluate_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return [evaluate_record(record, index) for index, record in enumerate(records)]
 
 
+def metadata_lookup_consent_errors(*, lookup_provider: str, allow_network: bool) -> list[str]:
+    if lookup_provider not in LOOKUP_PROVIDERS:
+        return [f"unsupported lookup provider {lookup_provider!r}"]
+    if lookup_provider != "none" and not allow_network:
+        return ["public metadata lookup requires --allow-network with --lookup-provider crossref"]
+    return []
+
+
+def crossref_work_url(doi: str) -> str:
+    encoded_doi = urllib.parse.quote(normalize_identifier(doi), safe="")
+    return f"{CROSSREF_WORKS_ENDPOINT}{encoded_doi}"
+
+
+def first_string(value: Any) -> str:
+    if isinstance(value, str):
+        return value.strip()
+    if isinstance(value, list):
+        for item in value:
+            if isinstance(item, str) and item.strip():
+                return item.strip()
+    return ""
+
+
+def crossref_year(message: dict[str, Any]) -> str:
+    for key in ["published-print", "published-online", "published", "issued", "created"]:
+        value = message.get(key)
+        if not isinstance(value, dict):
+            continue
+        date_parts = value.get("date-parts")
+        if not isinstance(date_parts, list) or not date_parts:
+            continue
+        first_part = date_parts[0]
+        if isinstance(first_part, list) and first_part:
+            year = first_part[0]
+            if isinstance(year, int):
+                return str(year)
+            if isinstance(year, str) and year.isdigit():
+                return year
+    return ""
+
+
+def crossref_author_label(message: dict[str, Any]) -> str:
+    authors = message.get("author")
+    if not isinstance(authors, list):
+        return ""
+
+    family_names = [
+        family.strip()
+        for author in authors
+        if isinstance(author, dict)
+        for family in [str(author.get("family", ""))]
+        if family.strip()
+    ]
+    if not family_names:
+        return ""
+    if len(family_names) == 1:
+        return family_names[0]
+    if len(family_names) == 2:
+        return f"{family_names[0]} and {family_names[1]}"
+    return f"{family_names[0]} et al."
+
+
+def crossref_author_year(message: dict[str, Any]) -> str:
+    author_label = crossref_author_label(message)
+    year = crossref_year(message)
+    return " ".join(part for part in [author_label, year] if part)
+
+
+def public_metadata_from_crossref_message(message: dict[str, Any]) -> dict[str, str]:
+    metadata = {
+        "authoritative_doi": first_string(message.get("DOI")),
+        "authoritative_title": first_string(message.get("title")),
+        "authoritative_author_year": crossref_author_year(message),
+        "authoritative_venue": first_string(message.get("container-title")),
+    }
+    return {key: value for key, value in metadata.items() if value}
+
+
+def fetch_crossref_metadata(doi: str, timeout: float) -> dict[str, str]:
+    request = urllib.request.Request(
+        crossref_work_url(doi),
+        headers={"Accept": "application/json", "User-Agent": CROSSREF_USER_AGENT},
+    )
+    with urllib.request.urlopen(request, timeout=timeout) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+    message = payload.get("message") if isinstance(payload, dict) else None
+    return public_metadata_from_crossref_message(message) if isinstance(message, dict) else {}
+
+
+def enrich_record_with_public_metadata(record: dict[str, Any], metadata: dict[str, str]) -> dict[str, Any]:
+    enriched_record = dict(record)
+    for key, value in metadata.items():
+        if not text_value(enriched_record, key):
+            enriched_record[key] = value
+    return enriched_record
+
+
+def enrich_records_with_public_lookup(
+    records: list[dict[str, Any]], *, lookup_provider: str, timeout: float
+) -> list[dict[str, Any]]:
+    if lookup_provider == "none":
+        return records
+
+    enriched_records: list[dict[str, Any]] = []
+    for record in records:
+        claimed_doi = normalize_identifier(text_value(record, "claimed_doi"))
+        if not claimed_doi or not DOI_RE.match(claimed_doi):
+            enriched_records.append(record)
+            continue
+        metadata = fetch_crossref_metadata(claimed_doi, timeout)
+        enriched_records.append(enrich_record_with_public_metadata(record, metadata))
+    return enriched_records
+
+
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, required=True, help="Local JSON or CSV metadata export.")
+    parser.add_argument(
+        "--lookup-provider",
+        choices=sorted(LOOKUP_PROVIDERS),
+        default="none",
+        help="Optional public metadata provider. Default is local no-network mode.",
+    )
+    parser.add_argument(
+        "--allow-network",
+        action="store_true",
+        help="Required before any public metadata lookup. The lookup submits DOI identifiers only.",
+    )
+    parser.add_argument(
+        "--lookup-timeout",
+        type=float,
+        default=10.0,
+        help="Network timeout in seconds for explicit public metadata lookup.",
+    )
     return parser.parse_args(argv)
 
 
@@ -182,7 +348,25 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps({"errors": errors}, indent=2))
         return 1
 
-    results = evaluate_records(records)
+    consent_errors = metadata_lookup_consent_errors(
+        lookup_provider=args.lookup_provider,
+        allow_network=args.allow_network,
+    )
+    if consent_errors:
+        print(json.dumps({"errors": consent_errors}, indent=2))
+        return 1
+
+    try:
+        checked_records = enrich_records_with_public_lookup(
+            records,
+            lookup_provider=args.lookup_provider,
+            timeout=args.lookup_timeout,
+        )
+    except (OSError, urllib.error.URLError, TimeoutError, ValueError, json.JSONDecodeError) as error:
+        print(json.dumps({"errors": [f"public metadata lookup failed: {error}"]}, indent=2))
+        return 1
+
+    results = evaluate_records(checked_records)
     print(json.dumps({"records": results}, indent=2))
     return 1 if any(result["risk"] in {"medium", "high"} for result in results) else 0
 

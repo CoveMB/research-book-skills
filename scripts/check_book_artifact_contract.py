@@ -8,7 +8,11 @@ from pathlib import Path
 from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from plugin_utils import load_json_object_result
+from plugin_utils import (
+    ARTIFACT_TYPE_FIELDS as ARTIFACT_ALLOWED_FIELDS,
+    COMMON_ARTIFACT_FIELDS,
+    load_json_object_result,
+)
 
 
 SCHEMA_RELATIVE_PATH = Path("shared/contracts/book/book_artifact.schema.json")
@@ -125,6 +129,8 @@ def validate_string(value: str, subschema: dict[str, Any], path_parts: list[str]
     minimum_length = subschema.get("minLength")
     if isinstance(minimum_length, int) and len(value) < minimum_length:
         return [f"string shorter than minLength {minimum_length} at {location(path_parts)}"]
+    if isinstance(minimum_length, int) and minimum_length > 0 and not value.strip():
+        return [f"blank string at {location(path_parts)}"]
     return []
 
 
@@ -283,7 +289,30 @@ def validate_examples(schema: dict[str, Any], files: list[Path]) -> list[str]:
         assert payload is not None
         for validation_error in validate_value(schema, schema, payload, []):
             errors.append(f"{path}: {validation_error}")
+        for boundary_error in validate_artifact_boundaries(payload):
+            errors.append(f"{path}: {boundary_error}")
     return errors
+
+
+def allowed_fields_for_artifact_type(artifact_type: str) -> set[str]:
+    return COMMON_ARTIFACT_FIELDS | ARTIFACT_ALLOWED_FIELDS.get(artifact_type, set())
+
+
+def validate_artifact_field_boundaries(payload: dict[str, Any]) -> list[str]:
+    artifact_type = payload.get("artifact_type")
+    if not isinstance(artifact_type, str) or artifact_type not in ARTIFACT_ALLOWED_FIELDS:
+        return []
+
+    allowed_fields = allowed_fields_for_artifact_type(artifact_type)
+    return [
+        f"field {key!r} is not allowed for artifact_type {artifact_type!r}"
+        for key in sorted(payload)
+        if key not in allowed_fields
+    ]
+
+
+def validate_artifact_boundaries(payload: dict[str, Any]) -> list[str]:
+    return validate_artifact_field_boundaries(payload)
 
 
 def schema_artifact_types(schema: dict[str, Any]) -> set[str]:

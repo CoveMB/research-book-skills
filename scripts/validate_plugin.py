@@ -23,16 +23,11 @@ from plugin_utils import (
     nested_mapping,
     nested_string,
     parse_simple_yaml_mapping,
+    REQUIRED_AGENT_POLICY,
     significant_description_terms,
 )
 
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
-REQUIRED_AGENT_POLICY_STRINGS = {
-    "task_type": "research-book-skill",
-    "data_access_level": "user-provided-or-public-metadata",
-    "external_lookup_allowed": "conditional",
-    "confidentiality_gate": "required-before-external-lookup",
-}
 MARKDOWN_LINK_RE = re.compile(r"\[[^\]]+\]\(([^)#]+)(?:#[^)]+)?\)")
 BACKTICK_REFERENCE_RE = re.compile(r"`([^`\n]+)`")
 LOCAL_REFERENCE_PREFIXES = (
@@ -61,14 +56,24 @@ def parse_frontmatter(path: Path) -> dict[str, str]:
     if not lines or lines[0].strip() != "---":
         raise ValueError("missing opening YAML frontmatter delimiter")
     data: dict[str, str] = {}
+    current_section = ""
     for line in lines[1:]:
         if line.strip() == "---":
             return data
         if not line.strip() or line.startswith("  "):
+            if line.startswith("  ") and current_section and ":" in line:
+                key, value = line.split(":", 1)
+                data[f"{current_section}.{key.strip()}"] = value.strip().strip('"').strip("'")
             continue
         if ":" in line:
             key, value = line.split(":", 1)
-            data[key.strip()] = value.strip().strip('"').strip("'")
+            normalized_key = key.strip()
+            normalized_value = value.strip().strip('"').strip("'")
+            if normalized_value:
+                data[normalized_key] = normalized_value
+                current_section = ""
+            else:
+                current_section = normalized_key
     raise ValueError("missing closing YAML frontmatter delimiter")
 
 
@@ -268,7 +273,7 @@ def validate_agent_metadata(
         errors.append(
             f"{skill_name}: agents/openai.yaml policy.allow_implicit_invocation must be boolean"
         )
-    for field_name, expected_value in REQUIRED_AGENT_POLICY_STRINGS.items():
+    for field_name, expected_value in REQUIRED_AGENT_POLICY.items():
         value = nested_string(policy, field_name)
         if value != expected_value:
             errors.append(
@@ -286,7 +291,12 @@ def validate_agent_metadata(
     return default_prompt, errors
 
 
-def validate_skill_dir(root: Path, skill_dir: Path, seen_names: set[str]) -> tuple[str, str, list[str]]:
+def validate_skill_dir(
+    root: Path,
+    skill_dir: Path,
+    seen_names: set[str],
+    expected_version: str,
+) -> tuple[str, str, list[str]]:
     errors: list[str] = []
     skill_name = skill_dir.name
     skill_path = skill_dir / "SKILL.md"
@@ -311,6 +321,12 @@ def validate_skill_dir(root: Path, skill_dir: Path, seen_names: set[str]) -> tup
         errors.append(f"{skill_name}: missing description")
     if len(description) > 1024:
         errors.append(f"{skill_name}: description exceeds 1024 characters")
+    metadata_version = frontmatter.get("metadata.version", "")
+    if metadata_version and expected_version and metadata_version != expected_version:
+        errors.append(
+            f"{skill_name}: metadata.version {metadata_version!r} must match plugin version "
+            f"{expected_version!r}"
+        )
     if name != skill_name:
         errors.append(f"{skill_name}: frontmatter name '{name}' does not match folder")
     if not NAME_RE.match(name):
@@ -341,7 +357,7 @@ def validate_project_references(root: Path) -> list[str]:
     return errors
 
 
-def validate_skills(root: Path, skills_dir: Path) -> list[str]:
+def validate_skills(root: Path, skills_dir: Path, expected_version: str) -> list[str]:
     errors: list[str] = []
     if not skills_dir.exists():
         return ["Missing skills/ directory"]
@@ -353,7 +369,12 @@ def validate_skills(root: Path, skills_dir: Path) -> list[str]:
     seen_names: set[str] = set()
     seen_prompts: dict[str, str] = {}
     for skill_dir in skill_dirs:
-        skill_name, default_prompt, skill_errors = validate_skill_dir(root, skill_dir, seen_names)
+        skill_name, default_prompt, skill_errors = validate_skill_dir(
+            root,
+            skill_dir,
+            seen_names,
+            expected_version,
+        )
         errors.extend(skill_errors)
         if default_prompt:
             previous_skill = seen_prompts.get(default_prompt)
@@ -374,8 +395,9 @@ def main() -> int:
     args = parser.parse_args()
 
     root = Path(args.plugin_root).expanduser().resolve()
-    _, skills_dir, errors = manifest_errors(root)
-    errors.extend(validate_skills(root, skills_dir))
+    manifest, skills_dir, errors = manifest_errors(root)
+    expected_version = str(manifest.get("version", "")) if manifest else ""
+    errors.extend(validate_skills(root, skills_dir, expected_version))
     errors.extend(validate_project_references(root))
 
     if errors:

@@ -230,6 +230,17 @@ class TestPluginStructure(unittest.TestCase):
         ]
         self.assertEqual(offenders, [])
 
+    def test_skill_readme_template_defers_common_operational_boundaries(self) -> None:
+        template = read_text(ROOT / "docs" / "SKILL_README_TEMPLATE.md")
+        self.assertIn("docs/SKILL_OPERATIONAL_BOUNDARIES.md", template)
+        duplicated_phrases = [
+            "State the source basis and source access level",
+            "Bundled skill instructions, metadata, and assets if available",
+            "Invent missing scholarly facts or verification",
+        ]
+        offenders = [phrase for phrase in duplicated_phrases if phrase in template]
+        self.assertEqual(offenders, [])
+
     def test_each_skill_has_ai_safety_rules(self) -> None:
         missing: list[str] = []
         required_phrases = [
@@ -380,6 +391,10 @@ class TestPluginStructure(unittest.TestCase):
             "Use the package source-access policy if available (including, but not limited to,",
             "Use the optional Suggested next step policy if available (including, but not limited to,",
             "Suggested next step must reduce a named scholarly risk, not promote a skill because it exists.",
+            "separate source basis from interpretation",
+            "it may be omitted unless one skill reduces",
+            "it may be omitted unless one specialist skill reduces",
+            "Bundled skill instructions, metadata, and assets if available",
         ]
         offenders = [
             f"{path.relative_to(ROOT)}: {phrase}"
@@ -682,6 +697,16 @@ class TestPluginStructure(unittest.TestCase):
         self.assertIn(f"Version: {version}", readme)
         self.assertIn(f"## {version}", changelog)
 
+    def test_skill_metadata_versions_match_manifest(self) -> None:
+        manifest = read_json(ROOT / ".codex-plugin" / "plugin.json")
+        version = manifest["version"]
+        mismatches = [
+            f"{skill_dir.name}: {metadata_field(skill_markdown(skill_dir), 'version')}"
+            for skill_dir in self.skill_dirs()
+            if metadata_field(skill_markdown(skill_dir), "version") != version
+        ]
+        self.assertEqual(mismatches, [])
+
     def test_skill_readmes_use_risk_gated_followup_language(self) -> None:
         disallowed_phrases = [
             "next best skill",
@@ -821,6 +846,9 @@ class TestPluginStructure(unittest.TestCase):
             "fuzzy title",
             "scripts/check_citation_metadata.py",
             "no-network",
+            "--lookup-provider crossref",
+            "--allow-network",
+            "submits DOI identifiers only",
             "full_text",
             "abstract",
         ]
@@ -833,8 +861,16 @@ class TestPluginStructure(unittest.TestCase):
         )
         required_phrases = [
             "systematic review mode",
+            "review-type prefilter",
+            "scoping review",
+            "narrative review",
             "PRISMA",
             "protocol snapshot",
+            "reviewer process",
+            "appraisal plan",
+            "risk of bias",
+            "synthesis method",
+            "certainty",
             "screening counts",
             "exclusion reasons",
         ]
@@ -863,7 +899,12 @@ class TestPluginStructure(unittest.TestCase):
         systematic_review = definitions["systematic_review_record"]
         required_fields = systematic_review["required"]
         for field in [
+            "review_type",
             "protocol_snapshot",
+            "reviewer_process",
+            "appraisal_plan",
+            "synthesis_method",
+            "certainty_assessment",
             "screening_counts",
             "exclusion_reasons",
             "prisma_flow",
@@ -903,6 +944,13 @@ class TestPluginStructure(unittest.TestCase):
         schema = read_json(ROOT / "shared" / "contracts" / "book" / "book_artifact.schema.json")
         self.assertIn("process_passport", schema["properties"])
         self.assertNotIn("process_passport", schema["required"])
+        for path in [
+            ROOT / "docs" / "QUALITY_STANDARD.md",
+            ROOT / "docs" / "SCRIPTS.md",
+        ]:
+            text = read_text(path)
+            self.assertNotIn("requires `process_passport`", text)
+            self.assertNotIn("requires process_passport", text)
 
         passport = schema["$defs"]["process_passport"]
         required_fields = passport["required"]
@@ -966,6 +1014,55 @@ class TestPluginStructure(unittest.TestCase):
             "systematic review",
         ]
         self.assertEqual(missing_phrases(methodology, required_phrases), [])
+
+    def test_methodology_auditor_reference_files_exist(self) -> None:
+        references_dir = SKILLS_DIR / "methodology-source-auditor" / "references"
+        expected_files = [
+            "qualitative.md",
+            "historical.md",
+            "legal.md",
+            "computational.md",
+            "survey.md",
+            "observational.md",
+            "experimental.md",
+            "systematic-review.md",
+        ]
+        missing_files = [
+            filename
+            for filename in expected_files
+            if not (references_dir / filename).is_file()
+        ]
+        self.assertEqual(missing_files, [])
+
+        missing_phrases_by_file = {
+            filename: missing_phrases(
+                read_text(references_dir / filename),
+                ["## Audit questions", "## Boundaries", "## Cannot support"],
+            )
+            for filename in expected_files
+            if (references_dir / filename).is_file()
+        }
+        self.assertEqual(
+            {
+                filename: phrases
+                for filename, phrases in missing_phrases_by_file.items()
+                if phrases
+            },
+            {},
+        )
+
+    def test_integrity_gate_has_stage_prefilters_and_block_rules(self) -> None:
+        integrity_gate = read_text(SKILLS_DIR / "scholarly-integrity-gate" / "SKILL.md")
+        required_phrases = [
+            "artifact/method prefilter",
+            "not applicable",
+            "Stage-specific block rules",
+            "result-bearing artifact",
+            "must hold",
+            "must not block",
+            "theoretical, interpretive, or normative",
+        ]
+        self.assertEqual(missing_phrases(integrity_gate, required_phrases), [])
 
     def test_router_deep_mode_requires_lookup_target_object(self) -> None:
         router = read_text(SKILLS_DIR / "research-intent-router" / "SKILL.md")
@@ -1218,6 +1315,10 @@ class TestPluginStructure(unittest.TestCase):
             "compact methodology triage",
             "compact release blockers",
             "compact routing",
+            "integrity gate block rule",
+            "irrelevant integrity check",
+            "method family audit",
+            "metadata lookup consent",
         }
         covered_risks = {fixture["risk_covered"] for fixture in fixtures["fixtures"]}
         self.assertEqual(sorted(required_risks - covered_risks), [])

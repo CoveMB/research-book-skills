@@ -56,7 +56,7 @@ Include:
 
 ## Source basis and AI limits
 
-Follow `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, include What I can verify, What remains uncertain, and User verification needed. Do not invent citations or source support.
+Use `docs/SOURCE_LIMITS.md` for source-access rules. Keep source access level, What I can verify, What remains uncertain, and User verification needed visible. Do not invent citations or source support.
 
 ## Machine-readable artifacts
 
@@ -64,7 +64,7 @@ When the user explicitly asks for JSON or a contract artifact, use `shared/contr
 
 ## Files/folders it may read
 
-- Bundled skill instructions, metadata, and assets if available (including, but not limited to, `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` in this project or equivalent files in another project).
+- Shared operational boundary doc: `docs/SKILL_OPERATIONAL_BOUNDARIES.md`.
 - Shared policy docs, especially `docs/SOURCE_LIMITS.md` and `docs/AUTO_SELECTION_GUARDRAILS.md`.
 - User-provided proposals, outlines, chapter summaries, literature maps, sample chapters, CV notes, and comparable-title lists explicitly named in the request.
 - Related book artifacts when proposal claims depend on prior research work.
@@ -163,7 +163,7 @@ Recommend missing research, proposal materials, and sample chapter priorities.
 
 ```
 
-Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless one skill reduces a named scholarly risk.
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless a follow-on skill reduces a named scholarly risk.
 
 ## Quality checks
 

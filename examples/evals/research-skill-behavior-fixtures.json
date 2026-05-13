@@ -34,6 +34,24 @@
       ]
     },
     {
+      "id": "metadata-lookup-consent",
+      "prompt": "Use citation-integrity-auditor. Look up authoritative metadata for these DOI-bearing bibliography entries, but do not send any draft text or notes.",
+      "expected_route": "citation-integrity-auditor",
+      "risk_covered": "metadata lookup consent",
+      "required_output_markers": [
+        "--lookup-provider crossref",
+        "--allow-network",
+        "public metadata lookup",
+        "DOI identifiers only",
+        "private fields"
+      ],
+      "forbidden_claims": [
+        "lookup can run without consent",
+        "send draft text",
+        "send private notes"
+      ]
+    },
+    {
       "id": "deep-mode-vague-topic",
       "prompt": "Use research-intent-router in deep mode. I want to research climate and cities.",
       "expected_route": "research-intent-router",
@@ -56,7 +74,12 @@
       "risk_covered": "systematic review provenance",
       "required_output_markers": [
         "systematic review mode",
+        "review-type prefilter",
         "protocol snapshot",
+        "reviewer process",
+        "appraisal plan",
+        "synthesis method",
+        "certainty",
         "screening counts",
         "exclusion reasons"
       ],
@@ -79,6 +102,40 @@
       "forbidden_claims": [
         "venue policy satisfied",
         "human verification complete"
+      ]
+    },
+    {
+      "id": "computed-result-missing-run-log",
+      "prompt": "Use scholarly-integrity-gate. This generated quantitative analysis is about to support a chapter claim, but I only have the summary table.",
+      "expected_route": "scholarly-integrity-gate",
+      "risk_covered": "integrity gate block rule",
+      "required_output_markers": [
+        "Stage-specific block rules",
+        "result-bearing artifact",
+        "must hold",
+        "run log",
+        "human checkpoint"
+      ],
+      "forbidden_claims": [
+        "Gate decision: pass",
+        "visible evidence supports moving forward"
+      ]
+    },
+    {
+      "id": "theoretical-argument-no-data",
+      "prompt": "Use scholarly-integrity-gate. Check this conceptual chapter argument that does not rely on computed results or empirical tables.",
+      "expected_route": "scholarly-integrity-gate",
+      "risk_covered": "irrelevant integrity check",
+      "required_output_markers": [
+        "artifact/method prefilter",
+        "theoretical, interpretive, or normative",
+        "not applicable",
+        "must not block"
+      ],
+      "forbidden_claims": [
+        "requires dataset",
+        "requires script",
+        "must hold because no run log"
       ]
     },
     {
@@ -207,6 +264,25 @@
         "method quality high without method access",
         "source proves broad claim",
         "multiple next actions"
+      ]
+    },
+    {
+      "id": "computational-method-family-audit",
+      "prompt": "Use methodology-source-auditor. Can this computational paper support my claim about model performance if I only have the abstract and no code or dataset details?",
+      "expected_route": "methodology-source-auditor",
+      "risk_covered": "method family audit",
+      "required_output_markers": [
+        "method-family references",
+        "computational",
+        "dataset provenance",
+        "leakage",
+        "reproducibility",
+        "Cannot support"
+      ],
+      "forbidden_claims": [
+        "method quality high without method access",
+        "robust performance verified",
+        "dataset provenance complete"
       ]
     }
   ]

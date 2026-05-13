@@ -54,7 +54,18 @@ Assess each source by:
 
 ## Method-family references
 
-Use method-family references only when the source's method matters to the claim. Keep the SKILL body concise and load or request field-specific guidance when needed. Useful families include qualitative, historical, legal, computational, survey, observational, experimental, systematic review, dataset, and mixed-methods work.
+Use method-family references only when the source's method matters to the claim. Keep the SKILL body concise and load or request field-specific guidance when needed. Load only the relevant one-level reference file:
+
+- qualitative: `references/qualitative.md`
+- historical: `references/historical.md`
+- legal: `references/legal.md`
+- computational: `references/computational.md`
+- survey: `references/survey.md`
+- observational: `references/observational.md`
+- experimental: `references/experimental.md`
+- systematic review: `references/systematic-review.md`
+
+Useful families include qualitative, historical, legal, computational, survey, observational, experimental, systematic review, dataset, and mixed-methods work.
 
 For each family, ask method-specific questions:
 
@@ -69,7 +80,7 @@ For each family, ask method-specific questions:
 
 ## Source basis and AI limits
 
-Follow `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, include What I can verify, What remains uncertain, and User verification needed. Do not invent citations or source support.
+Use `docs/SOURCE_LIMITS.md` for source-access rules. Keep source access level, What I can verify, What remains uncertain, and User verification needed visible. Do not invent citations or source support.
 
 ## Compact output
 
@@ -77,7 +88,7 @@ Use compact output when the user asks for low reading load, source-use triage, o
 
 ## Files/folders it may read
 
-- Bundled skill instructions, metadata, and assets if available (including, but not limited to, `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` in this project or equivalent files in another project).
+- Shared operational boundary doc: `docs/SKILL_OPERATIONAL_BOUNDARIES.md`.
 - Shared policy docs, especially `docs/SOURCE_LIMITS.md` and `docs/AUTO_SELECTION_GUARDRAILS.md`.
 - User-provided sources, excerpts, data descriptions, bibliographies, and manuscript files explicitly named in the request.
 - Related claim ledgers or chapter notes when source-use fit depends on them.
@@ -174,7 +185,7 @@ How to use this result: TRIAGE ONLY - Use this only for provisional source-use t
 Next action: [one action]
 ```
 
-Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless one skill reduces a named scholarly risk.
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless a follow-on skill reduces a named scholarly risk.
 
 ## Quality checks
 

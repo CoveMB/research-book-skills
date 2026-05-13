@@ -10,7 +10,9 @@ from tempfile import TemporaryDirectory
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from check_citation_metadata import (
+    crossref_work_url,
     evaluate_records,
+    metadata_lookup_consent_errors,
     private_field_errors,
 )
 
@@ -61,6 +63,14 @@ class TestCitationMetadataChecks(unittest.TestCase):
 
         self.assertEqual(errors, ["fixture-reference: remove private field 'abstract'"])
 
+    def test_private_field_aliases_are_rejected(self) -> None:
+        record = matching_record()
+        record["Full Text"] = "Private source text does not belong in this helper."
+
+        errors = private_field_errors([record])
+
+        self.assertEqual(errors, ["fixture-reference: remove private field 'Full Text'"])
+
     def test_invalid_doi_format_is_reported(self) -> None:
         record = matching_record()
         record["claimed_doi"] = "fixture-only"
@@ -94,6 +104,79 @@ class TestCitationMetadataChecks(unittest.TestCase):
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("remove private field", result.stdout)
+
+    def test_cli_fails_on_non_object_json_records(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            input_path = root / "metadata.json"
+            input_path.write_text(json.dumps({"records": [matching_record(), "not a record"]}), encoding="utf-8")
+
+            result = subprocess.run(
+                [sys.executable, str(SCRIPT), "--input", str(input_path)],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("record 2 must be an object", result.stdout)
+
+    def test_cli_fails_on_empty_record_set(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            input_path = root / "metadata.json"
+            input_path.write_text(json.dumps({"records": []}), encoding="utf-8")
+
+            result = subprocess.run(
+                [sys.executable, str(SCRIPT), "--input", str(input_path)],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("at least one metadata record", result.stdout)
+
+    def test_public_lookup_requires_explicit_network_consent(self) -> None:
+        errors = metadata_lookup_consent_errors(lookup_provider="crossref", allow_network=False)
+
+        self.assertEqual(
+            errors,
+            ["public metadata lookup requires --allow-network with --lookup-provider crossref"],
+        )
+
+    def test_public_lookup_consent_not_required_for_local_mode(self) -> None:
+        errors = metadata_lookup_consent_errors(lookup_provider="none", allow_network=False)
+
+        self.assertEqual(errors, [])
+
+    def test_crossref_lookup_url_uses_encoded_public_doi_only(self) -> None:
+        url = crossref_work_url("https://doi.org/10.0000/Fixture Case")
+
+        self.assertEqual(url, "https://api.crossref.org/v1/works/10.0000%2Ffixture%20case")
+
+    def test_cli_rejects_lookup_without_network_consent(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            input_path = root / "metadata.json"
+            input_path.write_text(json.dumps({"records": [matching_record()]}), encoding="utf-8")
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--input",
+                    str(input_path),
+                    "--lookup-provider",
+                    "crossref",
+                ],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("requires --allow-network", result.stdout)
 
 
 if __name__ == "__main__":

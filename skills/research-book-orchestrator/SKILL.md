@@ -59,11 +59,11 @@ Use `docs/ROUTING_MATRIX.md` as the canonical route table. This skill should sum
 
 ## Source basis and AI limits
 
-Follow `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, include What I can verify, What remains uncertain, and User verification needed. Do not invent citations or source support.
+Use `docs/SOURCE_LIMITS.md` for source-access rules. Keep source access level, What I can verify, What remains uncertain, and User verification needed visible. Do not invent citations or source support.
 
 ## Files/folders it may read
 
-- Bundled skill instructions, metadata, and assets if available (including, but not limited to, `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` in this project or equivalent files in another project).
+- Shared operational boundary doc: `docs/SKILL_OPERATIONAL_BOUNDARIES.md`.
 - Shared policy docs, especially `docs/SOURCE_LIMITS.md` and `docs/AUTO_SELECTION_GUARDRAILS.md`.
 - `docs/ARCHITECTURE.md`, `MODE_REGISTRY.md`, `docs/QUALITY_STANDARD.md`, and `shared/contracts/book/book_artifact.schema.json` when routing, artifacts, or quality gates matter.
 - User-provided files, drafts, notes, bibliographies, and artifacts explicitly named in the request.

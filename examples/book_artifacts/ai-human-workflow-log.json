@@ -13,6 +13,22 @@
   "user_verification_needed": [
     "Verify each AI-assisted step and human checkpoint before external disclosure."
   ],
+  "process_passport": {
+    "stage": "Fixture AI/human workflow handoff",
+    "artifact_inputs": [
+      "Fixture workflow summary"
+    ],
+    "tool_use_summary": [
+      "No actual tool history was reviewed."
+    ],
+    "gate_status": [
+      "Not ready for disclosure use until project-specific tool history and human checkpoints replace fixture values."
+    ],
+    "human_checkpoints": [
+      "Human reviewer must confirm each AI-assisted step, affected section, and verification responsibility."
+    ],
+    "handoff_notes": "Use this fixture only to validate workflow-log structure and handoff limits."
+  },
   "workflow_decisions": [
     {
       "checkpoint": "Generated synthesis review",

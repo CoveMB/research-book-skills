@@ -13,6 +13,22 @@
   "user_verification_needed": [
     "Verify data provenance, labels, and rights before using the figure or table."
   ],
+  "process_passport": {
+    "stage": "Fixture figure/table audit handoff",
+    "artifact_inputs": [
+      "Fixture figure/table row"
+    ],
+    "tool_use_summary": [
+      "No dataset, source image, notebook, run log, or license file was reviewed."
+    ],
+    "gate_status": [
+      "Not ready for empirical or release reliance until data provenance, caption, axis, and rights checks are complete."
+    ],
+    "human_checkpoints": [
+      "Human reviewer must confirm provenance, visual integrity, and rights before manuscript or release use."
+    ],
+    "handoff_notes": "Use this fixture only to validate figure/table audit structure and handoff limits."
+  },
   "figure_table_checks": [
     {
       "object": "Figure 1",

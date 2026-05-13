@@ -39,6 +39,10 @@ def write_minimal_plugin(root: Path, *, skill_body: str | None = None) -> None:
     manifest_dir = root / ".codex-plugin"
     skill_dir = root / "skills" / "sample-skill"
     agents_dir = skill_dir / "agents"
+    skill_description = (
+        "Sample skill validates metadata display routing coverage evidence workflow "
+        "planning audit chapter argument continuity."
+    )
     manifest_dir.mkdir(parents=True)
     agents_dir.mkdir(parents=True)
     (manifest_dir / "plugin.json").write_text(
@@ -58,7 +62,7 @@ def write_minimal_plugin(root: Path, *, skill_body: str | None = None) -> None:
             [
                 "---",
                 "name: sample-skill",
-                "description: Sample skill for validation.",
+                f"description: {skill_description}",
                 "---",
                 "# Sample Skill",
                 "",
@@ -72,14 +76,9 @@ def write_minimal_plugin(root: Path, *, skill_body: str | None = None) -> None:
             [
                 "interface:",
                 '  display_name: "Sample Skill"',
-                '  short_description: "Sample skill for validation."',
+                f'  short_description: "{skill_description}"',
                 '  default_prompt: "Use sample-skill."',
-                "policy:",
-                "  allow_implicit_invocation: true",
-                '  task_type: "research-book-skill"',
-                '  data_access_level: "user-provided-or-public-metadata"',
-                '  external_lookup_allowed: "conditional"',
-                '  confidentiality_gate: "required-before-external-lookup"',
+                *load_module("plugin_utils.py").agent_policy_yaml_lines(),
                 "",
             ]
         ),
@@ -91,10 +90,13 @@ class TestExecutableSafeguards(unittest.TestCase):
     def test_package_excludes_generated_and_vcs_files(self) -> None:
         with TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory) / "plugin"
-            root.mkdir()
-            (root / "keep.txt").write_text("keep", encoding="utf-8")
+            write_minimal_plugin(root)
             (root / ".env").write_text("SECRET=1", encoding="utf-8")
             (root / "local-notes.txt").write_text("notes", encoding="utf-8")
+            (root / "skills" / "sample-skill" / ".env").write_text("SECRET=2", encoding="utf-8")
+            (root / "docs").mkdir()
+            (root / "docs" / "local-notes.txt").write_text("notes", encoding="utf-8")
+            (root / "skills" / "sample-skill" / "secrets.json").write_text("{}", encoding="utf-8")
             (root / "old.zip").write_text("old", encoding="utf-8")
             (root / ".DS_Store").write_text("metadata", encoding="utf-8")
             (root / ".git").mkdir()
@@ -118,6 +120,9 @@ class TestExecutableSafeguards(unittest.TestCase):
                 names = archive.namelist()
             self.assertNotIn(f"{root.name}/.env", names)
             self.assertNotIn(f"{root.name}/local-notes.txt", names)
+            self.assertNotIn(f"{root.name}/skills/sample-skill/.env", names)
+            self.assertNotIn(f"{root.name}/docs/local-notes.txt", names)
+            self.assertNotIn(f"{root.name}/skills/sample-skill/secrets.json", names)
             self.assertNotIn(f"{root.name}/bundle.zip", names)
             self.assertFalse(any("/.git/" in name for name in names))
             self.assertFalse(any(name.endswith(".zip") for name in names))
@@ -127,6 +132,31 @@ class TestExecutableSafeguards(unittest.TestCase):
             self.assertFalse(any("/dist/" in name for name in names))
             self.assertFalse(any("/build/" in name for name in names))
             self.assertFalse(any("/coverage/" in name for name in names))
+
+    def test_package_validates_plugin_before_writing_zip(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory) / "plugin"
+            write_minimal_plugin(root)
+            (root / "skills" / "sample-skill" / "SKILL.md").write_text(
+                "\n".join(
+                    [
+                        "---",
+                        "name: wrong-skill",
+                        "description: Sample skill for validation.",
+                        "---",
+                        "# Sample Skill",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            output_path = Path(temporary_directory) / "bundle.zip"
+
+            result = run_script("package_plugin.py", "--root", str(root), "--out", str(output_path))
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("frontmatter name", result.stdout)
+            self.assertFalse(output_path.exists())
 
     def test_package_default_output_uses_manifest_version(self) -> None:
         packager = load_module("package_plugin.py")
@@ -350,6 +380,29 @@ class TestExecutableSafeguards(unittest.TestCase):
             "claim_evidence_ledger",
         )
 
+    def test_plugin_utils_exposes_shared_agent_policy(self) -> None:
+        plugin_utils = load_module("plugin_utils.py")
+
+        self.assertEqual(
+            plugin_utils.REQUIRED_AGENT_POLICY["task_type"],
+            "research-book-skill",
+        )
+        self.assertIn(
+            '  confidentiality_gate: "required-before-external-lookup"',
+            plugin_utils.agent_policy_yaml_lines(),
+        )
+
+    def test_artifact_boundary_rules_are_shared(self) -> None:
+        plugin_utils = load_module("plugin_utils.py")
+        checker = load_module("check_book_artifact_contract.py")
+
+        self.assertEqual(checker.COMMON_ARTIFACT_FIELDS, plugin_utils.COMMON_ARTIFACT_FIELDS)
+        self.assertEqual(checker.ARTIFACT_ALLOWED_FIELDS, plugin_utils.ARTIFACT_TYPE_FIELDS)
+        self.assertEqual(
+            set(plugin_utils.ARTIFACT_TYPE_FIELDS),
+            set(plugin_utils.CONTRACT_ARTIFACT_SKILLS.values()),
+        )
+
     def test_gitignore_tracks_generated_file_exclusions(self) -> None:
         plugin_utils = load_module("plugin_utils.py")
         ignored_patterns = {
@@ -373,6 +426,18 @@ class TestExecutableSafeguards(unittest.TestCase):
     def test_validate_script_uses_unittest_discovery(self) -> None:
         text = (ROOT / "validate.sh").read_text(encoding="utf-8")
         self.assertIn("-m unittest discover", text)
+        self.assertIn("check_research_behavior_fixtures.py", text)
+        self.assertIn("--outputs-dir examples/evals/outputs", text)
+
+    def test_validation_workflow_runs_validate_script(self) -> None:
+        workflow_path = ROOT / ".github" / "workflows" / "validate.yml"
+
+        self.assertTrue(workflow_path.exists())
+        text = workflow_path.read_text(encoding="utf-8")
+        self.assertIn("pull_request:", text)
+        self.assertIn("push:", text)
+        self.assertIn("python-version: '3.10'", text)
+        self.assertIn("bash validate.sh", text)
 
     def test_install_shell_requires_python_310_or_newer(self) -> None:
         with TemporaryDirectory() as temporary_directory:
@@ -424,9 +489,14 @@ class TestExecutableSafeguards(unittest.TestCase):
                 "Check research behavior fixture documents and captured local outputs.",
                 "--fixtures",
             ],
+            "summarize_research_behavior_evals.py": [
+                "Summarize local research behavior fixture coverage and captured outputs.",
+                "--outputs-dir",
+            ],
             "check_citation_metadata.py": [
-                "Check local citation metadata exports without network lookup or private text.",
+                "Check local citation metadata exports without private text.",
                 "--input",
+                "--allow-network",
             ],
             "package_plugin.py": [
                 "Package this plugin directory as a zip.",
@@ -632,6 +702,33 @@ class TestExecutableSafeguards(unittest.TestCase):
             self.assertIn("policy.data_access_level", result.stdout)
             self.assertIn("policy.external_lookup_allowed", result.stdout)
             self.assertIn("policy.confidentiality_gate", result.stdout)
+
+    def test_validator_rejects_skill_metadata_version_drift(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory) / "plugin"
+            write_minimal_plugin(
+                root,
+                skill_body="\n".join(
+                    [
+                        "---",
+                        "name: sample-skill",
+                        (
+                            "description: Sample skill validates metadata display routing "
+                            "coverage evidence workflow planning audit chapter argument continuity."
+                        ),
+                        "metadata:",
+                        '  version: "0.9.0"',
+                        "---",
+                        "# Sample Skill",
+                        "",
+                    ]
+                ),
+            )
+
+            result = run_script("validate_plugin.py", str(root))
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("metadata.version", result.stdout)
 
     def test_validator_rejects_stale_agent_display_name(self) -> None:
         with TemporaryDirectory() as temporary_directory:

@@ -13,6 +13,22 @@
   "user_verification_needed": [
     "Verify title, author, publisher, year, and comparability before proposal use."
   ],
+  "process_passport": {
+    "stage": "Fixture comps verification handoff",
+    "artifact_inputs": [
+      "Fixture comparable-title row"
+    ],
+    "tool_use_summary": [
+      "No publisher, catalogue, sales, or market lookup was performed."
+    ],
+    "gate_status": [
+      "Not ready for proposal positioning until publication details and fit are verified."
+    ],
+    "human_checkpoints": [
+      "Human reviewer must approve each comp's title metadata, audience fit, and mismatch risk."
+    ],
+    "handoff_notes": "Use this fixture only to validate comps-verification structure and handoff limits."
+  },
   "comps_verification_rows": [
     {
       "title": "Fixture Comparable",

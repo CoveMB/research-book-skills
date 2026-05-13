@@ -920,15 +920,35 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
+        "review_type",
         "protocol_snapshot",
+        "reviewer_process",
+        "appraisal_plan",
+        "synthesis_method",
+        "certainty_assessment",
         "screening_counts",
         "exclusion_reasons",
         "prisma_flow",
         "exact_search_strings"
       ],
       "properties": {
+        "review_type": {
+          "$ref": "#/$defs/non_empty_string"
+        },
         "protocol_snapshot": {
           "$ref": "#/$defs/systematic_review_protocol_snapshot"
+        },
+        "reviewer_process": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "appraisal_plan": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "synthesis_method": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "certainty_assessment": {
+          "$ref": "#/$defs/non_empty_string"
         },
         "screening_counts": {
           "$ref": "#/$defs/systematic_review_screening_counts"

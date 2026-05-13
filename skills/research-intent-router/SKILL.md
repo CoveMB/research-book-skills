@@ -126,7 +126,7 @@ Use `docs/ROUTING_MATRIX.md` as the canonical route table. If the request matche
 
 ## Source basis and AI limits
 
-Follow `docs/SOURCE_LIMITS.md`: state the source access level, separate source basis from interpretation, include What I can verify, What remains uncertain, and User verification needed. Do not invent citations or source support.
+Use `docs/SOURCE_LIMITS.md` for source-access rules. Keep source access level, What I can verify, What remains uncertain, and User verification needed visible. Do not invent citations or source support.
 
 ## Compact output
 
@@ -134,7 +134,7 @@ Use compact output when the user asks for low reading load, fast routing, or the
 
 ## Files/folders it may read
 
-- Bundled skill instructions, metadata, and assets if available (including, but not limited to, `SKILL.md`, `README.md`, `assets/`, `references/`, and `agents/openai.yaml` in this project or equivalent files in another project).
+- Shared operational boundary doc: `docs/SKILL_OPERATIONAL_BOUNDARIES.md`.
 - Shared policy docs, especially `docs/SOURCE_LIMITS.md` and `docs/AUTO_SELECTION_GUARDRAILS.md`.
 - `docs/ROUTING_MATRIX.md` for canonical skill-routing choices.
 - `docs/ARCHITECTURE.md`, `MODE_REGISTRY.md`, `docs/SKILL_INDEX.md`, `docs/QUALITY_STANDARD.md`, and `shared/contracts/book/book_artifact.schema.json` when routing, artifacts, or quality gates matter.
@@ -219,7 +219,7 @@ Ambiguity: [only if it could change route or lookup decision]
 Next action: [one action]
 ```
 
-Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless one skill reduces a named scholarly risk.
+Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.md`; it may be omitted unless a follow-on skill reduces a named scholarly risk.
 
 ## Quality checks
 

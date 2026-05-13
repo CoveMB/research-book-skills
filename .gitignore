@@ -19,3 +19,6 @@ node_modules/
 
 # Local OS/editor metadata
 .DS_Store
+.env
+local-notes.txt
+secrets.json

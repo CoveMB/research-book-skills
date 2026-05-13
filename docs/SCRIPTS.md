@@ -21,9 +21,10 @@ These requirements apply only when you run the scripts. If you copy or upload sk
 | Install locally on Windows | `.\install.ps1` | Same installer flow through PowerShell. |
 | Run the full package check | `./validate.sh` | Runs plugin validation, artifact contract validation, and the unit test suite. |
 | Validate plugin structure | `python3 scripts/validate_plugin.py .` | Checks the manifest, skill folders, skill frontmatter, skill README files, agent metadata, duplicate prompts, and local docs links. |
-| Validate book artifacts | `python3 scripts/check_book_artifact_contract.py --path .` | Checks the shared book artifact schema and every JSON example under `examples/book_artifacts/`. |
+| Validate book artifacts | `python3 scripts/check_book_artifact_contract.py --path .` | Checks the shared book artifact schema, artifact-specific field boundaries, optional handoff passport shape, and every JSON example under `examples/book_artifacts/`. |
 | Check behavior fixtures | `python3 scripts/check_research_behavior_fixtures.py --fixtures examples/evals/research-skill-behavior-fixtures.json` | Checks high-risk behavior fixture shape; add `--outputs-dir path/to/outputs` to check captured local outputs. |
-| Check citation metadata | `python3 scripts/check_citation_metadata.py --input path/to/public-metadata.json` | Compares local public metadata fields for DOI, normalized title, author-year, and venue mismatch risk without network lookup. |
+| Summarize behavior calibration | `python3 scripts/summarize_research_behavior_evals.py --fixtures examples/evals/research-skill-behavior-fixtures.json --outputs-dir examples/evals/outputs` | Reports fixture coverage, route coverage, compact-output coverage, and captured-output validation status. |
+| Check citation metadata | `python3 scripts/check_citation_metadata.py --input path/to/public-metadata.json` | Compares local public metadata fields for DOI, normalized title, author-year, and venue mismatch risk. Default mode uses no network. |
 | Run unit tests | `python3 -m unittest discover -s scripts -p 'test_*.py'` | Runs the script and package policy tests. |
 | Package a zip | `python3 scripts/package_plugin.py --root .` | Writes a versioned zip in the current directory unless `--out` is supplied. |
 
@@ -49,7 +50,7 @@ The validator checks:
 
 ### Book artifact contract checker
 
-`scripts/check_book_artifact_contract.py` validates the shared artifact schema and shipped examples. It supports the schema keywords used by this package rather than acting as a full JSON Schema implementation.
+`scripts/check_book_artifact_contract.py` validates the shared artifact schema and shipped examples. It supports the schema keywords used by this package rather than acting as a full JSON Schema implementation. It also rejects fields that belong to another artifact type and validates `process_passport` shape when that optional handoff field is present.
 
 Use this script after changing `shared/contracts/book/book_artifact.schema.json` or any file in `examples/book_artifacts/`.
 
@@ -59,11 +60,15 @@ Use this script after changing `shared/contracts/book/book_artifact.schema.json`
 
 The checker is deterministic and no-network. It does not run a model or verify source truth; it only checks local fixture documents and local captured outputs.
 
+`scripts/summarize_research_behavior_evals.py` writes a local JSON calibration report for the same fixture set. It reports fixture count, expected-route coverage, covered risks, compact fixture count, captured-output presence, and captured-output validation errors. This is a local benchmark report only: it does not run a model, verify source truth, or certify scholarly correctness.
+
 ### Citation metadata checker
 
 `scripts/check_citation_metadata.py` compares local JSON or CSV metadata exports. It checks DOI format and exact normalized matches for DOI, title, author-year, and venue, then flags mismatch or identifier-hijack risk.
 
-The checker is deterministic and no-network. It rejects private fields such as `full_text`, `excerpt`, `abstract`, `notes`, `source_text`, and `private_notes`; pass public citation metadata only.
+Default mode is deterministic and no-network. It rejects private fields such as `full_text`, `excerpt`, `abstract`, `notes`, `source_text`, and `private_notes`; pass public citation metadata only.
+
+Optional public lookup is consent-gated. `--lookup-provider crossref --allow-network` can enrich missing authoritative metadata from Crossref by submitting DOI identifiers only. Do not pass draft text, source text, abstracts, notes, private fields, or manuscript excerpts to the checker.
 
 ### Packager
 
