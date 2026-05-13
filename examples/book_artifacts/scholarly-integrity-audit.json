@@ -13,6 +13,22 @@
   "user_verification_needed": [
     "Provide the workflow materials needed to clear or hold each gate."
   ],
+  "process_passport": {
+    "stage": "Fixture scholarly integrity handoff",
+    "artifact_inputs": [
+      "Fixture integrity-check row"
+    ],
+    "tool_use_summary": [
+      "No source log, code, data, citation audit, figure/table audit, or workflow record was reviewed."
+    ],
+    "gate_status": [
+      "Hold until visible provenance and human checkpoints support any CLEAR verdict."
+    ],
+    "human_checkpoints": [
+      "Human reviewer must approve unresolved-risk handling before any override or forward movement."
+    ],
+    "handoff_notes": "Use this fixture only to validate scholarly-integrity audit structure and handoff limits."
+  },
   "integrity_checks": [
     {
       "check": "Hallucinated evidence",

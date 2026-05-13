@@ -33,6 +33,110 @@ SUPPORTED_SCHEMA_KEYWORDS = {
     "title",
     "type",
 }
+COMMON_ARTIFACT_FIELDS = {
+    "schema_version",
+    "artifact_type",
+    "project_title",
+    "created_at",
+    "source_basis",
+    "what_i_can_verify",
+    "what_remains_uncertain",
+    "user_verification_needed",
+    "process_passport",
+}
+ARTIFACT_ALLOWED_FIELDS = {
+    "book_research_agenda": {
+        "central_research_question",
+        "subquestions",
+        "provisional_thesis",
+        "contribution_claim",
+        "scope_boundaries",
+        "evidence_plan",
+        "risks_and_mitigation",
+    },
+    "source_discovery_log": {
+        "search_families",
+        "query_bank",
+        "priority_venues",
+        "inclusion_criteria",
+        "exclusion_criteria",
+        "citation_chaining_plan",
+        "source_targets",
+        "opposing_literature_targets",
+        "search_log",
+        "systematic_review",
+    },
+    "literature_map": {
+        "field_overview",
+        "fields_and_subfields",
+        "schools_of_thought",
+        "major_debates",
+        "consensus_controversy_map",
+        "development_map",
+        "gaps_in_literature",
+        "thesis_implications",
+        "sources_still_needed",
+    },
+    "thesis_tree": {
+        "main_thesis",
+        "thesis_variants",
+        "thesis_claims",
+        "hidden_assumptions",
+        "chapter_argument_sequence",
+        "weak_links",
+    },
+    "chapter_brief": {
+        "chapter_title",
+        "chapter_purpose",
+        "central_question",
+        "chapter_thesis",
+        "key_concepts",
+        "section_outline",
+        "counterarguments_to_include",
+        "opening_options",
+        "ending_bridge",
+        "research_still_needed",
+        "revision_risks",
+    },
+    "claim_evidence_ledger": {
+        "claims",
+        "high_risk_claims",
+        "analysis_provenance",
+        "source_priorities",
+    },
+    "source_note": {"source_notes"},
+    "extraction_table": {"extraction_rows"},
+    "claim_traceability_graph": {"traceability_links"},
+    "citation_integrity_audit": {"citation_audit_rows"},
+    "rights_privacy_release_audit": {"release_issues"},
+    "comps_verification": {"comps_verification_rows"},
+    "scholarly_integrity_audit": {"integrity_checks"},
+    "ai_human_workflow_log": {"workflow_decisions"},
+    "figure_table_integrity_audit": {"figure_table_checks"},
+    "continuity_review": {
+        "global_thesis",
+        "chapter_function_map",
+        "repetition_map",
+        "concept_tracking",
+        "contradictions_or_tensions",
+        "tone_and_audience_consistency",
+        "suggested_restructuring",
+        "priority_revision_list",
+    },
+    "book_proposal": {
+        "title_options",
+        "premise",
+        "core_thesis",
+        "contribution_to_field",
+        "audience",
+        "source_base",
+        "chapter_summaries",
+        "comparable_titles",
+        "author_positioning",
+        "status_and_timeline",
+        "sample_material_plan",
+    },
+}
 
 
 def location(path_parts: list[str]) -> str:
@@ -125,6 +229,8 @@ def validate_string(value: str, subschema: dict[str, Any], path_parts: list[str]
     minimum_length = subschema.get("minLength")
     if isinstance(minimum_length, int) and len(value) < minimum_length:
         return [f"string shorter than minLength {minimum_length} at {location(path_parts)}"]
+    if isinstance(minimum_length, int) and minimum_length > 0 and not value.strip():
+        return [f"blank string at {location(path_parts)}"]
     return []
 
 
@@ -283,7 +389,30 @@ def validate_examples(schema: dict[str, Any], files: list[Path]) -> list[str]:
         assert payload is not None
         for validation_error in validate_value(schema, schema, payload, []):
             errors.append(f"{path}: {validation_error}")
+        for boundary_error in validate_artifact_boundaries(payload):
+            errors.append(f"{path}: {boundary_error}")
     return errors
+
+
+def allowed_fields_for_artifact_type(artifact_type: str) -> set[str]:
+    return COMMON_ARTIFACT_FIELDS | ARTIFACT_ALLOWED_FIELDS.get(artifact_type, set())
+
+
+def validate_artifact_field_boundaries(payload: dict[str, Any]) -> list[str]:
+    artifact_type = payload.get("artifact_type")
+    if not isinstance(artifact_type, str) or artifact_type not in ARTIFACT_ALLOWED_FIELDS:
+        return []
+
+    allowed_fields = allowed_fields_for_artifact_type(artifact_type)
+    return [
+        f"field {key!r} is not allowed for artifact_type {artifact_type!r}"
+        for key in sorted(payload)
+        if key not in allowed_fields
+    ]
+
+
+def validate_artifact_boundaries(payload: dict[str, Any]) -> list[str]:
+    return validate_artifact_field_boundaries(payload)
 
 
 def schema_artifact_types(schema: dict[str, Any]) -> set[str]:

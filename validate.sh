@@ -11,4 +11,5 @@ export PYTHONDONTWRITEBYTECODE=1
 
 python3 scripts/validate_plugin.py .
 python3 scripts/check_book_artifact_contract.py --path .
+python3 scripts/check_research_behavior_fixtures.py --fixtures examples/evals/research-skill-behavior-fixtures.json --outputs-dir examples/evals/outputs
 python3 -m unittest discover -s scripts -p 'test_*.py'

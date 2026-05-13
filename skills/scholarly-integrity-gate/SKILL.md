@@ -78,6 +78,17 @@ When the user explicitly asks for JSON or a contract artifact, use `shared/contr
 
 State what is visible: sources, claims, data, code, search logs, extraction tables, citations, figures, tool history, and human checkpoints.
 
+### 1.1. Apply artifact/method prefilter
+
+Classify the artifact before assigning verdicts:
+
+- result-bearing artifact: empirical result, quantitative claim, computational analysis, automated extraction, generated synthesis, figure/table, chart, or computed comparison
+- source-trace artifact: source discovery log, source note, extraction table, claim ledger, traceability graph, citation audit, or bibliography metadata check
+- release or disclosure artifact: proposal, comps verification, AI/human workflow log, rights/privacy release audit, or external-sharing packet
+- theoretical, interpretive, or normative artifact: argument, conceptual framing, peer-review critique, prose revision, or chapter architecture that does not claim computed or empirical results
+
+Mark irrelevant checks as not applicable. A missing dataset, script, notebook, or run log must not block a theoretical, interpretive, or normative artifact unless that artifact relies on computed, empirical, or extracted results.
+
 ### 2. Classify integrity checks
 
 Check only relevant failure classes:
@@ -89,6 +100,18 @@ Check only relevant failure classes:
 - frame-lock: the workflow only tests the user's preferred thesis or search vocabulary
 - duplicate or recycled result: table, figure, case, or source appears reused without provenance
 - missing human checkpoint: stage advanced without user decision, rationale, or unresolved-risk record
+
+### 2.1. Stage-specific block rules
+
+Use these block rules before assigning a pass:
+
+- A result-bearing artifact must hold when data provenance, transformation logic, script or notebook, run log, source text, or human verification is unavailable and the artifact is being used for manuscript claims.
+- A generated literature synthesis must hold when corpus boundaries, search/source log, included/excluded source basis, or opposing-literature search terms are missing.
+- A citation, quotation, or locator-dependent claim must hold or route to `citation-integrity-auditor` when source text, page image, authoritative metadata, or locator support is unavailable.
+- A figure or table must hold or route to `figure-table-integrity-auditor` when caption, axis, source data, license, or duplicate-visual status is unavailable.
+- A release or disclosure artifact must hold or route to `rights-privacy-release-auditor` or `ai-human-workflow-log` when external sharing is intended and rights, privacy, copied-text, tool-use, human-verification, or disclosure basis is missing.
+- A theoretical, interpretive, or normative artifact must not block on empirical or computational materials that are not part of its claim basis; record those checks as not applicable instead.
+- An OVERRIDDEN decision must hold unless the human decision, override reason, unresolved risk, and follow-up owner are visible.
 
 ### 3. Assign verdicts
 
@@ -158,6 +181,8 @@ Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.m
 - SUSPECTED and INSUFFICIENT EVIDENCE must not be softened into pass language.
 - OVERRIDDEN requires a human decision, override reason, unresolved risk, and follow-up.
 - Integrity checks should be specific to the workflow stage, not a generic warning list.
+- Irrelevant checks should be labeled not applicable rather than converted into INSUFFICIENT EVIDENCE.
+- Stage-specific block rules must override fluent or plausible prose when provenance is missing.
 
 ## Failure modes
 

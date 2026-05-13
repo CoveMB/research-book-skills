@@ -48,7 +48,7 @@ Figures, tables, charts, screenshots, and image panels need data provenance, cap
 
 AI-assisted research, generated synthesis, automated extraction, or computed results need an integrity gate before manuscript reliance. Human checkpoints should record decisions, override reasons, unresolved risks, affected sections, and disclosure notes when external sharing or submission is likely.
 
-Use an optional `process_passport` in machine-readable artifacts when a result will be handed to another skill, reviewer, or submission workflow. It should name the stage, inputs, tool use, gate status, human checkpoints, and handoff limits without turning fixture or partial work into verified scholarship.
+Use a `process_passport` in machine-readable artifacts when a result will be handed to another skill, reviewer, or submission workflow. The schema keeps this field structurally optional for early artifacts, but the local artifact checker requires it for high-risk handoff artifacts such as citation, figure/table, integrity, AI/human workflow, release, comps, and proposal outputs. It should name the stage, inputs, tool use, gate status, human checkpoints, and handoff limits without turning fixture or partial work into verified scholarship.
 
 ## Evaluation discipline
 

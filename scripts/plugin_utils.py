@@ -43,7 +43,7 @@ EXCLUDED_DIRECTORIES = {
     "node_modules",
     "venv",
 }
-EXCLUDED_FILE_NAMES = {".DS_Store"}
+EXCLUDED_FILE_NAMES = {".DS_Store", ".env", "local-notes.txt", "secrets.json"}
 EXCLUDED_SUFFIXES = {".log", ".pyc", ".zip", ".tmp"}
 DESCRIPTION_STOPWORDS = {
     "after",

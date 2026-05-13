@@ -397,6 +397,41 @@ class TestBookArtifactContract(unittest.TestCase):
             self.assertEqual(result.returncode, 1)
             self.assertIn("minimum", result.stdout)
 
+    def test_whitespace_only_string_fails_minimum_length(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            write_schema(root)
+            write_valid_coverage_examples(root, skip={"chapter_brief"})
+            payload = valid_chapter_brief()
+            payload["project_title"] = "   "
+            write_example(root, "chapter-brief.json", payload)
+
+            result = run_checker(root)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("blank string", result.stdout)
+
+    def test_artifact_specific_field_from_other_artifact_type_fails(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            write_schema(root)
+            write_valid_coverage_examples(root, skip={"book_proposal"})
+            payload = valid_book_proposal()
+            payload["claims"] = [
+                {
+                    "claim": "This unrelated field belongs to another artifact.",
+                    "evidence_status": "needed",
+                    "safer_wording": "Remove this field from the proposal artifact.",
+                }
+            ]
+            write_example(root, "book-proposal.json", payload)
+
+            result = run_checker(root)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("not allowed for artifact_type 'book_proposal'", result.stdout)
+            self.assertIn("claims", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -821,6 +821,9 @@ class TestPluginStructure(unittest.TestCase):
             "fuzzy title",
             "scripts/check_citation_metadata.py",
             "no-network",
+            "--lookup-provider crossref",
+            "--allow-network",
+            "submits DOI identifiers only",
             "full_text",
             "abstract",
         ]
@@ -833,8 +836,16 @@ class TestPluginStructure(unittest.TestCase):
         )
         required_phrases = [
             "systematic review mode",
+            "review-type prefilter",
+            "scoping review",
+            "narrative review",
             "PRISMA",
             "protocol snapshot",
+            "reviewer process",
+            "appraisal plan",
+            "risk of bias",
+            "synthesis method",
+            "certainty",
             "screening counts",
             "exclusion reasons",
         ]
@@ -863,7 +874,12 @@ class TestPluginStructure(unittest.TestCase):
         systematic_review = definitions["systematic_review_record"]
         required_fields = systematic_review["required"]
         for field in [
+            "review_type",
             "protocol_snapshot",
+            "reviewer_process",
+            "appraisal_plan",
+            "synthesis_method",
+            "certainty_assessment",
             "screening_counts",
             "exclusion_reasons",
             "prisma_flow",
@@ -966,6 +982,55 @@ class TestPluginStructure(unittest.TestCase):
             "systematic review",
         ]
         self.assertEqual(missing_phrases(methodology, required_phrases), [])
+
+    def test_methodology_auditor_reference_files_exist(self) -> None:
+        references_dir = SKILLS_DIR / "methodology-source-auditor" / "references"
+        expected_files = [
+            "qualitative.md",
+            "historical.md",
+            "legal.md",
+            "computational.md",
+            "survey.md",
+            "observational.md",
+            "experimental.md",
+            "systematic-review.md",
+        ]
+        missing_files = [
+            filename
+            for filename in expected_files
+            if not (references_dir / filename).is_file()
+        ]
+        self.assertEqual(missing_files, [])
+
+        missing_phrases_by_file = {
+            filename: missing_phrases(
+                read_text(references_dir / filename),
+                ["## Audit questions", "## Boundaries", "## Cannot support"],
+            )
+            for filename in expected_files
+            if (references_dir / filename).is_file()
+        }
+        self.assertEqual(
+            {
+                filename: phrases
+                for filename, phrases in missing_phrases_by_file.items()
+                if phrases
+            },
+            {},
+        )
+
+    def test_integrity_gate_has_stage_prefilters_and_block_rules(self) -> None:
+        integrity_gate = read_text(SKILLS_DIR / "scholarly-integrity-gate" / "SKILL.md")
+        required_phrases = [
+            "artifact/method prefilter",
+            "not applicable",
+            "Stage-specific block rules",
+            "result-bearing artifact",
+            "must hold",
+            "must not block",
+            "theoretical, interpretive, or normative",
+        ]
+        self.assertEqual(missing_phrases(integrity_gate, required_phrases), [])
 
     def test_router_deep_mode_requires_lookup_target_object(self) -> None:
         router = read_text(SKILLS_DIR / "research-intent-router" / "SKILL.md")
@@ -1218,6 +1283,10 @@ class TestPluginStructure(unittest.TestCase):
             "compact methodology triage",
             "compact release blockers",
             "compact routing",
+            "integrity gate block rule",
+            "irrelevant integrity check",
+            "method family audit",
+            "metadata lookup consent",
         }
         covered_risks = {fixture["risk_covered"] for fixture in fixtures["fixtures"]}
         self.assertEqual(sorted(required_risks - covered_risks), [])

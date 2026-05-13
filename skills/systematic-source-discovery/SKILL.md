@@ -61,9 +61,22 @@ When the user explicitly asks for JSON or a contract artifact, use `shared/contr
 
 Use systematic review mode only when the user requests a systematic review, scoping review, evidence review, PRISMA-style search record, reproducible database search, or protocol-grade literature discovery. Do not impose it on ordinary book research.
 
+Apply a review-type prefilter before adding reporting-grade structure:
+
+- systematic review: requires a narrow question, reproducible search, reviewer process, screening, appraisal plan, risk of bias or quality appraisal, synthesis method, and certainty or confidence limits where the field expects them
+- scoping review: requires transparent search, charting fields, screening process, and map-of-evidence limits; do not claim effect estimates or settled certainty
+- rapid review: requires abbreviated-search limits, reviewer process, omitted steps, and time-boxed caveats
+- narrative review: may use transparent source selection and coverage limits, but must not present itself as systematic or PRISMA-complete
+- critical review: may prioritize argument and theoretical synthesis, but must label selection rationale and field-coverage limits
+
 When active, add:
 
+- review type and reason for using that review type
 - protocol snapshot: review question, scope, databases, dates, filters, inclusion/exclusion rules, and reviewer assumptions
+- reviewer process: number of reviewers, screening stages, conflict resolution, and any single-reviewer limitations
+- appraisal plan: method or quality appraisal approach, risk of bias fields where relevant, and when appraisal is not applicable
+- synthesis method: narrative synthesis, thematic synthesis, vote counting, meta-analysis, evidence map, or other method with limits
+- certainty or confidence assessment: GRADE, CERQual, field-specific confidence language, or explicit note that certainty assessment is not being performed
 - exact search strings by venue, with date searched and filter settings
 - screening counts: records found, records deduped, records screened, included, excluded, and full-text unavailable
 - exclusion reasons tied to criteria, not vague judgment
@@ -147,7 +160,7 @@ Record every search query, venue, date, filters, number of useful hits, and note
 
 ### 7. Add protocol-grade fields when requested
 
-If systematic review mode is active, include the protocol snapshot, screening counts, and exclusion reasons. Keep planned searches separate from completed searches.
+If systematic review mode is active, include the review type, protocol snapshot, reviewer process, appraisal plan, synthesis method, certainty assessment, screening counts, and exclusion reasons. Keep planned searches separate from completed searches.
 
 ## Output format
 
@@ -186,7 +199,17 @@ If systematic review mode is active, include the protocol snapshot, screening co
 
 ## Systematic review mode fields, if requested
 
+## Review type
+
 ## Protocol snapshot
+
+## Reviewer process
+
+## Appraisal plan
+
+## Synthesis method
+
+## Certainty / confidence assessment
 
 ## Screening counts
 | Stage | Count | Basis |
@@ -208,6 +231,7 @@ Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.m
 - Avoid overreliance on search-engine snippets.
 - Mark any live-search requirement clearly when current information is needed.
 - Mark unsearched venues as planned venues, not evidence.
+- Do not use PRISMA-style labels to imply completed screening, appraisal, risk of bias review, synthesis, or certainty assessment.
 
 ## Failure modes
 
@@ -215,4 +239,6 @@ Use the optional Suggested next step policy in `docs/AUTO_SELECTION_GUARDRAILS.m
 - Search log mixes completed searches with planned searches.
 - Source list overweights convenient web results.
 - Inclusion criteria are too vague to prevent cherry-picking.
+- Systematic, scoping, narrative, rapid, and critical review types are collapsed into one template.
+- Appraisal plan, reviewer process, synthesis method, risk of bias, or certainty limits are missing while the output appears reporting-grade.
 - Premature citation audit before citations, quotes, page numbers, bibliography entries, or cited claims exist.

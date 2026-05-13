@@ -13,6 +13,22 @@
   "user_verification_needed": [
     "Verify citation metadata and source-claim fit before marking passed."
   ],
+  "process_passport": {
+    "stage": "Fixture citation audit handoff",
+    "artifact_inputs": [
+      "Fixture citation row"
+    ],
+    "tool_use_summary": [
+      "No source text, page image, DOI lookup, or bibliography database was checked."
+    ],
+    "gate_status": [
+      "Not ready for citation clearance until authoritative source text or metadata is supplied."
+    ],
+    "human_checkpoints": [
+      "Human reviewer must verify source identity, locator, and source-claim fit before relying on this audit."
+    ],
+    "handoff_notes": "Use this fixture only to validate citation-audit structure and handoff limits."
+  },
   "citation_audit_rows": [
     {
       "claim": "The draft cites a source for a factual claim.",

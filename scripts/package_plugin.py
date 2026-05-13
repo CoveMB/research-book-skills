@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import subprocess
 import sys
 import zipfile
 from pathlib import Path
@@ -12,6 +13,9 @@ from plugin_utils import (
     package_files as included_package_files,
     plugin_version,
 )
+
+
+VALIDATION_SCRIPT = Path(__file__).resolve().parent / "validate_plugin.py"
 
 
 def package_output_files(root: Path, output_path: Path, temporary_output_path: Path) -> list[Path]:
@@ -37,6 +41,20 @@ def default_output_path(root: Path) -> Path:
     return Path(f"{root.name}-v{plugin_version(root)}.zip")
 
 
+def run_validation(root: Path) -> int:
+    result = subprocess.run(
+        [sys.executable, str(VALIDATION_SCRIPT), str(root)],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if result.stdout:
+        print(result.stdout, end="" if result.stdout.endswith("\n") else "\n")
+    if result.stderr:
+        print(result.stderr, file=sys.stderr, end="" if result.stderr.endswith("\n") else "\n")
+    return result.returncode
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Package this plugin directory as a zip.")
     parser.add_argument(
@@ -53,6 +71,9 @@ def main() -> int:
     args = parser.parse_args()
     root = args.root.resolve()
     out = (args.out if args.out is not None else default_output_path(root)).resolve()
+    validation_status = run_validation(root)
+    if validation_status != 0:
+        return validation_status
     write_package(root, out)
     print(f"Wrote {out}")
     return 0

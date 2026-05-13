@@ -54,7 +54,18 @@ Assess each source by:
 
 ## Method-family references
 
-Use method-family references only when the source's method matters to the claim. Keep the SKILL body concise and load or request field-specific guidance when needed. Useful families include qualitative, historical, legal, computational, survey, observational, experimental, systematic review, dataset, and mixed-methods work.
+Use method-family references only when the source's method matters to the claim. Keep the SKILL body concise and load or request field-specific guidance when needed. Load only the relevant one-level reference file:
+
+- qualitative: `references/qualitative.md`
+- historical: `references/historical.md`
+- legal: `references/legal.md`
+- computational: `references/computational.md`
+- survey: `references/survey.md`
+- observational: `references/observational.md`
+- experimental: `references/experimental.md`
+- systematic review: `references/systematic-review.md`
+
+Useful families include qualitative, historical, legal, computational, survey, observational, experimental, systematic review, dataset, and mixed-methods work.
 
 For each family, ask method-specific questions:
 

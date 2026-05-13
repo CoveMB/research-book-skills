@@ -91,7 +91,9 @@ Use this metadata verification ladder before calling a reference real or bibliog
 
 Flag identifier hijack risk when the DOI, URL, title, author, year, or venue points to a different work than the manuscript claims. Do not repair metadata from memory.
 
-Optional local helper: `python3 scripts/check_citation_metadata.py --input path/to/public-metadata.json` compares user-provided public metadata fields only. It is deterministic and no-network; it rejects private fields such as `full_text`, `excerpt`, `abstract`, `notes`, or `private_notes`.
+Optional local helper: `python3 scripts/check_citation_metadata.py --input path/to/public-metadata.json` compares user-provided public metadata fields only. By default it is deterministic and no-network; it rejects private fields such as `full_text`, `excerpt`, `abstract`, `notes`, or `private_notes`.
+
+Optional public metadata lookup is consent-gated: use `--lookup-provider crossref --allow-network` only when the user has explicitly approved public lookup. This path submits DOI identifiers only, never draft text, source text, abstracts, notes, private fields, or manuscript excerpts. If lookup consent is absent, stay in local no-network mode and mark unresolved metadata as unchecked rather than guessing.
 
 ## Files/folders it may read
 
