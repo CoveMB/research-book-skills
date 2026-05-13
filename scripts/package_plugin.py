@@ -16,6 +16,7 @@ from plugin_utils import (
 
 
 VALIDATION_SCRIPT = Path(__file__).resolve().parent / "validate_plugin.py"
+DEFAULT_PACKAGE_STEM = "research-book-plugin"
 
 
 def package_output_files(root: Path, output_path: Path, temporary_output_path: Path) -> list[Path]:
@@ -38,7 +39,7 @@ def write_package(root: Path, output_path: Path) -> None:
 
 
 def default_output_path(root: Path) -> Path:
-    return Path(f"{root.name}-v{plugin_version(root)}.zip")
+    return Path(f"{DEFAULT_PACKAGE_STEM}-v{plugin_version(root)}.zip")
 
 
 def run_validation(root: Path) -> int:
@@ -66,7 +67,7 @@ def main() -> int:
     parser.add_argument(
         "--out",
         type=Path,
-        help="Zip file to write. Defaults to <root-name>-v<manifest-version>.zip.",
+        help=f"Zip file to write. Defaults to {DEFAULT_PACKAGE_STEM}-v<manifest-version>.zip.",
     )
     args = parser.parse_args()
     root = args.root.resolve()
