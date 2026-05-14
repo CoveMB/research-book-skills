@@ -1,0 +1,27 @@
+{
+  "capture_mode": "deterministic-reference",
+  "date": "2026-05-13",
+  "external_lookup_permitted": false,
+  "fixture_id": "manuscript-continuity-concept-drift",
+  "interface": "local-fixture",
+  "model": "not-run",
+  "network_permissions": "none",
+  "operator": "fixture-author",
+  "output_file": "manuscript-continuity-concept-drift.md",
+  "output_sha256": "6486cb2221d62a1ed89d66b32bcbde14328ea75f685afa78976ef8835c69d127",
+  "schema_version": "scholar-grade-run-manifest-v1",
+  "skill": "manuscript-continuity-editor",
+  "skill_file": "skills/manuscript-continuity-editor/SKILL.md",
+  "skill_file_sha256": "6838f4069e559f82ecbd5c00755fb311bde53e7d182f5c6a80fa5fcc35620e98",
+  "source_packet": "corpora/manuscript-continuity-concept-drift/source-packet.md",
+  "source_packet_sha256": "f17a6fc924f151d531adb3d729e4d93fbefae3bdde3b346c79c4bb442c0ae307",
+  "structured_result": {
+    "decision": "Flag continuity risks without inventing missing chapters",
+    "external_lookup_used": false,
+    "hard_fail_triggered": false,
+    "next_action_count": 1,
+    "private_material_submitted": false,
+    "source_access_level": "controlled-packet"
+  },
+  "tool_permissions": "none"
+}

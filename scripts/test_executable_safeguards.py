@@ -551,7 +551,43 @@ class TestExecutableSafeguards(unittest.TestCase):
     def test_full_validation_runner_checks_source_candidates(self) -> None:
         text = (SCRIPTS_DIR / "run_package_checks.py").read_text(encoding="utf-8")
         self.assertIn("check_source_candidates.py", text)
-        self.assertIn("examples/evals/source-candidates.json", text)
+        self.assertIn("tests/skill_evals/source-candidates.json", text)
+
+    def test_skill_evaluation_assets_live_under_tests(self) -> None:
+        expected_paths = [
+            ROOT / "tests" / "skill_evals" / "README.md",
+            ROOT / "tests" / "skill_evals" / "research_behavior" / "fixtures.json",
+            ROOT / "tests" / "skill_evals" / "research_behavior" / "outputs",
+            ROOT / "tests" / "skill_evals" / "scholar_grade" / "fixtures.json",
+            ROOT / "tests" / "skill_evals" / "scholar_grade" / "corpora",
+            ROOT / "tests" / "skill_evals" / "scholar_grade" / "outputs",
+            ROOT / "tests" / "skill_evals" / "scholar_grade" / "scholar_grade_eval_harness.py",
+        ]
+
+        for path in expected_paths:
+            with self.subTest(path=path):
+                self.assertTrue(path.exists(), msg=f"Missing expected skill eval path: {path}")
+
+    def test_full_validation_runner_checks_scholar_grade_skill_evals(self) -> None:
+        text = (SCRIPTS_DIR / "run_package_checks.py").read_text(encoding="utf-8")
+
+        self.assertIn("tests/skill_evals/scholar_grade/scholar_grade_eval_harness.py", text)
+        self.assertIn("tests/skill_evals/scholar_grade/fixtures.json", text)
+        self.assertIn("tests/skill_evals/scholar_grade/outputs", text)
+        self.assertNotIn("examples/evals/scholar-grade-fixtures.json", text)
+
+    def test_validation_runner_exposes_non_default_live_capture_scope(self) -> None:
+        text = (SCRIPTS_DIR / "run_package_checks.py").read_text(encoding="utf-8")
+
+        self.assertIn('"live"', text)
+        self.assertIn("--require-live-captures", text)
+
+    def test_readme_describes_skill_evaluation_strategy(self) -> None:
+        text = (ROOT / "README.md").read_text(encoding="utf-8")
+
+        self.assertIn("## Skill testing", text)
+        self.assertIn("tests/skill_evals", text)
+        self.assertIn("scholar-grade", text)
 
     def test_installer_uses_shared_validation_runner(self) -> None:
         text = (SCRIPTS_DIR / "install_codex_plugin.py").read_text(encoding="utf-8")

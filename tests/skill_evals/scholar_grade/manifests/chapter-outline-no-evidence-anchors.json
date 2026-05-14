@@ -1,0 +1,27 @@
+{
+  "capture_mode": "deterministic-reference",
+  "date": "2026-05-13",
+  "external_lookup_permitted": false,
+  "fixture_id": "chapter-outline-no-evidence-anchors",
+  "interface": "local-fixture",
+  "model": "not-run",
+  "network_permissions": "none",
+  "operator": "fixture-author",
+  "output_file": "chapter-outline-no-evidence-anchors.md",
+  "output_sha256": "3f6fdb1e628ba960999a48a49e35bdacf6e2581380d5b424db9736f2f3b0b79b",
+  "schema_version": "scholar-grade-run-manifest-v1",
+  "skill": "chapter-architecture",
+  "skill_file": "skills/chapter-architecture/SKILL.md",
+  "skill_file_sha256": "4fcfc05809b084aefc278b3a7244bac357934e9b39c88490851a7beb578d37bf",
+  "source_packet": "corpora/chapter-outline-no-evidence-anchors/source-packet.md",
+  "source_packet_sha256": "4353a0685c84b0277321c4a60293f1f41987f9a751918a8d36d31410f90c8022",
+  "structured_result": {
+    "decision": "Add evidence anchors before drafting",
+    "external_lookup_used": false,
+    "hard_fail_triggered": false,
+    "next_action_count": 1,
+    "private_material_submitted": false,
+    "source_access_level": "controlled-packet"
+  },
+  "tool_permissions": "none"
+}

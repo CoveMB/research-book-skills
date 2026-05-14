@@ -1,0 +1,27 @@
+{
+  "capture_mode": "deterministic-reference",
+  "date": "2026-05-13",
+  "external_lookup_permitted": false,
+  "fixture_id": "source-discovery-plan-not-results",
+  "interface": "local-fixture",
+  "model": "not-run",
+  "network_permissions": "none",
+  "operator": "fixture-author",
+  "output_file": "source-discovery-plan-not-results.md",
+  "output_sha256": "3b2a12e8a4245ee90f612283398eacaacd8ef1a75d702bfbab4fe68b005cdaed",
+  "schema_version": "scholar-grade-run-manifest-v1",
+  "skill": "systematic-source-discovery",
+  "skill_file": "skills/systematic-source-discovery/SKILL.md",
+  "skill_file_sha256": "343188c32d7d8d9cd2b3137646e33130775c920f3e5fc5ef7fd26d09c694e826",
+  "source_packet": "corpora/source-discovery-plan-not-results/source-packet.md",
+  "source_packet_sha256": "675efec52690e66061f69cf5dd03a8efdda59ea4d62503703908ada5c805c75a",
+  "structured_result": {
+    "decision": "Plan search without claiming results",
+    "external_lookup_used": false,
+    "hard_fail_triggered": false,
+    "next_action_count": 1,
+    "private_material_submitted": false,
+    "source_access_level": "controlled-packet"
+  },
+  "tool_permissions": "none"
+}

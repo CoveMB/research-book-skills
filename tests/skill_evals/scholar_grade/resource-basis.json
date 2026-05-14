@@ -1,0 +1,61 @@
+{
+  "schema_version": "scholar-grade-resource-basis-v1",
+  "resources": [
+    {
+      "accessed": "2026-05-14",
+      "slug": "academic-research-skills",
+      "title": "Academic Research Skills for Claude Code",
+      "url": "https://github.com/Imbad0202/academic-research-skills",
+      "usage": "Use for pipeline-level gates, data-access metadata, benchmark-report discipline, material/process passports, anti-leakage, and human-in-the-loop research workflows."
+    },
+    {
+      "accessed": "2026-05-14",
+      "slug": "ai-research-failure-modes",
+      "title": "AI Research Failure Mode Checklist",
+      "url": "https://raw.githubusercontent.com/Imbad0202/academic-research-skills/main/academic-pipeline/references/ai_research_failure_modes.md",
+      "usage": "Use for implementation bugs, hallucinated citations or results, shortcut reliance, bug-as-insight reframing, methodology fabrication, and frame-lock."
+    },
+    {
+      "accessed": "2026-05-14",
+      "slug": "claude-skill-best-practices",
+      "title": "Skill authoring best practices",
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices",
+      "usage": "Use for evaluation-first development, validation loops, progressive disclosure, strict templates, and testing skills across target models."
+    },
+    {
+      "accessed": "2026-05-14",
+      "slug": "hallu-lens",
+      "title": "HalluLens: LLM Hallucination Benchmark",
+      "url": "https://arxiv.org/abs/2504.17550",
+      "usage": "Use for intrinsic and extrinsic hallucination distinctions, dynamic test generation, and leakage-resistant benchmark design."
+    },
+    {
+      "accessed": "2026-05-14",
+      "slug": "llm-citation-hallucinations-wild",
+      "title": "LLM hallucinations in the wild: Large-scale evidence from non-existent citations",
+      "url": "https://arxiv.org/abs/2605.07723",
+      "usage": "Use for citation-existence failures and the scale of hallucinated references in scholarly records."
+    },
+    {
+      "accessed": "2026-05-14",
+      "slug": "nature-ai-scientist",
+      "title": "Towards end-to-end automation of AI research",
+      "url": "https://www.nature.com/articles/s41586-026-10265-5",
+      "usage": "Use for autonomous-research failure modes, peer-review-passing but flawed AI papers, and the need for implementation and method checks."
+    },
+    {
+      "accessed": "2026-05-14",
+      "slug": "paperask",
+      "title": "PaperAsk: A Benchmark for Reliability Evaluation of LLMs in Paper Search and Reading",
+      "url": "https://arxiv.org/abs/2510.22242",
+      "usage": "Use for paper search, citation retrieval, content extraction, paper discovery, and claim-verification reliability failures."
+    },
+    {
+      "accessed": "2026-05-14",
+      "slug": "paperorchestra",
+      "title": "PaperOrchestra: A Multi-Agent Framework for Automated AI Research Paper Writing",
+      "url": "https://arxiv.org/abs/2604.05018",
+      "usage": "Use for benchmarked paper-writing pipelines, literature-synthesis quality, generated visuals, and grounded source/material transformations."
+    }
+  ]
+}

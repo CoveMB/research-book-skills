@@ -21,25 +21,62 @@ FULL_CHECKS = (
     (
         "scripts/check_research_behavior_fixtures.py",
         "--fixtures",
-        "examples/evals/research-skill-behavior-fixtures.json",
+        "tests/skill_evals/research_behavior/fixtures.json",
         "--outputs-dir",
-        "examples/evals/outputs",
+        "tests/skill_evals/research_behavior/outputs",
     ),
     (
         "scripts/research_behavior_eval_harness.py",
         "--fixtures",
-        "examples/evals/research-skill-behavior-fixtures.json",
+        "tests/skill_evals/research_behavior/fixtures.json",
         "--outputs-dir",
-        "examples/evals/outputs",
+        "tests/skill_evals/research_behavior/outputs",
         "--quiet",
+    ),
+    (
+        "tests/skill_evals/scholar_grade/scholar_grade_eval_harness.py",
+        "--fixtures",
+        "tests/skill_evals/scholar_grade/fixtures.json",
+        "--outputs-dir",
+        "tests/skill_evals/scholar_grade/outputs",
+        "--manifests-dir",
+        "tests/skill_evals/scholar_grade/manifests",
+        "--scores-dir",
+        "tests/skill_evals/scholar_grade/scores",
+        "--quiet",
+    ),
+    (
+        "tests/skill_evals/scholar_grade/live_capture_protocol.py",
+        "--fixtures",
+        "tests/skill_evals/scholar_grade/fixtures.json",
+        "--root",
+        ".",
+        "--check",
     ),
     (
         "scripts/check_source_candidates.py",
         "--input",
-        "examples/evals/source-candidates.json",
+        "tests/skill_evals/source-candidates.json",
         "--quiet",
     ),
     ("-m", "unittest", "discover", "-s", "scripts", "-p", "test_*.py"),
+    ("-m", "unittest", "discover", "-s", "tests", "-p", "test_*.py"),
+)
+
+LIVE_CHECKS = (
+    (
+        "tests/skill_evals/scholar_grade/scholar_grade_eval_harness.py",
+        "--fixtures",
+        "tests/skill_evals/scholar_grade/fixtures.json",
+        "--outputs-dir",
+        "tests/skill_evals/scholar_grade/outputs",
+        "--manifests-dir",
+        "tests/skill_evals/scholar_grade/manifests",
+        "--scores-dir",
+        "tests/skill_evals/scholar_grade/scores",
+        "--require-live-captures",
+        "--quiet",
+    ),
 )
 
 
@@ -47,7 +84,12 @@ PackageCheck = tuple[str, ...]
 
 
 def checks_for_scope(scope: str) -> tuple[PackageCheck, ...]:
-    return INSTALL_CHECKS if scope == "install" else FULL_CHECKS
+    checks_by_scope = {
+        "install": INSTALL_CHECKS,
+        "full": FULL_CHECKS,
+        "live": LIVE_CHECKS,
+    }
+    return checks_by_scope[scope]
 
 
 def command_with_python(check: PackageCheck) -> list[str]:
@@ -81,9 +123,12 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--scope",
-        choices=["install", "full"],
+        choices=["install", "full", "live"],
         default="full",
-        help="Use install for pre-install checks or full for the complete validation suite.",
+        help=(
+            "Use install for pre-install checks, full for deterministic package validation, "
+            "or live for recorded live skill captures."
+        ),
     )
     parser.add_argument(
         "--root",

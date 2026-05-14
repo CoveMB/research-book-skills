@@ -1,0 +1,27 @@
+{
+  "capture_mode": "deterministic-reference",
+  "date": "2026-05-13",
+  "external_lookup_permitted": false,
+  "fixture_id": "reading-load-abstract-only",
+  "interface": "local-fixture",
+  "model": "not-run",
+  "network_permissions": "none",
+  "operator": "fixture-author",
+  "output_file": "reading-load-abstract-only.md",
+  "output_sha256": "f9a35838701179f5917eca19e9dbb5d2be9a203d73f89c2cd34563e49fc6b1f9",
+  "schema_version": "scholar-grade-run-manifest-v1",
+  "skill": "reading-load-reducer",
+  "skill_file": "skills/reading-load-reducer/SKILL.md",
+  "skill_file_sha256": "061b236aaeaf823eb70f628d2958eb25e26ce0bde5a421255794e1eb0fb1d62a",
+  "source_packet": "corpora/reading-load-abstract-only/source-packet.md",
+  "source_packet_sha256": "29e026a9d8db1187ab823e69a6edd71a893266fc6af78235dd969ff60f8adcde",
+  "structured_result": {
+    "decision": "Triage only",
+    "external_lookup_used": false,
+    "hard_fail_triggered": false,
+    "next_action_count": 1,
+    "private_material_submitted": false,
+    "source_access_level": "controlled-packet"
+  },
+  "tool_permissions": "none"
+}

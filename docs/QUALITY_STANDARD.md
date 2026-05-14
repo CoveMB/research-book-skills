@@ -52,7 +52,7 @@ Use a `process_passport` in machine-readable artifacts when a result will be han
 
 ## Evaluation discipline
 
-High-risk routing behavior should have prompt fixtures that state the expected route, required output markers, and forbidden claims. Store reusable fixtures under `examples/evals/` so future skill changes can be checked against real failure modes instead of only structural tests.
+High-risk routing behavior should have prompt fixtures that state the expected route, required output markers, and forbidden claims. Store reusable fixtures under `tests/skill_evals/` so future skill changes can be checked against real failure modes instead of only structural tests.
 
 ## Counterargument discipline
 

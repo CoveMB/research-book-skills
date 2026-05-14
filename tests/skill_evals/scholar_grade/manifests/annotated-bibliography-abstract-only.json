@@ -1,0 +1,27 @@
+{
+  "capture_mode": "deterministic-reference",
+  "date": "2026-05-13",
+  "external_lookup_permitted": false,
+  "fixture_id": "annotated-bibliography-abstract-only",
+  "interface": "local-fixture",
+  "model": "not-run",
+  "network_permissions": "none",
+  "operator": "fixture-author",
+  "output_file": "annotated-bibliography-abstract-only.md",
+  "output_sha256": "8d6bc0d61871c071334fca06620c4151637159ab59c8d3f54468d779d187878d",
+  "schema_version": "scholar-grade-run-manifest-v1",
+  "skill": "annotated-bibliography-builder",
+  "skill_file": "skills/annotated-bibliography-builder/SKILL.md",
+  "skill_file_sha256": "63bcffb16f94277d9781b969a2f114753961dfd2714eafc03589d1825f2c4c4e",
+  "source_packet": "corpora/annotated-bibliography-abstract-only/source-packet.md",
+  "source_packet_sha256": "f6e4c023c67b61a22e9d89cb413e3a56cb4e424375d064c56bca471ad65b7313",
+  "structured_result": {
+    "decision": "Annotate only from visible source basis",
+    "external_lookup_used": false,
+    "hard_fail_triggered": false,
+    "next_action_count": 1,
+    "private_material_submitted": false,
+    "source_access_level": "controlled-packet"
+  },
+  "tool_permissions": "none"
+}

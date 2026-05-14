@@ -1,0 +1,27 @@
+{
+  "capture_mode": "deterministic-reference",
+  "date": "2026-05-13",
+  "external_lookup_permitted": false,
+  "fixture_id": "prose-edit-changes-meaning",
+  "interface": "local-fixture",
+  "model": "not-run",
+  "network_permissions": "none",
+  "operator": "fixture-author",
+  "output_file": "prose-edit-changes-meaning.md",
+  "output_sha256": "f39ab2e08327f6310cd382bec9a71d8f0d4482df5ee09a9ba54c364949d8bdd8",
+  "schema_version": "scholar-grade-run-manifest-v1",
+  "skill": "dyslexia-friendly-prose-editor",
+  "skill_file": "skills/dyslexia-friendly-prose-editor/SKILL.md",
+  "skill_file_sha256": "6bc9075c6d356ebe1a0c0e3f23c2642baaf41fd3ece695249acfa12a28775d32",
+  "source_packet": "corpora/prose-edit-changes-meaning/source-packet.md",
+  "source_packet_sha256": "18eb3f41ed4102dd15878646a976aa3b01c16916636c2165dc0447342fcb0c99",
+  "structured_result": {
+    "decision": "Repair wording without changing claim strength",
+    "external_lookup_used": false,
+    "hard_fail_triggered": false,
+    "next_action_count": 1,
+    "private_material_submitted": false,
+    "source_access_level": "controlled-packet"
+  },
+  "tool_permissions": "none"
+}

@@ -61,6 +61,7 @@ class TestResearchBehaviorFixtures(unittest.TestCase):
             (outputs_dir / "compact-routing.md").write_text(
                 "\n".join([
                     "Source basis: user prompt only.",
+                    "Selected skill: research-intent-router.",
                     "How to use this result: TRIAGE ONLY - Pick the next step.",
                     "Next action: Use the smallest route.",
                 ]),
@@ -85,6 +86,28 @@ class TestResearchBehaviorFixtures(unittest.TestCase):
 
             self.assertIn("compact-routing: missing required marker 'How to use this result'", errors)
 
+    def test_missing_selected_skill_route_evidence_fails(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            fixture_path = write_fixture_file(root, fixture_document(fixture()))
+            outputs_dir = root / "outputs"
+            outputs_dir.mkdir()
+            (outputs_dir / "compact-routing.md").write_text(
+                "\n".join([
+                    "Source basis: user prompt only.",
+                    "How to use this result: TRIAGE ONLY - Pick the next step.",
+                    "Next action: Use the smallest route.",
+                ]),
+                encoding="utf-8",
+            )
+
+            errors = validate_fixture_outputs(fixture_path, outputs_dir)
+
+            self.assertIn(
+                "compact-routing: missing selected skill route evidence 'research-intent-router'",
+                errors,
+            )
+
     def test_forbidden_claim_fails(self) -> None:
         with TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
@@ -94,6 +117,7 @@ class TestResearchBehaviorFixtures(unittest.TestCase):
             (outputs_dir / "compact-routing.md").write_text(
                 "\n".join([
                     "Source basis: user prompt only.",
+                    "Selected skill: research-intent-router.",
                     "How to use this result: TRIAGE ONLY - Pick the next step.",
                     "Next action: Use the smallest route.",
                     "Source verified.",
@@ -123,6 +147,7 @@ class TestResearchBehaviorFixtures(unittest.TestCase):
             (root / "secret.md").write_text(
                 "\n".join([
                     "Source basis: user prompt only.",
+                    "Selected skill: research-intent-router.",
                     "How to use this result: TRIAGE ONLY - Pick the next step.",
                     "Next action: Use the smallest route.",
                 ]),
@@ -157,6 +182,7 @@ class TestResearchBehaviorFixtures(unittest.TestCase):
             (outputs_dir / "compact-routing.md").write_text(
                 "\n".join([
                     "Source basis: user prompt only.",
+                    "Selected skill: research-intent-router.",
                     "How to use this result: TRIAGE ONLY - Pick the next step.",
                     "How to use this result: TRIAGE ONLY - Repeat.",
                     "Next action: Use the smallest route.",
@@ -179,6 +205,7 @@ class TestResearchBehaviorFixtures(unittest.TestCase):
             (outputs_dir / "compact-routing.md").write_text(
                 "\n".join([
                     "Source basis: user prompt only.",
+                    "Selected skill: research-intent-router.",
                     "How to use this result: TRIAGE ONLY - Pick the next step.",
                     "Next action: Use the smallest route.",
                 ]),

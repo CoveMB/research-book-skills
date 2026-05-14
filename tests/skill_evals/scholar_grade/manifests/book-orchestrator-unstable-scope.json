@@ -1,0 +1,27 @@
+{
+  "capture_mode": "deterministic-reference",
+  "date": "2026-05-13",
+  "external_lookup_permitted": false,
+  "fixture_id": "book-orchestrator-unstable-scope",
+  "interface": "local-fixture",
+  "model": "not-run",
+  "network_permissions": "none",
+  "operator": "fixture-author",
+  "output_file": "book-orchestrator-unstable-scope.md",
+  "output_sha256": "718fbd884ddb09b654336c3ec45f37886f1808a39fcd3f8295dd3e0c5bf5ef73",
+  "schema_version": "scholar-grade-run-manifest-v1",
+  "skill": "research-book-orchestrator",
+  "skill_file": "skills/research-book-orchestrator/SKILL.md",
+  "skill_file_sha256": "b85de1a77357a199d14da578a138e6328f57c8f19253ee4ae589239ee5f9de20",
+  "source_packet": "corpora/book-orchestrator-unstable-scope/source-packet.md",
+  "source_packet_sha256": "bdebb0df4ebb641fc889fc07b1236af6d0fccfa9a4fa481bfb7810ba8b4d2fe1",
+  "structured_result": {
+    "decision": "Sequence phase gates instead of executing every skill",
+    "external_lookup_used": false,
+    "hard_fail_triggered": false,
+    "next_action_count": 1,
+    "private_material_submitted": false,
+    "source_access_level": "controlled-packet"
+  },
+  "tool_permissions": "none"
+}

@@ -1,0 +1,27 @@
+{
+  "capture_mode": "deterministic-reference",
+  "date": "2026-05-13",
+  "external_lookup_permitted": false,
+  "fixture_id": "dyslexia-companion-mixed-bottleneck",
+  "interface": "local-fixture",
+  "model": "not-run",
+  "network_permissions": "none",
+  "operator": "fixture-author",
+  "output_file": "dyslexia-companion-mixed-bottleneck.md",
+  "output_sha256": "132347478714ea648ea6ed72b3d79e56edd00d2e035370866ee13eb2467c6146",
+  "schema_version": "scholar-grade-run-manifest-v1",
+  "skill": "dyslexia-research-companion",
+  "skill_file": "skills/dyslexia-research-companion/SKILL.md",
+  "skill_file_sha256": "75347e93c3a76638b87999c6330822e92f18541efff4ce55978c3e2b2b2ccbf9",
+  "source_packet": "corpora/dyslexia-companion-mixed-bottleneck/source-packet.md",
+  "source_packet_sha256": "da4d770c37af1f3ea4727008a1a6934a83de782bd4fb599e3df2cc845d1f3b5a",
+  "structured_result": {
+    "decision": "Use wrapper triage before downstream scholarship",
+    "external_lookup_used": false,
+    "hard_fail_triggered": false,
+    "next_action_count": 1,
+    "private_material_submitted": false,
+    "source_access_level": "controlled-packet"
+  },
+  "tool_permissions": "none"
+}

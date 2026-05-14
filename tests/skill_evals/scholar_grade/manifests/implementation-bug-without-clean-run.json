@@ -1,0 +1,27 @@
+{
+  "capture_mode": "deterministic-reference",
+  "date": "2026-05-13",
+  "external_lookup_permitted": false,
+  "fixture_id": "implementation-bug-without-clean-run",
+  "interface": "local-fixture",
+  "model": "not-run",
+  "network_permissions": "none",
+  "operator": "fixture-author",
+  "output_file": "implementation-bug-without-clean-run.md",
+  "output_sha256": "a45ca73c8fdb25074753de1e604b63833a336c5f059ae12d1b0ba1631e6f697c",
+  "schema_version": "scholar-grade-run-manifest-v1",
+  "skill": "scholarly-integrity-gate",
+  "skill_file": "skills/scholarly-integrity-gate/SKILL.md",
+  "skill_file_sha256": "6fb1b3335677efea826a83f39306fca64fc50fb0a7b157a67d2bb835e5621442",
+  "source_packet": "corpora/implementation-bug-without-clean-run/source-packet.md",
+  "source_packet_sha256": "d2660777156a6682048fe510c267509534bbad6d6e54df3adaf4f0c223b6dcc8",
+  "structured_result": {
+    "decision": "Gate decision: hold",
+    "external_lookup_used": false,
+    "hard_fail_triggered": false,
+    "next_action_count": 1,
+    "private_material_submitted": false,
+    "source_access_level": "controlled-packet"
+  },
+  "tool_permissions": "none"
+}

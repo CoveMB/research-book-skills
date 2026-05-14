@@ -1,0 +1,27 @@
+{
+  "capture_mode": "deterministic-reference",
+  "date": "2026-05-13",
+  "external_lookup_permitted": false,
+  "fixture_id": "claim-ledger-mixed-claim-types",
+  "interface": "local-fixture",
+  "model": "not-run",
+  "network_permissions": "none",
+  "operator": "fixture-author",
+  "output_file": "claim-ledger-mixed-claim-types.md",
+  "output_sha256": "84334513dad71ef29b1bc3084fe582d516cbb7edeb50f33aced4515856a76dee",
+  "schema_version": "scholar-grade-run-manifest-v1",
+  "skill": "claim-evidence-ledger",
+  "skill_file": "skills/claim-evidence-ledger/SKILL.md",
+  "skill_file_sha256": "f09338f7576b227129901c211fd20dd686b9f0507a2faa8be877f9f95801ee8d",
+  "source_packet": "corpora/claim-ledger-mixed-claim-types/source-packet.md",
+  "source_packet_sha256": "6e2879e2b4eefe7c5d5fc25ba67df6e3feccd2638997d91b259700cf3ee35578",
+  "structured_result": {
+    "decision": "Separate claim types before citation work",
+    "external_lookup_used": false,
+    "hard_fail_triggered": false,
+    "next_action_count": 1,
+    "private_material_submitted": false,
+    "source_access_level": "controlled-packet"
+  },
+  "tool_permissions": "none"
+}

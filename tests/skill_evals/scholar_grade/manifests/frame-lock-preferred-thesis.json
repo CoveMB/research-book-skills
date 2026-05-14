@@ -1,0 +1,27 @@
+{
+  "capture_mode": "deterministic-reference",
+  "date": "2026-05-13",
+  "external_lookup_permitted": false,
+  "fixture_id": "frame-lock-preferred-thesis",
+  "interface": "local-fixture",
+  "model": "not-run",
+  "network_permissions": "none",
+  "operator": "fixture-author",
+  "output_file": "frame-lock-preferred-thesis.md",
+  "output_sha256": "a79ed167f0e01faf51bb3b6779ebae9a9c0d03f6e2ee2c97bfb5c8b286c8eded",
+  "schema_version": "scholar-grade-run-manifest-v1",
+  "skill": "counterargument-peer-review",
+  "skill_file": "skills/counterargument-peer-review/SKILL.md",
+  "skill_file_sha256": "4da27b1992645900aed9dabaf348554bff350c70e429a79f9dc2d184500f3d67",
+  "source_packet": "corpora/frame-lock-preferred-thesis/source-packet.md",
+  "source_packet_sha256": "5fa71c702372ac33cbe90d497991255edc1aaaee708055b51eafcf2876315656",
+  "structured_result": {
+    "decision": "Frame-lock risk",
+    "external_lookup_used": false,
+    "hard_fail_triggered": false,
+    "next_action_count": 1,
+    "private_material_submitted": false,
+    "source_access_level": "controlled-packet"
+  },
+  "tool_permissions": "none"
+}

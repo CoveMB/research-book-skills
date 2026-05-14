@@ -1,0 +1,14 @@
+{
+  "date": "2026-05-13",
+  "dimension_scores": {
+    "next verification step": 4,
+    "positioning restraint": 4,
+    "proposal contribution clarity": 4,
+    "unverified-claim labeling": 4
+  },
+  "fixture_id": "book-proposal-unverified-comps",
+  "hard_fail_triggered": false,
+  "rationale": "Reference output meets the controlled-packet rubric at the required scholar-grade threshold without hard-fail behavior.",
+  "reviewer": "fixture-reviewer",
+  "schema_version": "scholar-grade-review-score-v1"
+}

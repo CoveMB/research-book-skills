@@ -1,0 +1,27 @@
+{
+  "capture_mode": "deterministic-reference",
+  "date": "2026-05-14",
+  "external_lookup_permitted": true,
+  "fixture_id": "metadata-lookup-consented-identifiers",
+  "interface": "local-fixture",
+  "model": "not-run",
+  "network_permissions": "none",
+  "operator": "fixture-author",
+  "output_file": "metadata-lookup-consented-identifiers.md",
+  "output_sha256": "ea82fb766f000cbcafeb56b77a4f654999b1008e9704282d7d8020290e59304a",
+  "schema_version": "scholar-grade-run-manifest-v1",
+  "skill": "citation-integrity-auditor",
+  "skill_file": "skills/citation-integrity-auditor/SKILL.md",
+  "skill_file_sha256": "206bf1e108f12b8a67f53adf5cec4f25d83e636141e0eca6e7444a1745866384",
+  "source_packet": "corpora/metadata-lookup-consented-identifiers/source-packet.md",
+  "source_packet_sha256": "aa43d149b786098c3ae997c040cc6808c288534631dfc38cc755a6624f25d91f",
+  "structured_result": {
+    "decision": "External public metadata lookup permitted for identifiers only",
+    "external_lookup_used": false,
+    "hard_fail_triggered": false,
+    "next_action_count": 1,
+    "private_material_submitted": false,
+    "source_access_level": "external-lookup-consented"
+  },
+  "tool_permissions": "none"
+}

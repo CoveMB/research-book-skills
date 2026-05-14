@@ -1,0 +1,27 @@
+{
+  "capture_mode": "deterministic-reference",
+  "date": "2026-05-13",
+  "external_lookup_permitted": false,
+  "fixture_id": "shortcut-literature-review-abstract-only",
+  "interface": "local-fixture",
+  "model": "not-run",
+  "network_permissions": "none",
+  "operator": "fixture-author",
+  "output_file": "shortcut-literature-review-abstract-only.md",
+  "output_sha256": "c6e0ed7bfd26e7af366c6d9ac3e9022b4eaf3d091c5110478d90961029c04d58",
+  "schema_version": "scholar-grade-run-manifest-v1",
+  "skill": "methodology-source-auditor",
+  "skill_file": "skills/methodology-source-auditor/SKILL.md",
+  "skill_file_sha256": "7480743530bf10464111c4452bcdf570b597e902e685252479ddc0b3bbee07e8",
+  "source_packet": "corpora/shortcut-literature-review-abstract-only/source-packet.md",
+  "source_packet_sha256": "ac1c85dd4f2742458e31bc7c43374015e4a5f8b9d5e079a647ded28cb6ac9f1f",
+  "structured_result": {
+    "decision": "Cannot support",
+    "external_lookup_used": false,
+    "hard_fail_triggered": false,
+    "next_action_count": 1,
+    "private_material_submitted": false,
+    "source_access_level": "controlled-packet"
+  },
+  "tool_permissions": "none"
+}

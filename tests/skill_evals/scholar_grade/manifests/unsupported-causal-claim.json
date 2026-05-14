@@ -1,0 +1,27 @@
+{
+  "capture_mode": "deterministic-reference",
+  "date": "2026-05-13",
+  "external_lookup_permitted": false,
+  "fixture_id": "unsupported-causal-claim",
+  "interface": "local-fixture",
+  "model": "not-run",
+  "network_permissions": "none",
+  "operator": "fixture-author",
+  "output_file": "unsupported-causal-claim.md",
+  "output_sha256": "d4978ef6c2bc6ccc712c0d956afb07d037448a078b0a91d1bb404cfd49857e23",
+  "schema_version": "scholar-grade-run-manifest-v1",
+  "skill": "methodology-source-auditor",
+  "skill_file": "skills/methodology-source-auditor/SKILL.md",
+  "skill_file_sha256": "7480743530bf10464111c4452bcdf570b597e902e685252479ddc0b3bbee07e8",
+  "source_packet": "corpora/unsupported-causal-claim/source-packet.md",
+  "source_packet_sha256": "baaffd36b8bc73e824e378c6cc8892767b2695e7b4f35fb14ee03dd96fe3cd9e",
+  "structured_result": {
+    "decision": "Cannot support",
+    "external_lookup_used": false,
+    "hard_fail_triggered": false,
+    "next_action_count": 1,
+    "private_material_submitted": false,
+    "source_access_level": "controlled-packet"
+  },
+  "tool_permissions": "none"
+}

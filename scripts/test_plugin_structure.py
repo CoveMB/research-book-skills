@@ -1336,7 +1336,7 @@ class TestPluginStructure(unittest.TestCase):
         self.assertEqual(missing_phrases(source_limits, required_phrases), [])
 
     def test_behavior_eval_fixtures_cover_high_risk_skill_boundaries(self) -> None:
-        fixture_path = ROOT / "examples" / "evals" / "research-skill-behavior-fixtures.json"
+        fixture_path = ROOT / "tests" / "skill_evals" / "research_behavior" / "fixtures.json"
         fixtures = read_json(fixture_path)
         self.assertIsInstance(fixtures.get("fixtures"), list)
         self.assertGreaterEqual(len(fixtures["fixtures"]), 8)

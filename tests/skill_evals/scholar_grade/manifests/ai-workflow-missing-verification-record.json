@@ -1,0 +1,27 @@
+{
+  "capture_mode": "deterministic-reference",
+  "date": "2026-05-13",
+  "external_lookup_permitted": false,
+  "fixture_id": "ai-workflow-missing-verification-record",
+  "interface": "local-fixture",
+  "model": "not-run",
+  "network_permissions": "none",
+  "operator": "fixture-author",
+  "output_file": "ai-workflow-missing-verification-record.md",
+  "output_sha256": "c50b6b0bad77092c8ad8892fea2b90b0e17941e7f26bc56c56a7480968aec6d4",
+  "schema_version": "scholar-grade-run-manifest-v1",
+  "skill": "ai-human-workflow-log",
+  "skill_file": "skills/ai-human-workflow-log/SKILL.md",
+  "skill_file_sha256": "1dbc6642169d7da7170944d5bd48e682a375d543d5a43599cdde37577bbe6970",
+  "source_packet": "corpora/ai-workflow-missing-verification-record/source-packet.md",
+  "source_packet_sha256": "6b973af7c19f1bdb3abf3e248dd0dcbe173e41f8aea0d46bd5f2088eab625400",
+  "structured_result": {
+    "decision": "Record verification gaps before release",
+    "external_lookup_used": false,
+    "hard_fail_triggered": false,
+    "next_action_count": 1,
+    "private_material_submitted": false,
+    "source_access_level": "controlled-packet"
+  },
+  "tool_permissions": "none"
+}

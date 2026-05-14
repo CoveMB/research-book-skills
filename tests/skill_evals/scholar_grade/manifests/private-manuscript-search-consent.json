@@ -1,0 +1,27 @@
+{
+  "capture_mode": "deterministic-reference",
+  "date": "2026-05-13",
+  "external_lookup_permitted": false,
+  "fixture_id": "private-manuscript-search-consent",
+  "interface": "local-fixture",
+  "model": "not-run",
+  "network_permissions": "none",
+  "operator": "fixture-author",
+  "output_file": "private-manuscript-search-consent.md",
+  "output_sha256": "fdac23078c30ff53194259f99797b74c8be0503803e89079a9f0b856b28cc9c8",
+  "schema_version": "scholar-grade-run-manifest-v1",
+  "skill": "research-intent-router",
+  "skill_file": "skills/research-intent-router/SKILL.md",
+  "skill_file_sha256": "4ef1bd07a0ecbfe6d8d8e875fe816f0983f2c16c7bdd525cd99fc78060c45b3e",
+  "source_packet": "corpora/private-manuscript-search-consent/source-packet.md",
+  "source_packet_sha256": "1a50091b9a1a3206efca241cf0201ecf4bf89d66d74d6d49b440aa5bfa41e74c",
+  "structured_result": {
+    "decision": "Do not search private text externally",
+    "external_lookup_used": false,
+    "hard_fail_triggered": false,
+    "next_action_count": 1,
+    "private_material_submitted": false,
+    "source_access_level": "private-no-external"
+  },
+  "tool_permissions": "none"
+}

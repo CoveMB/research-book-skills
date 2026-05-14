@@ -240,9 +240,21 @@ research-book-plugin/
   examples/
   shared/
   scripts/
+  tests/
 ```
 
 The package works as a local plugin and as a portable collection of `SKILL.md` folders.
+
+## Skill testing
+
+Skill behavior tests live under [`tests/skill_evals/`](tests/skill_evals/). They are separate from user-facing examples because they are fixtures, controlled source packets, captured outputs, and harness code for evaluating whether skills preserve scholar-grade source discipline.
+
+The suite has two layers:
+
+- `research_behavior`: deterministic routing and behavior fixtures that check selected-skill route evidence, required output markers, forbidden claims, and compact-output boundaries.
+- `scholar_grade`: stricter source-packet fixtures that test claim/evidence fit, allowed-claim boundaries, required uncertainties, hard-fail patterns, private-text boundaries, source-access modes, and resource-backed rubric coverage.
+
+The scholar-grade fixtures use synthetic controlled packets with separate hidden `answer-key.md` files. Only `source-packet.md` should be supplied during live or manual skill runs. The harness does not run a model or certify source truth; it validates captured outputs, checks semantic fail patterns for paraphrased overclaims, checks run manifests with source/output/skill hashes, enforces rubric score thresholds, enforces fixture coverage for every skill, and produces reviewer scorecards for human or future live-run review. `live_capture_protocol.py` can generate operator-facing prompt packets plus manifest, score, and trace templates for real skill captures without exposing hidden answer keys. CI includes deterministic checks through `./validate.sh`, which runs `scripts/run_package_checks.py --scope full`; recorded live captures can be checked separately with `python3 scripts/run_package_checks.py --scope live`.
 
 ## Validate
 
@@ -257,7 +269,13 @@ Or run the checks one by one:
 ```bash
 python3 scripts/validate_plugin.py .
 python3 scripts/check_book_artifact_contract.py --path .
+python3 scripts/check_research_behavior_fixtures.py --fixtures tests/skill_evals/research_behavior/fixtures.json --outputs-dir tests/skill_evals/research_behavior/outputs
+python3 scripts/research_behavior_eval_harness.py --fixtures tests/skill_evals/research_behavior/fixtures.json --outputs-dir tests/skill_evals/research_behavior/outputs --quiet
+python3 tests/skill_evals/scholar_grade/scholar_grade_eval_harness.py --fixtures tests/skill_evals/scholar_grade/fixtures.json --outputs-dir tests/skill_evals/scholar_grade/outputs --manifests-dir tests/skill_evals/scholar_grade/manifests --scores-dir tests/skill_evals/scholar_grade/scores --quiet
+python3 tests/skill_evals/scholar_grade/live_capture_protocol.py --fixtures tests/skill_evals/scholar_grade/fixtures.json --root . --check
+python3 scripts/check_source_candidates.py --input tests/skill_evals/source-candidates.json --quiet
 python3 -m unittest discover -s scripts -p 'test_*.py'
+python3 -m unittest discover -s tests -p 'test_*.py'
 ```
 
 Script details, arguments, side effects, and dependency notes are in [`docs/SCRIPTS.md`](docs/SCRIPTS.md).
@@ -269,6 +287,7 @@ Script details, arguments, side effects, and dependency notes are in [`docs/SCRI
 - [`docs/SCRIPTS.md`](docs/SCRIPTS.md): script commands, requirements, and write behavior
 - [`docs/WORKFLOW_PLAYBOOK.md`](docs/WORKFLOW_PLAYBOOK.md): practical book workflows
 - [`docs/QUALITY_STANDARD.md`](docs/QUALITY_STANDARD.md): source, claim, and citation standards
+- [`tests/skill_evals/README.md`](tests/skill_evals/README.md): scholar-grade skill-evaluation standard and fixtures
 - [`docs/SOURCE_LIMITS.md`](docs/SOURCE_LIMITS.md): what counts as verified source access
 - [`docs/ROUTING_MATRIX.md`](docs/ROUTING_MATRIX.md): canonical route choices, including accessibility entry points
 - [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md): common setup and routing issues

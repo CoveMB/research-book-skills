@@ -47,7 +47,10 @@ class TestResearchBehaviorEvalSummary(unittest.TestCase):
             outputs_dir = root / "outputs"
             outputs_dir.mkdir()
             fixtures = fixture_document()["fixtures"]
-            (outputs_dir / "route-one.md").write_text("## Source basis\n", encoding="utf-8")
+            (outputs_dir / "route-one.md").write_text(
+                "Selected skill: citation-integrity-auditor\n## Source basis\n",
+                encoding="utf-8",
+            )
 
             summary = output_summary(outputs_dir, fixtures)
 
@@ -63,7 +66,10 @@ class TestResearchBehaviorEvalSummary(unittest.TestCase):
             outputs_dir = root / "outputs"
             outputs_dir.mkdir()
             fixture_path.write_text(json.dumps(fixture_document()), encoding="utf-8")
-            (outputs_dir / "route-one.md").write_text("## Source basis\n", encoding="utf-8")
+            (outputs_dir / "route-one.md").write_text(
+                "Selected skill: citation-integrity-auditor\n## Source basis\n",
+                encoding="utf-8",
+            )
 
             report = build_calibration_report(fixture_path, outputs_dir)
 

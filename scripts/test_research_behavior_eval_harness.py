@@ -49,7 +49,7 @@ class TestResearchBehaviorEvalHarness(unittest.TestCase):
             outputs_dir.mkdir()
             fixture_path.write_text(json.dumps(fixture_document()), encoding="utf-8")
             (outputs_dir / "route-one.md").write_text(
-                "metadata verification ladder\nDOI\n",
+                "Selected skill: citation-integrity-auditor\nmetadata verification ladder\nDOI\n",
                 encoding="utf-8",
             )
 
@@ -134,11 +134,11 @@ class TestResearchBehaviorEvalHarness(unittest.TestCase):
             outputs_dir.mkdir()
             fixture_path.write_text(json.dumps(fixture_document()), encoding="utf-8")
             (outputs_dir / "route-one.md").write_text(
-                "metadata verification ladder\nDOI\n",
+                "Selected skill: citation-integrity-auditor\nmetadata verification ladder\nDOI\n",
                 encoding="utf-8",
             )
             (outputs_dir / "route-two.md").write_text(
-                "How to use this result\nNext action\n",
+                "Selected skill: research-intent-router\nHow to use this result\nNext action\n",
                 encoding="utf-8",
             )
 

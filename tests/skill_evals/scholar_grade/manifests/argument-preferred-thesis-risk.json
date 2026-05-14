@@ -1,0 +1,27 @@
+{
+  "capture_mode": "deterministic-reference",
+  "date": "2026-05-13",
+  "external_lookup_permitted": false,
+  "fixture_id": "argument-preferred-thesis-risk",
+  "interface": "local-fixture",
+  "model": "not-run",
+  "network_permissions": "none",
+  "operator": "fixture-author",
+  "output_file": "argument-preferred-thesis-risk.md",
+  "output_sha256": "87045ad9661f8e56e787e52250c8743c3adca518cf7dc5663d11c8e424caa5cc",
+  "schema_version": "scholar-grade-run-manifest-v1",
+  "skill": "argument-architecture",
+  "skill_file": "skills/argument-architecture/SKILL.md",
+  "skill_file_sha256": "6ca9b2f96c18c29c9c2efffe7a709aebd9b26094924acf522167eda1145bc651",
+  "source_packet": "corpora/argument-preferred-thesis-risk/source-packet.md",
+  "source_packet_sha256": "b8dffc48a03f7ba39af53d509577a2d9b1a5ecbc54f59ad7b3042094da59a99a",
+  "structured_result": {
+    "decision": "Dependency risk",
+    "external_lookup_used": false,
+    "hard_fail_triggered": false,
+    "next_action_count": 1,
+    "private_material_submitted": false,
+    "source_access_level": "controlled-packet"
+  },
+  "tool_permissions": "none"
+}

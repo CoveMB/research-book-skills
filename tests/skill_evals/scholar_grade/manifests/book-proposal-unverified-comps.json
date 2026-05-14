@@ -1,0 +1,27 @@
+{
+  "capture_mode": "deterministic-reference",
+  "date": "2026-05-13",
+  "external_lookup_permitted": false,
+  "fixture_id": "book-proposal-unverified-comps",
+  "interface": "local-fixture",
+  "model": "not-run",
+  "network_permissions": "none",
+  "operator": "fixture-author",
+  "output_file": "book-proposal-unverified-comps.md",
+  "output_sha256": "fd9b39bb1e74f7b10dd4f15577711234c3819835e69171e3f3070b32c96648c1",
+  "schema_version": "scholar-grade-run-manifest-v1",
+  "skill": "book-proposal-scholarship",
+  "skill_file": "skills/book-proposal-scholarship/SKILL.md",
+  "skill_file_sha256": "2deb8e9881b980b99a4c7ea7cb0747511e1d23b504c00ea0a63c1624c53f9e7d",
+  "source_packet": "corpora/book-proposal-unverified-comps/source-packet.md",
+  "source_packet_sha256": "8c1aef4f4606ff3d01f2d241478aa31b88c714febfa28926bd1ee6a7dc28d965",
+  "structured_result": {
+    "decision": "Proposal can be revised but comps remain provisional",
+    "external_lookup_used": false,
+    "hard_fail_triggered": false,
+    "next_action_count": 1,
+    "private_material_submitted": false,
+    "source_access_level": "controlled-packet"
+  },
+  "tool_permissions": "none"
+}

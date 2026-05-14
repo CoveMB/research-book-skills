@@ -1,0 +1,27 @@
+{
+  "capture_mode": "deterministic-reference",
+  "date": "2026-05-13",
+  "external_lookup_permitted": false,
+  "fixture_id": "dictation-ambiguous-term",
+  "interface": "local-fixture",
+  "model": "not-run",
+  "network_permissions": "none",
+  "operator": "fixture-author",
+  "output_file": "dictation-ambiguous-term.md",
+  "output_sha256": "d748a7e24c8a2041c04a570b12f00f5ee112f1a0e31304f0dae745d0124a8fde",
+  "schema_version": "scholar-grade-run-manifest-v1",
+  "skill": "dictation-to-research-notes",
+  "skill_file": "skills/dictation-to-research-notes/SKILL.md",
+  "skill_file_sha256": "f76194d522e492e730c215becf7a5dd735527846cdea8ba422056466e3c1a6a6",
+  "source_packet": "corpora/dictation-ambiguous-term/source-packet.md",
+  "source_packet_sha256": "72cd0b5a74539db62924f01d2837ec8ddbc64522f22c967665722ee97fe32027",
+  "structured_result": {
+    "decision": "Hold claim drafting until ambiguity is resolved",
+    "external_lookup_used": false,
+    "hard_fail_triggered": false,
+    "next_action_count": 1,
+    "private_material_submitted": false,
+    "source_access_level": "controlled-packet"
+  },
+  "tool_permissions": "none"
+}

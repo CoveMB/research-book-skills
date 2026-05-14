@@ -1,0 +1,27 @@
+{
+  "capture_mode": "deterministic-reference",
+  "date": "2026-05-13",
+  "external_lookup_permitted": false,
+  "fixture_id": "methodology-fabrication-run-config",
+  "interface": "local-fixture",
+  "model": "not-run",
+  "network_permissions": "none",
+  "operator": "fixture-author",
+  "output_file": "methodology-fabrication-run-config.md",
+  "output_sha256": "6a5b261d59424c042d6457322ce2ff1ff1c8e75fc42352b3f6e3afc53a988069",
+  "schema_version": "scholar-grade-run-manifest-v1",
+  "skill": "scholarly-integrity-gate",
+  "skill_file": "skills/scholarly-integrity-gate/SKILL.md",
+  "skill_file_sha256": "6fb1b3335677efea826a83f39306fca64fc50fb0a7b157a67d2bb835e5621442",
+  "source_packet": "corpora/methodology-fabrication-run-config/source-packet.md",
+  "source_packet_sha256": "dd0fcbac3bf509a0803f4030aef5dc40b5bead2f064d82a42fe2e1e3444eb8f4",
+  "structured_result": {
+    "decision": "Gate decision: hold",
+    "external_lookup_used": false,
+    "hard_fail_triggered": false,
+    "next_action_count": 1,
+    "private_material_submitted": false,
+    "source_access_level": "controlled-packet"
+  },
+  "tool_permissions": "none"
+}

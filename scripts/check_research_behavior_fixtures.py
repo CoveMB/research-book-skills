@@ -155,6 +155,15 @@ def compact_marker_count_errors(fixture: dict[str, Any], output_text: str) -> li
     return errors
 
 
+def selected_skill_route_errors(fixture: dict[str, Any], output_text: str) -> list[str]:
+    expected_route = str(fixture.get("expected_route", ""))
+    if not expected_route or normalized_contains(output_text, expected_route):
+        return []
+    return [
+        f"{fixture_identifier(fixture)}: missing selected skill route evidence {expected_route!r}"
+    ]
+
+
 def validate_output_for_fixture(outputs_dir: Path, fixture: dict[str, Any]) -> list[str]:
     identifier_errors = invalid_fixture_id_errors(fixture)
     if identifier_errors:
@@ -165,6 +174,7 @@ def validate_output_for_fixture(outputs_dir: Path, fixture: dict[str, Any]) -> l
 
     output_text = output_path.read_text(encoding="utf-8")
     return [
+        *selected_skill_route_errors(fixture, output_text),
         *required_marker_errors(fixture, output_text),
         *forbidden_claim_errors(fixture, output_text),
         *compact_marker_count_errors(fixture, output_text),
